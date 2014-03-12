@@ -6,10 +6,8 @@ help:
 	@echo "Usage: "
 	@echo "       $(MAKE) {compile|clean}"        
 	@echo
-	@echo "       $(MAKE) {slim_cowboy|rel_cowboy|package_cowboy}"
+	@echo "       $(MAKE) {linux|win|mac}"
 	@echo
-	@echo "Windows Users:"
-	@echo "       $(MAKE) rel_cowboy_win"
 	@echo 
 
 all: get-deps compile
@@ -64,7 +62,7 @@ win:
 ## TODO: simplify further by adding a $(MODE) argument to be used in place of rel_inner_slim and rel_inner_full
 rel: compile
 	@$(MAKE) clean_release
-	@(cd rel && cp reltool_base.config reltool.config)
+	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_$(PLATFORM).config)
 	@($(MAKE) rel_inner_full PLATFORM=$(PLATFORM))
 	@echo Generated a self-contained Nitrogen project
 	@echo in 'rel/rise', configured to run on $(PLATFORM).
