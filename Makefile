@@ -7,21 +7,10 @@ help:
 	@echo "       $(MAKE) {compile|clean}"        
 	@echo
 	@echo "       $(MAKE) {slim_cowboy|rel_cowboy|package_cowboy}"
-	@echo "       $(MAKE) {slim_inets|rel_inets|package_inets}"  
-	@echo "       $(MAKE) {slim_mochiweb|rel_mochiweb|package_mochiweb}"
-	@echo "       $(MAKE) {slim_webmachine|rel_webmachine|package_webmachine}"
-	@echo "       $(MAKE) {slim_yaws|rel_yaws|package_yaws}"
 	@echo
 	@echo "Windows Users:"
 	@echo "       $(MAKE) rel_cowboy_win"
-	@echo "       $(MAKE) rel_inets_win"
-	@echo "       $(MAKE) rel_mochiweb_win"
-	@echo "       $(MAKE) rel_webmachine_win"
 	@echo 
-	@echo "To install the helper script on linux/unix machines"
-	@echo "which allows you to invoke "nitrogen" or "dev" from any"
-	@echo "directory in a Nitrogen installation."
-	@echo "       $(MAKE) install-helper-script" 
 
 all: get-deps compile
 
@@ -55,143 +44,39 @@ thanks:
 	rm -fr simple_bridge nprocreg nitrogen_core NitrogenProject.com; \
 	echo "Thanks file generated in thanks.txt - please review")
 	
-quickstart: rel_mochiweb rel_copy_quickstart
-	@(cd rel/nitrogen;$(MAKE))
+# PLATFORM-SPECIFIC RISE
 
-quickstart_win: rel_mochiweb_win rel_copy_quickstart
-	@(cd rel/nitrogen;$(MAKE))
+linux:
+	@($(MAKE) rel PLATFORM=linux)
+	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 
-# COWBOY
+mac:
+	@($(MAKE) rel PLATFORM=mac)
+	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
 
-slim_cowboy:
-	@($(MAKE) slim PLATFORM=cowboy)
-
-rel_cowboy:
-	@($(MAKE) rel PLATFORM=cowboy)
-
-rel_cowboy_win:
+win:
 	@($(MAKE) rel_win PLATFORM=cowboy)
-
-package_cowboy: 
-	@($(MAKE) package PLATFORM=cowboy)
-
-package_cowboy_win:
-	@($(MAKE) package_win PLATFORM=cowboy)
-
-
-# INETS
-
-slim_inets:
-	@($(MAKE) slim PLATFORM=inets)
-
-rel_inets:
-	@($(MAKE) rel PLATFORM=inets)
-
-rel_inets_win:
-	@($(MAKE) rel_win PLATFORM=inets)
-
-package_inets: 
-	@($(MAKE) package PLATFORM=inets)
-
-package_inets_win:
-	@($(MAKE) package_win PLATFORM=inets)
-
-
-# MOCHIWEB
-
-slim_mochiweb:
-	@($(MAKE) slim PLATFORM=mochiweb)
-
-rel_mochiweb:
-	@($(MAKE) rel PLATFORM=mochiweb)
-
-rel_mochiweb_win:
-	@($(MAKE) rel_win PLATFORM=mochiweb)
-
-package_mochiweb: 
-	@($(MAKE) package PLATFORM=mochiweb)
-
-package_mochiweb_win:
-	@($(MAKE) package_win PLATFORM=mochiweb)
-
-
-# WEBMACHINE
-
-slim_webmachine:
-	@($(MAKE) slim PLATFORM=webmachine)
-
-rel_webmachine:
-	@($(MAKE) rel PLATFORM=webmachine)
-
-rel_webmachine_win:
-	@($(MAKE) rel_win PLATFORM=webmachine)
-
-package_webmachine: 
-	@($(MAKE) package PLATFORM=webmachine)
-
-package_webmachine_win:
-	@($(MAKE) package_win PLATFORM=webmachine)
-
-
-# YAWS
-
-slim_yaws:
-	@($(MAKE) slim PLATFORM=yaws)
-
-rel_yaws:
-	@($(MAKE) rel PLATFORM=yaws)
-
-rel_yaws_win:
-	@($(MAKE) rel_win PLATFORM=yaws)
-
-package_yaws: 
-	@($(MAKE) package PLATFORM=yaws)
-
-package_yaws_win:
-	@($(MAKE) package_win PLATFORM=yaws)
+	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 
 
 # PLATFORM-AGNOSTIC
 
 ## TODO: simplify further by adding a $(MODE) argument to be used in place of rel_inner_slim and rel_inner_full
-slim: compile
-	@$(MAKE) clean_release
-	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_$(PLATFORM).config)
-	@($(MAKE) rel_inner_slim PLATFORM=$(PLATFORM))
-	@echo Generated a slim-release Nitrogen project
-	@echo in 'rel/nitrogen', configured to run on $(PLATFORM).
-
 rel: compile
 	@$(MAKE) clean_release
-	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_$(PLATFORM).config)
+	@(cd rel && cp reltool_base.config reltool.config)
 	@($(MAKE) rel_inner_full PLATFORM=$(PLATFORM))
 	@echo Generated a self-contained Nitrogen project
-	@echo in 'rel/nitrogen', configured to run on $(PLATFORM).
+	@echo in 'rel/rise', configured to run on $(PLATFORM).
 
 rel_win: compile
 	@$(MAKE) clean_release
-	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_$(PLATFORM).config reltool_win.config)
+	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_cowboy.config reltool_win.config)
 	@($(MAKE) rel_inner_win PLATFORM=$(PLATFORM))
 	@echo Generated a self-contained Nitrogen project
 	@echo in 'rel/nitrogen', configured to run on $(PLATFORM).
 
-package: rel
-	mkdir -p ./builds
-	$(MAKE) link_docs
-	tar cf ./builds/nitrogen-${NITROGEN_VERSION}-$(PLATFORM).tar -C rel nitrogen
-	gzip --best ./builds/nitrogen-${NITROGEN_VERSION}-$(PLATFORM).tar 
-
-package_win: rel_win copy_docs
-	mkdir -p ./builds
-	$(MAKE) copy_docs
-	7za a -r -tzip ./builds/nitrogen-${NITROGEN_VERSION}-$(PLATFORM)-win.zip ./rel/nitrogen/
-	rm -fr ./rel/nitrogen
-
 # MASS PACKAGING - Produce packages for all servers
-
-package_all: clean update-deps package_inets package_mochiweb package_cowboy package_yaws package_webmachine
-
-package_all_win: clean update-deps package_inets_win package_mochiweb_win package_cowboy_win package_webmachine_win
 
 clean_docs:
 	@(cd rel/nitrogen; rm -fr doc)
@@ -225,7 +110,8 @@ R16B02: R16B
 # SHARED
 
 clean_release:
-	@(rm -rf rel/nitrogen)
+	@(rm -rf rel/rise)
+	@(rm -rf rel/frontend)
 	@(rm -rf rel/reltool.config)
 
 generate:
@@ -235,11 +121,12 @@ erl_interface:
 	@(cd rel; escript copy_erl_interface.escript)
 
 rel_inner:
-	@(cd rel; ./merge_platform_dependencies.escript overlay/rebar.config.src overlay/$(PLATFORM).deps nitrogen/rebar.config)
-	@(cd rel/nitrogen; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
-	@printf "Nitrogen Version:\n${NITROGEN_VERSION}\n\n" > rel/nitrogen/BuildInfo.txt
-	@echo "Built On (uname -v):" >> rel/nitrogen/BuildInfo.txt
-	@uname -v >> rel/nitrogen/BuildInfo.txt
+	@(cd rel; cp overlay/rebar.config.src rise/rebar.config)
+	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git ./site)
+	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
+	@printf "Nitrogen Version:\n${NITROGEN_VERSION}\n\n" > rel/rise/BuildInfo.txt
+	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
+	@uname -v >> rel/rise/BuildInfo.txt
 	@rm -rf rel/reltool.config	
 
 rel_inner_slim:
@@ -252,8 +139,8 @@ rel_inner_full: generate erl_interface rel_inner
 rel_inner_win: generate erl_interface
 	@(cd rel/nitrogen; cp releases/${NITROGEN_VERSION}/start_clean.boot bin/)
 	@(cd rel; ./merge_platform_dependencies.escript overlay/rebar.config.src overlay/$(PLATFORM).deps nitrogen/rebar.config)
-	@(cd rel/nitrogen; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
-	@(cd rel/nitrogen; ./make_start_cmd.sh)
+	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
+	@(cd rel/rise; ./make_start_cmd.sh)
 	@printf "Nitrogen Version:\n${NITROGEN_VERSION}\n\n" > rel/nitrogen/BuildInfo.txt
 	@echo "Built On (uname -v):" >> rel/nitrogen/BuildInfo.txt
 	@uname -v >> rel/nitrogen/BuildInfo.txt

@@ -22,7 +22,7 @@
 
 main([]) ->
     Path = code:lib_dir(erl_interface),
-    To = filename:join([get_cwd(), "nitrogen", "lib", filename:basename(Path)]),
+    To = filename:join([get_cwd(), "rise", "lib", filename:basename(Path)]),
 
     ?CONSOLE("~s~n",["Copying " ++ Path]),
     cp_r([Path],To),

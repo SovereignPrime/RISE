@@ -1,6 +1,5 @@
 # Thanks
-
-Sincere thanks to all the people who have helped make Nitrogen great, including:
+As far as this code is based on Nitrogen web framework sincere thanks to all the people who made Nitrogen great, including:
 
 + Rusty Klophaus (@rustyio)
 + Chris Williams (@voodootikigod)
@@ -71,5 +70,10 @@ Sincere thanks to all the people who have helped make Nitrogen great, including:
 + Mehmet Emin Tok
 + Stuart Thackray
 
-Roughly sorted by date of contribution. Send your twitter handles to
-[@jessegumm](http://twitter.com/jessevumm)
+Also thanks to 
++ Jesper Louis Andersen for etorrent codebase
++ Jesse Gumm for sigma_search component
+
+And all the rest whom I forgot to mention.
+
+Thanks to all comunity.
