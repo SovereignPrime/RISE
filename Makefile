@@ -95,13 +95,7 @@ ERLANG_VERSION = $(shell $(ERLANG_VERSION_CHECK))
 # This is primarily for Travis build testing, as each build instruction will overwrite the previous
 travis: $(ERLANG_VERSION)
 
-R14B02: rel_inets rel_yaws rel_mochiweb rel_webmachine
-R14B03: R14B02
-R15B: R14B02 rel_cowboy
-R15B01: R15B
-R15B02: R15B slim_cowboy slim_inets slim_yaws slim_mochiweb slim_webmachine
-R15B03: R15B02
-R16B: R15B02
+R16B: linux mac win
 R16B01: R16B
 R16B02: R16B
 
@@ -111,6 +105,7 @@ clean_release:
 	@(rm -rf rel/rise)
 	@(rm -rf rel/frontend)
 	@(rm -rf rel/reltool.config)
+	@(rm -rf rel/Release)
 
 generate:
 	@(cd rel; ./rebar generate)
