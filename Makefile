@@ -51,6 +51,8 @@ linux:
 mac:
 	@($(MAKE) rel PLATFORM=mac)
 	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
+	@(cd rel/frontend; xcodebuild && mkdir ../Release)
+	@(cd rel; cp frontend/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend)
 
 win:
 	@($(MAKE) rel_win PLATFORM=cowboy)

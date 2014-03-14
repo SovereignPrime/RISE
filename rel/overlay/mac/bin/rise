@@ -9,7 +9,7 @@ CALLER_DIR=$PWD
 
 RUNNER_BASE_DIR=${RUNNER_SCRIPT_DIR%/*}
 ROOTDIR=$RUNNER_BASE_DIR
-RUNNER_ETC_DIR=~/Library/rise/
+RUNNER_ETC_DIR=~/Library/rise
 
 ERL_LIBS=$RUNNER_BASE_DIR/lib
 DOC_ROOT=$RUNNER_BASE_DIR/site/static
@@ -28,12 +28,14 @@ export ERL_FULLSWEEP_AFTER
 export ERL_MAX_PORTS
 
 
-for f in `ls $RUNNER_ETC_DIR/*.config`; do CONFIG="$CONFIG -config $f"; done
-if [-d $RUNNER_ETC_DIR ]; then
+if [ ! -d $RUNNER_ETC_DIR ]; then
    mkdir -p $RUNNER_ETC_DIR/spool
    mkdir -p $RUNNER_ETC_DIR/scratch
    cp $RUNNER_BASE_DIR/etc/* $RUNNER_ETC_DIR
 fi;
+
+for f in `ls $RUNNER_ETC_DIR/*.config`; do CONFIG="$CONFIG -config $f"; done
+
 case "$1" in
     start)
         # Make sure there is not already a node running
@@ -134,7 +136,7 @@ case "$1" in
         DOC_ROOT=$RUNNER_BASE_DIR/site/static
         export DOC_ROOT
         export ERL_LIBS
-        CMD="$BINDIR/erlexec -boot $RUNNER_BASE_DIR/releases/$APP_VSN/$SCRIPT -mode interactive $CONFIG -sname rise  -pa $RUNNER_BASE_DIR/site/ebin -eval \"application:start(nitrogen)\" -mnesia dir \"$MNESIA_DIR\""
+        CMD="$BINDIR/erlexec -boot $RUNNER_BASE_DIR/releases/$APP_VSN/$SCRIPT -mode interactive $CONFIG -sname rise  -pa $RUNNER_BASE_DIR/site/ebin  -mnesia dir \"$MNESIA_DIR\" -args_file $RUNNER_ETC_DIR/vm.args"
         export EMU
         export ROOTDIR
         export BINDIR
