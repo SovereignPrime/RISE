@@ -33,7 +33,7 @@
     {cowboy,        ".*",   {git, "git://github.com/extend/cowboy",         {tag, "0.8.6"}}},
     {ranch,         ".*",   {git, "git://github.com/extend/ranch",          {tag, "0.8.5"}}},
     {mimetypes,     ".*",   {git, "git://github.com/spawngrid/mimetypes",   {branch, master}}},
-    {mochijson2,    ".*",   {git, "git://github.com/bjnortier/mochijson2.git"}, "3663fb01fd98958181adc2d1300c7bfa553e1434"},
+    {mochijson2,    ".*",   {git, "git://github.com/bjnortier/mochijson2.git", "3663fb01fd98958181adc2d1300c7bfa553e1434"}},
     {bitmessage, ".*", {git, "git://github.com/SovereignPrime/BitMessage.erl.git"}},
     {eminer, ".*", {git, "git://github.com/t0ha/eminer.git"}},
     {pat, ".*", {git, "git://github.com/selectel/pat.git", "3c0916931065d037d66f884601e7d740e2a3d7fe"}},

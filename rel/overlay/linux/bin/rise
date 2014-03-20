@@ -20,7 +20,9 @@ PIPE_DIR=/tmp/$RUNNER_BASE_DIR/
 START_ERL=`cat $RUNNER_BASE_DIR/releases/start_erl.data`
 ERTS_VSN=${START_ERL% *}
 APP_VSN=${START_ERL#* }
-
+BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
+COOKIE_ARG=`grep '^-setcookie' $RUNNER_ETC_DIR/vm.args`
+NODETOOL="$BINDIR/escript $BINDIR/nodetool -sname rise $COOKIE_ARG"
 ERL_MAX_PORTS=4096
 
 ERL_FULLSWEEP_AFTER=10
@@ -49,7 +51,7 @@ case "$1" in
         RUN_PARAM=$(printf "\'%s\' " "$@")
         export HEART_COMMAND
         mkdir -p $PIPE_DIR
-        $ERTS_PATH/run_erl -daemon $PIPE_DIR $RUNNER_ETC_DIR/log/ "exec $RUNNER_BASE_DIR/bin/$SCRIPT console $RUN_PARAM" 2>&1
+        $BINDIR/run_erl -daemon $PIPE_DIR $RUNNER_ETC_DIR/log/ "exec $RUNNER_BASE_DIR/bin/$SCRIPT console $RUN_PARAM" 2>&1
         ;;
 
     stop)
@@ -118,7 +120,7 @@ case "$1" in
         fi
 
         shift
-        exec $ERTS_PATH/to_erl $PIPE_DIR
+        exec $BINDIR/to_erl $PIPE_DIR
         ;;
 
     console)
@@ -127,7 +129,6 @@ case "$1" in
         # For e.g. 'setup', one may even want to name another boot script.
         # Setup beam-required vars
 
-        BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
         EMU=beam
         PROGNAME=`echo $0 | sed 's/.*\\///'`
 
