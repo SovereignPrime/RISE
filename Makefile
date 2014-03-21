@@ -1,5 +1,5 @@
 
-NITROGEN_VERSION=2.2.2
+RISE_VERSION=0.0.21
 
 help:
 	@echo 
@@ -53,6 +53,7 @@ mac:
 	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
 	@(cd rel/frontend; xcodebuild && mkdir ../Release)
 	@(cd rel; cp frontend/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend) 
+	@(cd rel; hdiutil create ./Release/RISE_$RISE_VERSION.dmg -srcdir ./Release)
 
 win:
 	@($(MAKE) rel_win PLATFORM=cowboy)
@@ -66,28 +67,28 @@ rel: compile
 	@$(MAKE) clean_release
 	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_$(PLATFORM).config)
 	@($(MAKE) rel_inner_full PLATFORM=$(PLATFORM))
-	@echo Generated a self-contained Nitrogen project
+	@echo Generated a self-contained Rise project
 	@echo in 'rel/rise', configured to run on $(PLATFORM).
 
 rel_win: compile
 	@$(MAKE) clean_release
 	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_cowboy.config reltool_win.config)
 	@($(MAKE) rel_inner_win PLATFORM=$(PLATFORM))
-	@echo Generated a self-contained Nitrogen project
-	@echo in 'rel/nitrogen', configured to run on $(PLATFORM).
+	@echo Generated a self-contained Rise project
+	@echo in 'rel/rise', configured to run on $(PLATFORM).
 
 # MASS PACKAGING - Produce packages for all servers
 
 clean_docs:
-	@(cd rel/nitrogen; rm -fr doc)
+	@(cd rel/rise; rm -fr doc)
 
 copy_docs: clean_docs
 	@(echo "Copying Documentation to the release")
-	@(cd rel/nitrogen; cp -r lib/nitrogen_core/doc .; cd doc; rm *.pl *.html)
+	@(cd rel/rise; cp -r lib/nitrogen_core/doc .; cd doc; rm *.pl *.html)
 
 link_docs: clean_docs
 	@(echo "Linking Documentation in the release")
-	@(cd rel/nitrogen; ln -s lib/nitrogen_core/doc doc)
+	@(cd rel/rise; ln -s lib/nitrogen_core/doc doc)
 
 # TRAVIS-CI STUFF
 
@@ -119,7 +120,7 @@ rel_inner:
 	@(cd rel; cp overlay/rebar.config.src rise/rebar.config)
 	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git ./site)
 	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
-	@printf "Nitrogen Version:\n${NITROGEN_VERSION}\n\n" > rel/rise/BuildInfo.txt
+	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
 	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
 	@uname -v >> rel/rise/BuildInfo.txt
 	@rm -rf rel/reltool.config	
@@ -132,14 +133,14 @@ rel_inner_full: generate erl_interface rel_inner
 
 
 rel_inner_win: generate erl_interface
-	@(cd rel/nitrogen; cp releases/${NITROGEN_VERSION}/start_clean.boot bin/)
-	@(cd rel; ./merge_platform_dependencies.escript overlay/rebar.config.src overlay/$(PLATFORM).deps nitrogen/rebar.config)
+	@(cd rel/rise; cp releases/${RISE_VERSION}/start_clean.boot bin/)
+	@(cd rel; ./merge_platform_dependencies.escript overlay/rebar.config.src overlay/$(PLATFORM).deps rise/rebar.config)
 	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
 	@(cd rel/rise; ./make_start_cmd.sh)
-	@printf "Nitrogen Version:\n${NITROGEN_VERSION}\n\n" > rel/nitrogen/BuildInfo.txt
-	@echo "Built On (uname -v):" >> rel/nitrogen/BuildInfo.txt
-	@uname -v >> rel/nitrogen/BuildInfo.txt
-	@rm -rf rel/reltool.config rel/nitrogen/make_start_cmd.sh rel/nitrogen/start.cmd.src
+	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
+	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
+	@uname -v >> rel/rise/BuildInfo.txt
+	@rm -rf rel/reltool.config rel/rise/make_start_cmd.sh rel/rise/start.cmd.src
 
 rel_copy_quickstart:
 	mkdir -p deps
@@ -153,6 +154,6 @@ rel_copy_quickstart:
 	(cd rel/nitrogen; ln -s site/templates templates)
 
 rellink:  
-	$(foreach app,$(wildcard deps/*), rm -rf rel/nitrogen/lib/$(shell basename $(app))* && ln -sf $(abspath $(app)) rel/nitrogen/lib;)
+	$(foreach app,$(wildcard deps/*), rm -rf rel/rise/lib/$(shell basename $(app))* && ln -sf $(abspath $(app)) rel/rise/lib;)
 
 

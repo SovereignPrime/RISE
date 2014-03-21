@@ -6,8 +6,9 @@
 ## If you run the sync application, this will switch it to 
 ## nitrogen_mode for proper include file detection
 -sync sync_mode nitrogen
-
+-simple_bridge_max_post_size 14096
 
 
 ## Run code at startup.
 -eval "application:start(nitrogen)"
+-setcookie p3bXSGDyNyrqtAUmx0RGC7GaHQZ4VPsZUjwivxaqgmit5ieAUlPnTll3JN4e0
