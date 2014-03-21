@@ -52,7 +52,7 @@ mac:
 	@($(MAKE) rel PLATFORM=mac)
 	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
 	@(cd rel/frontend; xcodebuild && mkdir ../Release)
-	@(cd rel; cp frontend/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend && ln -s /Applications ./Release/Applications) 
+	@(cd rel; cp -r frontend/build/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend && ln -s /Applications ./Release/Applications) 
 	@(cd rel; hdiutil create ./Release/RISE_$RISE_VERSION.dmg -srcdir ./Release)
 
 win:
