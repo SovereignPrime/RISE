@@ -1,10 +1,7 @@
 language: erlang
-script: "make travis"
+script: "make linux"
 otp_release:
   - R16B02
   - R16B01
   - R16B
-  - R15B02
-  - R15B01
-  - R15B
 before_script: "sudo apt-get --yes --force-yes install libpam0g-dev"
