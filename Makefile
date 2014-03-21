@@ -53,7 +53,7 @@ mac:
 	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
 	@(cd rel/frontend; xcodebuild && mkdir ../Release)
 	@(cd rel; cp -r frontend/build/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend && ln -s /Applications ./Release/Applications) 
-	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION.dmg} -srcdir ./Release)
+	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg volname RISE -srcdir ./Release)
 
 win:
 	@($(MAKE) rel_win PLATFORM=cowboy)
