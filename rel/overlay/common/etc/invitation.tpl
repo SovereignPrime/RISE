@@ -1,4 +1,4 @@
-    wants to contact you over RISE. Click here to download, or use the attached torrent file.
+    wants to contact you over RISE. <a href="http://sovereignprime.com/downloads/">Click here to download</a>, or use the attached torrent file.
 <h1>
     What is RISE?
 </h1>
@@ -41,5 +41,5 @@
     RISE can be downloaded free of charge. 
 </p>
 <p>
-<a href="#">Click here to take back your digital life.</a>
+<a href="http://sovereignprime.com/downloads/">Click here to take back your digital life.</a>
 </p>
