@@ -21,8 +21,6 @@ START_ERL=`cat $RUNNER_BASE_DIR/releases/start_erl.data`
 ERTS_VSN=${START_ERL% *}
 APP_VSN=${START_ERL#* }
 BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
-COOKIE_ARG=`grep '^-setcookie' $RUNNER_ETC_DIR/vm.args`
-NODETOOL="$BINDIR/escript $BINDIR/nodetool -sname rise $COOKIE_ARG"
 ERL_MAX_PORTS=4096
 
 ERL_FULLSWEEP_AFTER=10
@@ -35,6 +33,9 @@ if [ ! -d $RUNNER_ETC_DIR ]; then
    mkdir -p $RUNNER_ETC_DIR/scratch
    cp $RUNNER_BASE_DIR/etc/* $RUNNER_ETC_DIR
 fi;
+
+COOKIE_ARG=`grep '^-setcookie' $RUNNER_ETC_DIR/vm.args`
+NODETOOL="$BINDIR/escript $BINDIR/nodetool -sname rise $COOKIE_ARG"
 
 for f in `ls $RUNNER_ETC_DIR/*.config`; do CONFIG="$CONFIG -config $f"; done
 
