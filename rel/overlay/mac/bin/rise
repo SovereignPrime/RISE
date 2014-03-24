@@ -31,6 +31,7 @@ export ERL_MAX_PORTS
 if [ ! -d $RUNNER_ETC_DIR ]; then
    mkdir -p $RUNNER_ETC_DIR/spool
    mkdir -p $RUNNER_ETC_DIR/scratch
+   mkdir $RUNNER_ETC_DIR/log
    cp $RUNNER_BASE_DIR/etc/* $RUNNER_ETC_DIR
 fi;
 
