@@ -1,4 +1,4 @@
-RISE_VERSION=0.0.23
+RISE_VERSION=0.0.24
 
 help:
 	@echo 
@@ -154,5 +154,4 @@ rel_copy_quickstart:
 
 rellink:  
 	$(foreach app,$(wildcard deps/*), rm -rf rel/rise/lib/$(shell basename $(app))* && ln -sf $(abspath $(app)) rel/rise/lib;)
-
 
