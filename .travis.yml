@@ -3,5 +3,5 @@ script: "make linux"
 otp_release:
   - R16B02
   - R16B01
-  - R16B
+  - R16B03
 before_script: "sudo apt-get --yes --force-yes install libpam0g-dev"
