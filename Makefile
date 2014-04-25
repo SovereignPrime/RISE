@@ -1,4 +1,4 @@
-RISE_VERSION=0.0.26
+RISE_VERSION=0.0.27
 
 help:
 	@echo 
@@ -117,7 +117,7 @@ erl_interface:
 
 rel_inner:
 	@(cd rel; cp overlay/rebar.config.src rise/rebar.config)
-	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git ./site)
+	@(cd rel/rise; git clone git://github.com/choptastic/RISE-nitrogen-site.git ./site)
 	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
 	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
 	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
