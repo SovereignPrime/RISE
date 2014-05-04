@@ -1,4 +1,4 @@
-RISE_VERSION=0.0.26
+RISE_VERSION=0.0.28
 
 help:
 	@echo 
