@@ -1,4 +1,4 @@
-RISE_VERSION=0.0.29
+RISE_VERSION = $(shell git describe --tags --abbrev=0)
 
 help:
 	@echo 
@@ -41,6 +41,9 @@ thanks:
 	rm -fr simple_bridge nprocreg nitrogen_core NitrogenProject.com; \
 	echo "Thanks file generated in thanks.txt - please review")
 	
+version:
+	@(echo $(RISE_VERSION))
+
 # PLATFORM-SPECIFIC RISE
 
 linux:
