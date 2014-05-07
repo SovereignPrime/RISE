@@ -49,6 +49,7 @@ version:
 linux:
 	@($(MAKE) rel PLATFORM=linux)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
+	@(cd rel; cp frontend/frontend.py rise/bin/frontend && chmod +x rise/bin/frontend)
 
 mac:
 	@($(MAKE) rel PLATFORM=mac)
