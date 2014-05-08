@@ -8,19 +8,19 @@ arch=('any')
 url="http://sovereignprime.com"
 license=('GPL2')
 depends=('python2-gobject' 'webkitgtk' 'pywebkitgtk')
-makedepends=('erlang>=17.0')
+makedepends=('git' 'erlang>=17.0' 'rebar')
 source=($pkgname-$pkgver.tgz::https://github.com/SovereignPrime/$pkgname/archive/v$pkgver.tar.gz)
-sha256sums=('47b61664a47d29f3d5d4a3d6f01a7c5c13c1610767b6ed9e48c07439003533b8')
+sha256sums=('3ef1734b240bd3b2d68202031f96cbab63ad4e4e22f66c5c1c3b24cb4d76a6bd')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  python2 setup.py build
+  make linux
 }
 
 package() {
-  cd "$srcdir/$pkgname-$pkgver"
-  python2 setup.py install --root="$pkgdir" --optimize=1
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  mkdir -p "$pkgdir/opt/RISE"
+  mkdir -p "$pkgdir/etc/profile.d"
+  cp -r "$srcdir/$pkgname-$pkgver/rel/rise" "$pkgdir/opt/"
+  cp "$srcdir/$pkgname-$pkgver/rel/rise/etc/rise.sh" "$pkgdir/etc/profile.d"
 }
 
-# vim:set ts=2 sw=2 et:
