@@ -42,16 +42,18 @@ thanks:
 	echo "Thanks file generated in thanks.txt - please review")
 	
 version:
-	@(echo $(RISE_VERSION))
+	@(echo "Building RISE-$(RISE_VERSION)")
+	@(sed 's/".[0-9]*\.[0-9]*\.[0-9]*"/"$(RISE_VERSION)"/' rel/reltool_base.config > rel/reltool_tmp.config)
+
 
 # PLATFORM-SPECIFIC RISE
 
-linux:
+linux: version
 	@($(MAKE) rel PLATFORM=linux)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
-	@(cd rel; cp frontend/frontend.py rise/bin/frontend && chmod +x rise/bin/frontend)
+	# @(cd rel; cp frontend/frontend.py rise/bin/rise && chmod +x rise/bin/rise)
 
-mac:
+mac: version
 	@($(MAKE) rel PLATFORM=mac)
 	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
 	@(cd rel/frontend; xcodebuild && mkdir ../Release)
@@ -68,7 +70,7 @@ win:
 ## TODO: simplify further by adding a $(MODE) argument to be used in place of rel_inner_slim and rel_inner_full
 rel: compile
 	@$(MAKE) clean_release
-	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_$(PLATFORM).config)
+	@(cd rel; ./add_overlay.escript reltool.config reltool_tmp.config reltool_$(PLATFORM).config)
 	@($(MAKE) rel_inner_full PLATFORM=$(PLATFORM))
 	@echo Generated a self-contained Rise project
 	@echo in 'rel/rise', configured to run on $(PLATFORM).
