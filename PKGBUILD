@@ -20,7 +20,9 @@ build() {
 package() {
   mkdir -p "$pkgdir/opt/RISE"
   mkdir -p "$pkgdir/etc/profile.d"
+  mkdir -p "$pkgdir/usr/lib/systemd/user/"
   cp -r "$srcdir/$pkgname-$pkgver/rel/rise" "$pkgdir/opt/"
   cp "$srcdir/$pkgname-$pkgver/rel/rise/etc/rise.sh" "$pkgdir/etc/profile.d"
+  cp "$srcdir/$pkgname-$pkgver/rel/rise/etc/rise.service" "$pkgdir/usr/lib/systemd/user/"
 }
 
