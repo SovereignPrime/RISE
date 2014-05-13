@@ -60,8 +60,8 @@ mac: version
 	@(cd rel; cp -r frontend/build/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend && ln -s /Applications ./Release/Applications) 
 	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg -volname RISE -srcdir ./Release)
 
-win:
-	@($(MAKE) rel_win PLATFORM=win)
+win: version
+	@($(MAKE) rel PLATFORM=win)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 
 
@@ -77,7 +77,7 @@ rel: compile
 
 rel_win: compile
 	@$(MAKE) clean_release
-	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_win.config)
+	@(cd rel; ./add_overlay.escript reltool.config reltool_tmp.config reltool_win.config)
 	@($(MAKE) rel_inner_win PLATFORM=$(PLATFORM))
 	@echo Generated a self-contained Rise project
 	@echo in 'rel/rise', configured to run on $(PLATFORM).
@@ -138,8 +138,9 @@ rel_inner_full: generate erl_interface rel_inner
 
 
 rel_inner_win: generate erl_interface
+	@(cd rel; cp overlay/rebar.config.src rise/rebar.config)
+	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git ./site)
 	@(cd rel/rise; cp releases/${RISE_VERSION}/start_clean.boot bin/)
-	@(cd rel; ./merge_platform_dependencies.escript overlay/rebar.config.src overlay/$(PLATFORM).deps rise/rebar.config)
 	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
 	@(cd rel/rise; ./make_start_cmd.sh)
 	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
