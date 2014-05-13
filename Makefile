@@ -61,7 +61,7 @@ mac: version
 	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg -volname RISE -srcdir ./Release)
 
 win:
-	@($(MAKE) rel_win PLATFORM=cowboy)
+	@($(MAKE) rel_win PLATFORM=win)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 
 
@@ -77,7 +77,7 @@ rel: compile
 
 rel_win: compile
 	@$(MAKE) clean_release
-	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_cowboy.config reltool_win.config)
+	@(cd rel; ./add_overlay.escript reltool.config reltool_base.config reltool_win.config)
 	@($(MAKE) rel_inner_win PLATFORM=$(PLATFORM))
 	@echo Generated a self-contained Rise project
 	@echo in 'rel/rise', configured to run on $(PLATFORM).
