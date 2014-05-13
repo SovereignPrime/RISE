@@ -12,6 +12,11 @@
 
 {deps_dir, ["lib"]}.
 
+{port_env, [
+            {"CC", "gcc"},
+            {"CFLAGS", "$CFLAGS -std=gnu99 -Wall -Wextra -Werror -pedantic"}
+           ]}.
+
 {deps, [
     %% START_PLATFORM_DEPENDENCIES
     %% These lines will be replaced with any platform specific dependencies.
