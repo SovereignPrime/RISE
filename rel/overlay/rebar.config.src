@@ -13,8 +13,8 @@
 {deps_dir, ["lib"]}.
 
 {port_env, [
-            {"win32", "CC" , "cc"},
-            {"win32", "CXX", "c++"},
+            {"win32", "CC" , "gcc"},
+            {"win32", "CXX", "g++"},
             {"win32", "DRV_CXX_TEMPLATE",
              "$CXX -c $CXXFLAGS $DRV_CFLAGS $PORT_IN_FILES -o $PORT_OUT_FILE"},
             {"win32", "DRV_CC_TEMPLATE",
@@ -31,13 +31,15 @@
             {"win32", "DRV_LDFLAGS", "-shared $ERL_LDFLAGS"},
             {"win32", "EXE_CFLAGS" , "-g -Wall -fPIC $ERL_CFLAGS"},
             {"win32", "EXE_LDFLAGS", "$ERL_LDFLAGS"},
-            {"ERL_CFLAGS", lists:concat([" -I", erl_interface_dir(include),
-                                         " -I", filename:join(erts_dir(), "include"),
-                                         " "])},
-            {"ERL_EI_LIBDIR", erl_interface_dir(lib)},
-            {"ERL_LDFLAGS"  , " -L$ERL_EI_LIBDIR -lerl_interface -lei"},
-            {"ERLANG_ARCH"  , rebar_utils:wordsize()},
-            {"ERLANG_TARGET", rebar_utils:get_arch()}
+
+            %{"win32", "ERL_CFLAGS", lists:concat([" -I", erl_interface_dir(include),
+            %                             " -I", filename:join(erts_dir(), "include"),
+            %                             " "])},
+
+            %{"win32", "ERL_EI_LIBDIR", erl_interface_dir(lib)},
+            {"win32", "ERL_LDFLAGS"  , " -L$ERL_EI_LIBDIR -lerl_interface -lei"}
+           % {"win32", "ERLANG_ARCH"  , },
+           % {"win32", "ERLANG_TARGET", rebar_utils:get_arch()}
            ]}.
 
 {deps, [
