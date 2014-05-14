@@ -5,7 +5,7 @@ help:
 	@echo "Usage: "
 	@echo "       $(MAKE) {compile|clean}"        
 	@echo
-	@echo "       $(MAKE) {linux|win|mac}"
+	@echo "       $(MAKE) {linux|deb|win|mac}"
 	@echo
 	@echo 
 
@@ -52,11 +52,17 @@ linux: version
 	@($(MAKE) rel PLATFORM=linux)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 	@(cd rel; cp frontend/frontend.py rise/bin/rise && chmod +x rise/bin/rise)
-	@(mkdir rel/Release; \
-		cp -r rel/rise rel/Release/rise-$(RISE_VERSION) && \
-		cd rel/Release && \
-		tar czf rise_$(RISE_VERSION).orig.tar.gz rise-$(RISE_VERSION))
 
+deb: linux
+	@(echo "Creating DEB package for rise-$(RISE_VERSION)")
+	@(mkdir rel/Release)
+	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/opt)
+	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/DEBIAN)
+	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/profile.d)
+	@(cd rel; mv rise Release/rise-$(RISE_VERSION)/opt)
+	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/etc/rise.sh etc/profile.d)
+	@(cp packages/debian/* rel/Release/rise-$(RISE_VERSION)/DEBIAN)
+	@(cd rel/Release; dpkg-deb -z8 -Zgzip --build rise-$(RISE_VERSION))
 
 mac: version
 	@($(MAKE) rel PLATFORM=mac)
