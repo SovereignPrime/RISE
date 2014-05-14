@@ -52,6 +52,11 @@ linux: version
 	@($(MAKE) rel PLATFORM=linux)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 	@(cd rel; cp frontend/frontend.py rise/bin/rise && chmod +x rise/bin/rise)
+	@(mkdir rel/Release; \
+		cp -r rel/rise rel/Release/rise-$(RISE_VERSION) && \
+		cd rel/Release && \
+		tar czf rise_$(RISE_VERSION).orig.tar.gz rise-$(RISE_VERSION))
+
 
 mac: version
 	@($(MAKE) rel PLATFORM=mac)
@@ -61,7 +66,7 @@ mac: version
 	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg -volname RISE -srcdir ./Release)
 
 win: version
-	@($(MAKE) rel PLATFORM=win)
+	@(CC=gcc && $(MAKE) rel PLATFORM=win)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 
 
