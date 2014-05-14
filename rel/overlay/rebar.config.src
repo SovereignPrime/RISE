@@ -36,8 +36,7 @@
             %                             " -I", filename:join(erts_dir(), "include"),
             %                             " "])},
 
-            %{"win32", "ERL_EI_LIBDIR", erl_interface_dir(lib)},
-            {"win32", "ERL_LDFLAGS"  , " -L$ERL_EI_LIBDIR -lerl_interface -lei"}
+            {"win32", "ERL_EI_LIBDIR", "lib/erl_interface-3.7.15/lib"}
            % {"win32", "ERLANG_ARCH"  , },
            % {"win32", "ERLANG_TARGET", rebar_utils:get_arch()}
            ]}.
