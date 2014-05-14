@@ -30,7 +30,14 @@
             {"win32", "DRV_CFLAGS" , "-g -Wall -fPIC $ERL_CFLAGS"},
             {"win32", "DRV_LDFLAGS", "-shared $ERL_LDFLAGS"},
             {"win32", "EXE_CFLAGS" , "-g -Wall -fPIC $ERL_CFLAGS"},
-            {"win32", "EXE_LDFLAGS", "$ERL_LDFLAGS"}
+            {"win32", "EXE_LDFLAGS", "$ERL_LDFLAGS"},
+            {"ERL_CFLAGS", lists:concat([" -I", erl_interface_dir(include),
+                                         " -I", filename:join(erts_dir(), "include"),
+                                         " "])},
+            {"ERL_EI_LIBDIR", erl_interface_dir(lib)},
+            {"ERL_LDFLAGS"  , " -L$ERL_EI_LIBDIR -lerl_interface -lei"},
+            {"ERLANG_ARCH"  , rebar_utils:wordsize()},
+            {"ERLANG_TARGET", rebar_utils:get_arch()}
            ]}.
 
 {deps, [
