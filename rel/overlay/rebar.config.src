@@ -13,8 +13,24 @@
 {deps_dir, ["lib"]}.
 
 {port_env, [
-            {"CC", "gcc"},
-            {"CFLAGS", "$CFLAGS -std=gnu99 -Wall -Wextra -Werror -pedantic"}
+            {"win32", "CC" , "cc"},
+            {"win32", "CXX", "c++"},
+            {"win32", "DRV_CXX_TEMPLATE",
+             "$CXX -c $CXXFLAGS $DRV_CFLAGS $PORT_IN_FILES -o $PORT_OUT_FILE"},
+            {"win32", "DRV_CC_TEMPLATE",
+             "$CC -c $CFLAGS $DRV_CFLAGS $PORT_IN_FILES -o $PORT_OUT_FILE"},
+            {"win32", "DRV_LINK_TEMPLATE",
+             "$CC $PORT_IN_FILES $LDFLAGS $DRV_LDFLAGS -o $PORT_OUT_FILE"},
+            {"win32", "EXE_CXX_TEMPLATE",
+             "$CXX -c $CXXFLAGS $EXE_CFLAGS $PORT_IN_FILES -o $PORT_OUT_FILE"},
+            {"win32", "EXE_CC_TEMPLATE",
+             "$CC -c $CFLAGS $EXE_CFLAGS $PORT_IN_FILES -o $PORT_OUT_FILE"},
+            {"win32", "EXE_LINK_TEMPLATE",
+             "$CC $PORT_IN_FILES $LDFLAGS $EXE_LDFLAGS -o $PORT_OUT_FILE"},
+            {"win32", "DRV_CFLAGS" , "-g -Wall -fPIC $ERL_CFLAGS"},
+            {"win32", "DRV_LDFLAGS", "-shared $ERL_LDFLAGS"},
+            {"win32", "EXE_CFLAGS" , "-g -Wall -fPIC $ERL_CFLAGS"},
+            {"win32", "EXE_LDFLAGS", "$ERL_LDFLAGS"}
            ]}.
 
 {deps, [
