@@ -1,0 +1,9 @@
+Package: RISE
+Priority: optional
+Section: internet
+Installed-Size: 300000
+Maintainer: Anton Shvein
+Architecture: all
+Version: 0.0.30
+Depends: python-webkit
+Description: Secure sharing and collaboration
