@@ -59,9 +59,10 @@ deb: linux
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/opt)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/DEBIAN)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/profile.d)
+	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/init)
 	@(cd rel; mv rise Release/rise-$(RISE_VERSION)/opt)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/etc/rise.sh etc/profile.d)
-	@(cp packages/debian/* rel/Release/rise-$(RISE_VERSION)/DEBIAN)
+	@(cp -r packages/debian/* rel/Release/rise-$(RISE_VERSION))
 	@(cd rel/Release; dpkg-deb -z8 -Zgzip --build rise-$(RISE_VERSION))
 
 mac: version
