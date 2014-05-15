@@ -60,6 +60,7 @@ deb: linux
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/DEBIAN)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/profile.d)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/init)
+	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/usr/bin)
 	@(cd rel; mv rise Release/rise-$(RISE_VERSION)/opt)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/etc/rise.sh etc/profile.d)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/bin/rise usr/bin)
