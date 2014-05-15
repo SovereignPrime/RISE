@@ -51,7 +51,7 @@ version:
 linux: version
 	@($(MAKE) rel PLATFORM=linux)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
-	@(cd rel; cp frontend/frontend.py rise/bin/rise && chmod +x rise/bin/rise)
+	@(cd rel; cp frontend/frontend.py rise/bin/rise_frontend && chmod +x rise/bin/rise_frontend)
 
 deb: linux
 	@(echo "Creating DEB package for rise-$(RISE_VERSION)")
