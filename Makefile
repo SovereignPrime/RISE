@@ -62,6 +62,7 @@ deb: linux
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/init)
 	@(cd rel; mv rise Release/rise-$(RISE_VERSION)/opt)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/etc/rise.sh etc/profile.d)
+	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/bin/rise usr/bin)
 	@(cp -r packages/debian/* rel/Release/rise-$(RISE_VERSION))
 	@(cd rel/Release; dpkg-deb -z8 -Zgzip --build rise-$(RISE_VERSION))
 
