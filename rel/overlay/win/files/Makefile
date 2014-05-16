@@ -1,4 +1,4 @@
-all: get-deps plugins compile
+all: get-deps compile
 
 cookie:
 	@echo Generating a default cookie in /etc/vm.args
