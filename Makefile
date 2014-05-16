@@ -75,7 +75,7 @@ mac: version
 	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg -volname RISE -srcdir ./Release)
 
 win: version
-	@(CC=gcc && $(MAKE) rel PLATFORM=win)
+	@(CC=gcc && $(MAKE) rel_win PLATFORM=win)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 
 

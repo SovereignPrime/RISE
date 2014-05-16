@@ -31,7 +31,7 @@ Currently, we are running [build-bot](http://travis-ci.org)
 
 [![Build Status](https://travis-ci.org/SovereignPrime/RISE.svg?branch=master)](https://travis-ci.org/SovereignPrime/RISE)
 
-Requiirements
+Requirements
 -------------
 
 To build and run the software you need:
@@ -48,10 +48,10 @@ Building
 
 First install all dependences.
 
-### Linux
+### Linux (Ubunto)
 
 <code>
-make linux
+make deb
 </code>
 
 ### Mac
@@ -65,6 +65,15 @@ make mac
 <code>
 make win
 </code>
+
+Project file structure
+----------------------
+
+After compilation compiled project and package for target OS will be situated under rel/Release folder.
+Durin runtime all configs, DB files and logs are situated in
+* $HOME/Library/RISE for MacOSX
+* $HOME/.config/RISE for Linux
+* $HOME/Application Data/RISE for Windows
 
 License
 -------
