@@ -7,4 +7,4 @@ set DOC_ROOT=%ROOTDIR%/site/static
 cmd /c build-ini.bat
 erts-{ERTS_VSN}\bin\escript.exe merge-configs.escript ./etc
 erts-{ERTS_VSN}\bin\erl -boot releases/{APP_VSN}/rise -pa %PA% -make
-erts-{ERTS_VSN}\bin\werl -pa %PA% -boot releases/{APP_VSN}/rise -embedded -config etc/app.generated.config  -args_file etc/vm.args
+erts-{ERTS_VSN}\bin\erl -pa %PA% -boot releases/{APP_VSN}/rise -embedded -config etc/app.generated.config  -args_file etc/vm.args
