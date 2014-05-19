@@ -155,7 +155,7 @@ rel_inner_win: generate erl_interface
 	@(cd rel; cp overlay/rebar.config.src rise/rebar.config)
 	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git ./site)
 	@(cd rel/rise; cp releases/${RISE_VERSION}/start_clean.boot bin/)
-	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
+	@(cd rel/rise; $(MAKE); $(MAKE) cookie)
 	@(cd rel/rise; ./make_start_cmd.sh)
 	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
 	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
