@@ -77,6 +77,8 @@ mac: version
 win: version
 	@(CC=gcc && $(MAKE) rel_win PLATFORM=win)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
+	@(cd frontend; qmake sp-rise.pro -config release && nmake)
+	@(cp frontend/sp-rise.exe rise/bin/rise.exe)
 
 
 # PLATFORM-AGNOSTIC
