@@ -51,7 +51,9 @@ version:
 linux: version
 	@($(MAKE) rel PLATFORM=linux)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
-	@(cd rel; cp frontend/frontend.py rise/bin/rise_frontend && chmod +x rise/bin/rise_frontend)
+	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
+	@(cd rel; cp frontend/rise rise/bin/rise)
+	
 
 deb: linux
 	@(echo "Creating DEB package for rise-$(RISE_VERSION)")
@@ -77,6 +79,8 @@ mac: version
 win: version
 	@(CC=gcc && $(MAKE) rel_win PLATFORM=win)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
+	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
+	@(cd rel; cp frontend/release/rise.exe rise/bin/rise.exe)
 
 
 # PLATFORM-AGNOSTIC
