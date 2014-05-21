@@ -51,7 +51,7 @@ version:
 linux: version
 	@($(MAKE) rel PLATFORM=linux)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
-	@(cd rel/frontend; qmake sp-rise.pro -config release && nmake)
+	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
 	@(cd rel; cp frontend/rise rise/bin/rise)
 	
 
@@ -79,8 +79,8 @@ mac: version
 win: version
 	@(CC=gcc && $(MAKE) rel_win PLATFORM=win)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
-	@(cd rel/frontend; qmake sp-rise.pro -config release && nmake)
-	@(cd rel; cp frontend/rise.exe rise/bin/rise.exe)
+	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
+	@(cd rel; cp frontend/release/rise.exe rise/bin/rise.exe)
 
 
 # PLATFORM-AGNOSTIC
