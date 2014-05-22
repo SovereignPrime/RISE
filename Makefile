@@ -82,6 +82,7 @@ win: version
 	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
 	@(cd rel; cp frontend/release/rise.exe rise/bin/rise.exe)
 	@(cd rel/rise; erts-6.0/bin/escript.exe merge-configs.escript ./etc)
+	@(iscc packages/win/rise.iss)
 
 
 # PLATFORM-AGNOSTIC
