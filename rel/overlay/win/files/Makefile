@@ -16,10 +16,6 @@ get-deps:
 update-deps:
 	@(export PATH=`pwd`/`echo erts-*/bin`:$$PATH; echo "Using Erlang in `which erl`"; ./rebar update-deps)
 
-copy-static:
-	@(mkdir -p site/static/nitrogen)
-	@(cp -r lib/nitrogen_core/www/* site/static/nitrogen/)
-
 plugins:
 	@(export PATH=`pwd`/`echo erts-*/bin`:$$PATH;escript do-plugins.escript)
 
