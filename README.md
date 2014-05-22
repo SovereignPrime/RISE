@@ -108,10 +108,13 @@ The main application folder structure is inherited from [NitrogenProject](http:/
 External Librarys and Frameworks
 --------------------------------
 
-RISE uses 
-[NitrogenProject](http://nitrogenproject.com) as a WebFramework and inherits moast of directory 
+RISE uses
+ 
+[NitrogenProject](http://nitrogenproject.com) as a WebFramework and inherits most of directory 
 structure from it.
+
 For BitTorrent handling [Etorrent](https://github.com/jlouis/etorrent_core).
+
 Frontend part is based on Qt for Windows and Linux.
 MacOSX frontend is native.
 
