@@ -35,8 +35,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\RISE\rel\rise\bin\rise.exe"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "C:\RISE\rel\rise\bin\rise.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\RISE\rel\rise\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Qt\5.3\mingw482_32\plugins\platform"; DestDir: "{app}\bin"; Flags: recursesubdirs
+Source: "C:\Qt\5.3\mingw482_32\bin\*.dll"; DestDir: "{app}\bin"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Dirs]
