@@ -37,30 +37,53 @@ Requirements
 To build and run the software you need:
 
 * Erlang/OTP R16B1-1 or greater version
-* GCC, xcodebuild, MinGW or compatiable
+* GCC
 * gnumake
-* Python 2.7 (NOT 3.x at the moment)
-* GTK3 with GTKWebKit (for Linux and Windows)
-* Developer Tools for MacOSX
+* Git
+* Qt
+
+
+### For linux
+* Qt build tools
+* deblelper
+
+### For Windows
+* Qt
+* MinGW
+* MsysGit
+* Inno Setup
+
+### For MacOSX
+* XCode
 
 Building
 --------
 
-First install all dependences.
-
 ### Linux (Ubunto)
+* Install GCC and GNUMake
+* Install git
+* Install Qt build tools
+* Install Erlang
+* Install DebHelper to build deb
 
 <code>
 make deb
 </code>
 
 ### Mac
+* Install XCode
+* Install git
 
 <code>
 make mac
 </code>
 
 ### Windows
+* Install  Qt
+* Install MsysGit
+* Install Erlang
+* Don't forget to add Qt binaries to PATH (prepend)
+* Install Inno Setup
 
 <code>
 make win
@@ -73,10 +96,29 @@ After compilation compiled project and package for target OS will be situated un
 Durin runtime all configs, DB files and logs are situated in
 * $HOME/Library/RISE for MacOSX
 * $HOME/.config/RISE for Linux
-* $HOME/Application Data/RISE for Windows
+* Windows stores all data in program directory at the moment
+
+The main application folder structure is inherited from [NitrogenProject](http://nitrogenproject.com).
+* Most of Erlang dependences are situated in "lib" subdirectory.
+* The "site" contains web part.
+* In "bin" all Qt stuff and some shell helpers are situated.
+* "etc" is for template configs before moving to OS specific place.
+* All the rest seems to be standart for erlang release.
+
+External Librarys and Frameworks
+--------------------------------
+
+RISE uses 
+[NitrogenProject](http://nitrogenproject.com) as a WebFramework and inherits moast of directory 
+structure from it.
+For BitTorrent handling [Etorrent](https://github.com/jlouis/etorrent_core).
+Frontend part is based on Qt for Windows and Linux.
+MacOSX frontend is native.
+
+See [THANKS](THANKS.markdown) for details.
 
 License
 -------
 
 This code is licensed under GPL v2.
-See LICENSE for details.
+See [LICENSE](LICENSE) for details.
