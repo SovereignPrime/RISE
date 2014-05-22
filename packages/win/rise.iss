@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RISE"
-#define MyAppVersion "0.0.31"
+#define MyAppVersion "0.0.30"
 #define MyAppPublisher "Sovereign Prime"
 #define MyAppURL "http://souvereignprime.com/"
 #define MyAppExeName "rise.exe"
@@ -39,11 +39,16 @@ Source: "C:\RISE\rel\rise\bin\rise.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\RISE\rel\rise\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
+[Dirs]
+Name: "{app}/spool"; Flags: uninsneveruninstall
+Name: "{app}/scratch"; Flags: uninsneveruninstall
+
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}\bin"
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; WorkingDir: "{app}\bin"
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}\bin"; Tasks: quicklaunchicon
 
 [Run]
+Filename: "{app}\build-ini.bat"; StatusMsg: "Configuring..."; Flags: nowait
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
