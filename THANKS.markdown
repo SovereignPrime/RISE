@@ -1,4 +1,6 @@
 # Thanks
+Special thanks to Jesse Gumm for his help with the project.
+
 As far as this code is based on Nitrogen web framework sincere thanks to all the people who made Nitrogen great, including:
 
 + Rusty Klophaus (@rustyio)
@@ -72,7 +74,6 @@ As far as this code is based on Nitrogen web framework sincere thanks to all the
 
 Also thanks to 
 + Jesper Louis Andersen for etorrent codebase
-+ Jesse Gumm for sigma_search component
 
 And all the rest whom I forgot to mention.
 
