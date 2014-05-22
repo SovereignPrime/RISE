@@ -7,7 +7,7 @@ cookie:
 ini-file:
 	@(cmd /c build-ini.bat)
 
-compile: ini-file
+compile: 
 	@(export PATH=`pwd`/`echo erts-*/bin`:$$PATH; echo "Using Erlang in `which erl`"; ./rebar compile)
 
 get-deps:
