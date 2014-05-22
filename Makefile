@@ -150,10 +150,6 @@ rel_inner:
 	@uname -v >> rel/rise/BuildInfo.txt
 	@rm -rf rel/reltool.config	
 
-rel_inner_slim:
-	@(cd rel; ./make_slim.escript reltool.config)
-	@($(MAKE) generate rel_inner PLATFORM=$(PLATFORM))
-
 rel_inner_full: generate erl_interface rel_inner
 
 
