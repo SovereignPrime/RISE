@@ -23,7 +23,7 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=C:\RISE\LICENSE
 OutputDir=C:\RISE\rel\Release
-OutputBaseFilename=setup
+OutputBaseFilename={#MyAppName}_{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 
