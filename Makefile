@@ -50,8 +50,7 @@ version:
 
 linux: version
 	@($(MAKE) rel PLATFORM=linux)
-	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
-	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
+	@($(MAKE) frontend PLATFORM=linux)
 	@(cd rel; cp frontend/rise rise/bin/rise)
 	
 
@@ -61,7 +60,6 @@ deb: linux
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/opt)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/DEBIAN)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/profile.d)
-	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/init)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/usr/bin)
 	@(cd rel; mv rise Release/rise-$(RISE_VERSION)/opt)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/etc/rise.sh etc/profile.d)
@@ -78,11 +76,11 @@ mac: version
 
 win: version
 	@(CC=gcc && $(MAKE) rel_win PLATFORM=win)
-	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
-	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
+	@($(MAKE) frontend PLATFORM=win)
 	@(cd rel; cp frontend/release/rise.exe rise/bin/rise.exe)
 	@(cd rel/rise; erts-6.0/bin/escript.exe merge-configs.escript ./etc)
-	@(iscc packages/win/rise.iss)
+	@($(MAKE) setup)
+
 
 
 # PLATFORM-AGNOSTIC
@@ -164,17 +162,10 @@ rel_inner_win: generate erl_interface
 	@uname -v >> rel/rise/BuildInfo.txt
 	@rm -rf rel/reltool.config rel/rise/make_start_cmd.sh rel/rise/start.cmd.src
 
-rel_copy_quickstart:
-	mkdir -p deps
-	(rm -fr deps/NitrogenProject.com)
-	(cd deps; git clone git://github.com/nitrogen/NitrogenProject.com.git)
-	cp -R deps/NitrogenProject.com/src/* rel/nitrogen/site/src
-	cp -R deps/NitrogenProject.com/static/* rel/nitrogen/site/static
-	cp -R deps/NitrogenProject.com/templates/* rel/nitrogen/site/templates
-	rm -rf rel/nitrogen/site/src/nitrogen_website.app.src
-	(cd rel/nitrogen; ln -s site/static static)
-	(cd rel/nitrogen; ln -s site/templates templates)
 
-rellink:  
-	$(foreach app,$(wildcard deps/*), rm -rf rel/rise/lib/$(shell basename $(app))* && ln -sf $(abspath $(app)) rel/rise/lib;)
+frontend:
+	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
+	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
 
+setup:
+	@(iscc packages/win/rise.iss)
