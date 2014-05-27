@@ -54,13 +54,13 @@ begin
 ITD_Init;
 Installed := 0;
 RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86', 'Installed', Installed);
-if Installed != 1 then
+if Installed <> 1 then
 begin
     if IsWin64() then
     begin
         if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x64', 'Installed', Installed) then
         begin
-            if Installed != 1 then
+            if Installed <> 1 then
             begin 
                 ITD_AddFile('http://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe', expandconstant('{tmp}\vcredist.exe'));
             end;
@@ -70,6 +70,7 @@ begin
         ITD_AddFile('http://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe', expandconstant('{tmp}\vcredist.exe'));
     end;
     ITD_DownloadAfter(wpReady);
+end;
 end;
     
 [Icons]
