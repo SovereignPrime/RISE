@@ -49,7 +49,7 @@ Name: "{app}/scratch"; Flags: uninsneveruninstall
 [Code]
 procedure InitializeWizard();
 var 
-    Installed : Integer;
+    Installed : Cardinal;
 begin
 ITD_Init;
 Installed := 0;
