@@ -71,6 +71,7 @@ begin
     end;
     ITD_DownloadAfter(wpReady);
 end;
+end;
     
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; WorkingDir: "{app}\bin"
