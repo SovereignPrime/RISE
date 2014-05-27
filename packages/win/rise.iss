@@ -43,7 +43,11 @@ Source: "C:\Qt\5.3\mingw482_32\bin\*.dll"; DestDir: "{app}\bin"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Dirs]
-Name: "{userappdata}/scratch"; Flags: uninsneveruninstall
+Name: "{userappdata}/RISE"; Flags: uninsneveruninstall
+Name: "{userappdata}/RISE/scratch"; Flags: uninsneveruninstall
+Name: "{userappdata}/RISE/data"; Flags: uninsneveruninstall
+Name: "{userappdata}/RISE/log"; Flags: uninsneveruninstall
+Name: "{userappdata}/RISE/scratch"; Flags: uninsneveruninstall
 
 [Code]
 procedure InitializeWizard();
