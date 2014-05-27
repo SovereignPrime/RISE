@@ -44,8 +44,8 @@ thanks:
 version:
 	@(echo "Building RISE-$(RISE_VERSION)")
 	@(sed 's/".[0-9]*\.[0-9]*\.[0-9]*"/"$(RISE_VERSION)"/' rel/reltool_base.config > rel/reltool_tmp.config)
-	@(sed 's/%VERSION/"$(RISE_VERSION)"/' packages/debian/DEBIAN/control.src > packages/debian/DEBIAN/control)
-	@(sed 's/%VERSION/"$(RISE_VERSION)"/' packages/win/rise.iss.src > packages/win/rise.iss)
+	@(sed 's/%VERSION/$(RISE_VERSION)/' packages/debian/DEBIAN/control.src > packages/debian/DEBIAN/control)
+	@(sed 's/%VERSION/$(RISE_VERSION)/' packages/win/rise.iss.src > packages/win/rise.iss)
 
 
 # PLATFORM-SPECIFIC RISE
