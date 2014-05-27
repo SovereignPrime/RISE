@@ -4,7 +4,7 @@
 #include ReadReg(HKEY_LOCAL_MACHINE,'Software\Sherlock Software\InnoTools\Downloader','ScriptPath','') 
 
 #define MyAppName "RISE"
-#define MyAppVersion "0.1.1"
+#define MyAppVersion "%VERSION"
 #define MyAppPublisher "Sovereign Prime"
 #define MyAppURL "http://souvereignprime.com/"
 #define MyAppExeName "rise.exe"

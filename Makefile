@@ -44,6 +44,8 @@ thanks:
 version:
 	@(echo "Building RISE-$(RISE_VERSION)")
 	@(sed 's/".[0-9]*\.[0-9]*\.[0-9]*"/"$(RISE_VERSION)"/' rel/reltool_base.config > rel/reltool_tmp.config)
+	@(sed 's/%VERSION/"$(RISE_VERSION)"/' packages/debian/DEBIAN/control.src > packages/debian/DEBIAN/control)
+	@(sed 's/%VERSION/"$(RISE_VERSION)"/' packages/win/rise.iss.src > packages/win/rise.iss)
 
 
 # PLATFORM-SPECIFIC RISE
@@ -56,6 +58,7 @@ linux: version
 
 deb: linux
 	@(echo "Creating DEB package for rise-$(RISE_VERSION)")
+	@(rm -rf rel/Release)
 	@(mkdir rel/Release)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/opt)
 	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/DEBIAN)
@@ -164,8 +167,10 @@ rel_inner_win: generate erl_interface
 
 
 frontend:
+	@(rm -rf rel/frontend)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
 
 setup:
+	@(rm -rf rel/Release)
 	@(iscc packages/win/rise.iss)
