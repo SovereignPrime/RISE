@@ -4,6 +4,6 @@ Section: internet
 Installed-Size: 300000
 Maintainer: Anton Shvein
 Architecture: all
-Version: 0.0.30
-Depends: python-gi, gir1.2-webkit-3.0, gir1.2-gtk-3.0
+Version: 0.1.1
+Depends: libqt-webkit
 Description: Secure sharing and collaboration
