@@ -1,9 +1,0 @@
-Package: RISE
-Priority: optional
-Section: internet
-Installed-Size: 300000
-Maintainer: Anton Shvein
-Architecture: all
-Version: %VERSION
-Depends: libqt-webkit
-Description: Secure sharing and collaboration
