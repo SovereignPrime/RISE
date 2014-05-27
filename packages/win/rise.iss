@@ -78,7 +78,7 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Tas
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; WorkingDir: "{app}\bin"; Tasks: quicklaunchicon
 
 [Run]
-Filename: {tmp}\vcredist.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Flags: skipifdoesntexist StatusMsg: Installing Visual Studio 2010 C++ CRT Libraries...
+Filename: {tmp}\vcredist.exe; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Flags: skipifdoesntexist; StatusMsg: Installing Visual Studio 2010 C++ CRT Libraries...
 Filename: "{app}\build-ini.bat"; StatusMsg: "Configuring..."; Flags: nowait
 Filename: "{app}\bin\{#MyAppExeName}"; WorkingDir: "{app}\bin"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
