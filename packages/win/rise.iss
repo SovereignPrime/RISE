@@ -54,13 +54,13 @@ begin
 ITD_Init;
 Installed := 0;
 RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86', 'Installed', Installed);
-if Installed != 1 then
+if Installed <> 1 then
 begin
     if IsWin64() then
     begin
         if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x64', 'Installed', Installed) then
         begin
-            if Installed != 1 then
+            if Installed <> 1 then
             begin 
                 ITD_AddFile('http://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe', expandconstant('{tmp}\vcredist.exe'));
             end;
