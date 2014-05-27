@@ -4,6 +4,6 @@ Section: internet
 Installed-Size: 300000
 Maintainer: Anton Shvein
 Architecture: all
-Version: 0.1.1
+Version: %VERSION
 Depends: libqt-webkit
 Description: Secure sharing and collaboration
