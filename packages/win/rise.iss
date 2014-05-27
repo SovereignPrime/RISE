@@ -39,7 +39,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "C:\RISE\rel\rise\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Qt\5.3\mingw482_32\plugins\platforms\*"; DestDir: "{app}\bin\platforms"; Flags: recursesubdirs
-Source: "C:\Qt\5.3\mingw482_32\bin\*.dll"; ExcludesL "*d.dll"; DestDir: "{app}\bin"
+Source: "C:\Qt\5.3\mingw482_32\bin\*.dll"; Excludes: "*d.dll"; DestDir: "{app}\bin"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Dirs]
