@@ -23,3 +23,4 @@ echo [erlang]>%INIFILE%
 echo Bindir=%PWD%\\%ERTS%\\bin>>%INIFILE%
 echo Progname=erl>>%INIFILE%
 echo Rootdir=%PWD%>>%INIFILE%
+del %TEMP%\erts.txt
