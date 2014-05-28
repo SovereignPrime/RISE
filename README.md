@@ -15,7 +15,7 @@ RISE offers.
 Why RISE?
 ---------
 
-In a post Edward Snowdon world, no major web service provider can guarantee the 
+In a post Edward Snowden world, no major web service provider can guarantee the 
 privacy of their users.
 
 There could be no better time to consider what is at the root of any free and 
