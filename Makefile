@@ -72,10 +72,8 @@ deb: linux
 
 mac: version
 	@($(MAKE) rel PLATFORM=mac)
-	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
-	@(cd rel/frontend; xcodebuild && mkdir ../Release)
-	@(cd rel; cp -r frontend/build/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend && ln -s /Applications ./Release/Applications) 
-	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg -volname RISE -srcdir ./Release)
+	@($(MAKE) mac_frontend PLATFORM=mac)
+	@($(MAKE) dmg PLATFORM=mac)
 
 win: version
 	@(CC=gcc && $(MAKE) rel_win PLATFORM=win)
@@ -170,6 +168,15 @@ frontend:
 	@(rm -rf rel/frontend)
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git rel/frontend)
 	@(cd rel/frontend; qmake sp-rise.pro -config release && make)
+
+mac_frontend:
+	@(rm -rf rel/frontend)
+	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
+	@(cd rel/frontend; xcodebuild && mkdir ../Release)
+	@(cd rel; cp -r frontend/build/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend && ln -s /Applications ./Release/Applications) 
+
+dmg:
+	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg -volname RISE -srcdir ./Release)
 
 setup:
 	@(rm -rf rel/Release)
