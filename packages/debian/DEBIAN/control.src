@@ -5,5 +5,5 @@ Installed-Size: 300000
 Maintainer: Anton Shvein
 Architecture: all
 Version: %VERSION
-Depends: libqt-webkit
+Depends: libqt4-webkit
 Description: Secure sharing and collaboration
