@@ -28,6 +28,7 @@ OutputDir=C:\RISE\rel\Release
 OutputBaseFilename={#MyAppName}_{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
+SetupIconFile=sovereignprime.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -38,6 +39,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "C:\RISE\rel\rise\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\RISE\packages\win\sovereignprime.ico*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\5.3\mingw482_32\plugins\platforms\*"; Excludes: "*d.dll"; DestDir: "{app}\bin\platforms"; Flags: recursesubdirs
 Source: "C:\Qt\5.3\mingw482_32\bin\*.dll"; Excludes: "*d.dll"; DestDir: "{app}\bin"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
@@ -77,9 +79,9 @@ end;
 end;
     
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; WorkingDir: "{app}\bin"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Tasks: desktopicon; WorkingDir: "{app}\bin"
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; WorkingDir: "{app}\bin"; Tasks: quicklaunchicon
+Name: "{group}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; WorkingDir: "{app}\bin"; IconFilename: "{app}\sovereignprime.ico"
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; Tasks: desktopicon; WorkingDir: "{app}\bin"; IconFilename: "{app}\sovereignprime.ico"
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"; WorkingDir: "{app}\bin"; Tasks: quicklaunchicon; IconFilename: "{app}\sovereignprime.ico"
 
 [Run]
 Filename: "{tmp}\vcredist.exe"; Parameters: "/q:a /c:""VCREDI~3.EXE /q:a /c:""""msiexec /i vcredist.msi /qn"""" """; Flags: skipifdoesntexist; StatusMsg: Installing Visual Studio 2010 C++ CRT Libraries...
