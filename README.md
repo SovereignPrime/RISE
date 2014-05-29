@@ -24,6 +24,14 @@ open society.
 With this in mind, please read the following articles from the 
 Universal Declaration Of Human Rights.
 
+Article 12.
+
+No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.
+
+Article 19.
+
+Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.
+
 Build Status
 ------------
 
