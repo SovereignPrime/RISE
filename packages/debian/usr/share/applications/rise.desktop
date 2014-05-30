@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Categories=Application;Network;
 Exec=/opt/rise/bin/rise
-Icon=/opt/rise/rise.png
+Icon=/opt/rise/site/static/img/rise.ico
 StartupNotify=true
 Terminal=false
 Type=Application
