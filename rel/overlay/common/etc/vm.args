@@ -9,6 +9,5 @@
 -simple_bridge_max_post_size 14096
 -simple_bridge_max_file_size 14096
 
-
 ## Run code at startup.
 -eval "application:start(nitrogen)"
