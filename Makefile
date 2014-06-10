@@ -50,6 +50,14 @@ version:
 
 # PLATFORM-SPECIFIC RISE
 
+develop: version
+	@($(MAKE) rel_dev PLATFORM=linux)
+
+mac_dev: version
+	@($(MAKE) rel_dev PLATFORM=mac)
+	@($(MAKE) mac_frontend PLATFORM=mac)
+	@($(MAKE) dmg PLATFORM=mac)
+
 linux: version
 	@($(MAKE) rel PLATFORM=linux)
 	@($(MAKE) frontend PLATFORM=linux)
@@ -88,9 +96,16 @@ win: version
 
 ## TODO: simplify further by adding a $(MODE) argument to be used in place of rel_inner_slim and rel_inner_full
 rel: compile
-	@$(MAKE) clean_release
+	@($(MAKE) clean_release)
 	@(cd rel; ./add_overlay.escript reltool.config reltool_tmp.config reltool_$(PLATFORM).config)
 	@($(MAKE) rel_inner_full PLATFORM=$(PLATFORM))
+	@echo Generated a self-contained Rise project
+	@echo in 'rel/rise', configured to run on $(PLATFORM).
+
+rel_dev: compile
+	@($(MAKE) clean_release)
+	@(cd rel; ./add_overlay.escript reltool.config reltool_tmp.config reltool_$(PLATFORM).config)
+	@($(MAKE) rel_inner_dev PLATFORM=$(PLATFORM))
 	@echo Generated a self-contained Rise project
 	@echo in 'rel/rise', configured to run on $(PLATFORM).
 
@@ -140,16 +155,23 @@ generate:
 erl_interface:
 	@(cd rel; escript copy_erl_interface.escript)
 
-rel_inner:
+rel_inner_full: generate erl_interface
 	@(cd rel; cp overlay/rebar.config.src rise/rebar.config)
 	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git ./site)
-	@(cd rel/rise; $(MAKE); $(MAKE) cookie; $(MAKE) copy-static)
+	@(cd rel/rise; $(MAKE); $(MAKE) cookie)
 	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
 	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
 	@uname -v >> rel/rise/BuildInfo.txt
 	@rm -rf rel/reltool.config	
 
-rel_inner_full: generate erl_interface rel_inner
+rel_inner_dev: generate erl_interface
+	@(cd rel; cp overlay/rebar_dev.config.src rise/rebar.config)
+	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git --branch develop ./site)
+	@(cd rel/rise; $(MAKE); $(MAKE) cookie)
+	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
+	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
+	@uname -v >> rel/rise/BuildInfo.txt
+	@rm -rf rel/reltool.config	
 
 
 rel_inner_win: generate erl_interface
