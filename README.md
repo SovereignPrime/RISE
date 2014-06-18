@@ -67,7 +67,7 @@ To build and run the software you need:
 Building
 --------
 
-### Linux (Ubunto)
+### Linux (Ubuntu)
 * Install GCC and GNUMake
 * Install git
 * Install Qt build tools
@@ -101,7 +101,7 @@ Project file structure
 ----------------------
 
 After compilation compiled project and package for target OS will be situated under rel/Release folder.
-Durin runtime all configs, DB files and logs are situated in
+During runtime all configs, DB files and logs are situated in
 * $HOME/Library/RISE for MacOSX
 * $HOME/.config/RISE for Linux
 * Windows stores all data in program directory at the moment
@@ -111,9 +111,9 @@ The main application folder structure is inherited from [NitrogenProject](http:/
 * The "site" contains web part.
 * In "bin" all Qt stuff and some shell helpers are situated.
 * "etc" is for template configs before moving to OS specific place.
-* All the rest seems to be standart for erlang release.
+* All the rest seems to be standard for an erlang release.
 
-External Librarys and Frameworks
+External Libraries and Frameworks
 --------------------------------
 
 RISE uses
