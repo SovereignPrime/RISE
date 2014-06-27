@@ -53,20 +53,20 @@
     %%{nitrogen_core, ".*",   {git, "git://github.com/nitrogen/nitrogen_core",{branch, master}}},
     %%{nprocreg,      ".*",   {git, "git://github.com/nitrogen/nprocreg",     {branch, master}}},
     %% {simple_bridge, ".*",   {git, "git://github.com/nitrogen/simple_bridge",{branch, master}}},
-    {simple_bridge, ".*",   {git, "git://github.com/SovereignPrime/simple_bridge",{branch, master}}},
+    {simple_bridge, ".*",   {git, "ssh://git@github.com/SovereignPrime/simple_bridge",{branch, master}}},
     %%{sync,          ".*",   {git, "git://github.com/rustyio/sync",          {branch, master}}}
 
     %% Get specific tagged version
-    {nitrogen_core, ".*",   {git, "git://github.com/SovereignPrime/nitrogen_core"}},
+    {nitrogen_core, ".*",   {git, "ssh://git@github.com/SovereignPrime/nitrogen_core"}},
     {nprocreg,      ".*",   {git, "git://github.com/nitrogen/nprocreg",     {tag, "v0.2.1"}}},
     {cowboy,        ".*",   {git, "git://github.com/extend/cowboy",         {tag, "0.8.6"}}},
     {ranch,         ".*",   {git, "git://github.com/extend/ranch",          {tag, "0.8.5"}}},
     {mimetypes,     ".*",   {git, "git://github.com/spawngrid/mimetypes",   {branch, master}}},
     {mochijson2,    ".*",   {git, "git://github.com/bjnortier/mochijson2.git", "3663fb01fd98958181adc2d1300c7bfa553e1434"}},
-    {bitmessage, ".*", {git, "git://github.com/SovereignPrime/BitMessage.erl.git", {branch, "develop"}}},
-    {eminer, ".*", {git, "git://github.com/t0ha/eminer.git", {branch, "develop"}}},
+    {bitmessage, ".*", {git, "ssh://git@github.com/SovereignPrime/BitMessage.erl.git", {branch, "develop"}}},
+    {eminer, ".*", {git, "ssh://git@github.com/t0ha/eminer.git", {branch, "develop"}}},
     %{pat, ".*", {git, "git://github.com/selectel/pat.git", "3c0916931065d037d66f884601e7d740e2a3d7fe"}},
-    {etorrent_core, ".*", {git, "git://github.com/SovereignPrime/etorrent_core.git", {branch, "develop"}}},
-    {sigma_search, ".*", {git, "git://github.com/SovereignPrime/sigma_search.git", {branch, master}}},
+    {etorrent_core, ".*", {git, "ssh://git@github.com/SovereignPrime/etorrent_core.git", {branch, "develop"}}},
+    {sigma_search, ".*", {git, "ssh://git@github.com/SovereignPrime/sigma_search.git", {branch, master}}},
     {sync,          ".*",   {git, "git://github.com/rustyio/sync",          "a8366be73244383c07f9cafe30b72e83f3ad0621"}}
 ]}.
