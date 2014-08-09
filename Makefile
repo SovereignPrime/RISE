@@ -166,7 +166,7 @@ rel_inner_full: generate erl_interface
 
 rel_inner_dev: generate erl_interface
 	@(cd rel; cp overlay/rebar_dev.config.src rise/rebar.config)
-	@(cd rel/rise; git clone git://github.com/SovereignPrime/RISE-nitrogen-site.git --branch develop ./site)
+	@(cd rel/rise; git clone ssh://git@github.com/SovereignPrime/RISE-nitrogen-site.git --branch develop ./site)
 	@(cd rel/rise; $(MAKE); $(MAKE) cookie)
 	@printf "Rise Version:\n${RISE_VERSION}\n\n" > rel/rise/BuildInfo.txt
 	@echo "Built On (uname -v):" >> rel/rise/BuildInfo.txt
