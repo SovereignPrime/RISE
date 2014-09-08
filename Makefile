@@ -52,6 +52,8 @@ version:
 
 develop: version
 	@($(MAKE) rel_dev PLATFORM=linux)
+	@($(MAKE) frontend PLATFORM=linux)
+	@(cd rel; cp frontend/rise rise/bin/rise)
 
 mac_dev: version
 	@($(MAKE) rel_dev PLATFORM=mac)

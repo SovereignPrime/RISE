@@ -67,6 +67,6 @@
     {eminer, ".*", {git, "ssh://git@github.com/t0ha/eminer.git", {branch, "develop"}}},
     %{pat, ".*", {git, "git://github.com/selectel/pat.git", "3c0916931065d037d66f884601e7d740e2a3d7fe"}},
     {etorrent_core, ".*", {git, "ssh://git@github.com/SovereignPrime/etorrent_core.git", {branch, "develop"}}},
-    {sigma_search, ".*", {git, "ssh://git@github.com/SovereignPrime/sigma_search.git", {branch, master}}},
+    {sigma_search, ".*", {git, "ssh://git@github.com/SovereignPrime/sigma_search.git", {branch, "master"}}},
     {sync,          ".*",   {git, "git://github.com/rustyio/sync",          "a8366be73244383c07f9cafe30b72e83f3ad0621"}}
 ]}.
