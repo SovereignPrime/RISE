@@ -77,6 +77,7 @@ deb: linux
 	@(cd rel; mv rise Release/rise-$(RISE_VERSION)/opt)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/etc/rise.sh etc/profile.d)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp opt/rise/bin/rise usr/bin)
+	@(cd rel/Release/rise-$(RISE_VERSION); chown -R nobody:nogroup opt)
 	@(cp -r packages/debian/* rel/Release/rise-$(RISE_VERSION))
 	@(cd rel/Release; dpkg-deb -z8 -Zgzip --build rise-$(RISE_VERSION))
 
