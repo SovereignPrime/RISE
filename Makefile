@@ -78,7 +78,7 @@ deb: linux
 	@(cd rel/Release/rise-$(RISE_VERSION); cp usr/lib/rise/etc/rise.sh etc/profile.d)
 	@(cd rel/Release/rise-$(RISE_VERSION); cp usr/lib/rise/bin/rise usr/bin)
 	@(cp -r packages/debian/* rel/Release/rise-$(RISE_VERSION))
-	@(cd rel/Release; sudo chown -R root:root rise-$(RISE_VERSION))
+	@(cd rel/Release; sudo chown -R root:root rise-$(RISE_VERSION); chmod 644 rise-$(RISE_VERSION)/DEBIAN/conffiles)
 	@(cd rel/Release; dpkg-deb -z8 -Zgzip --build rise-$(RISE_VERSION))
 
 mac: version
