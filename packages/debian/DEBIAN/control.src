@@ -6,7 +6,7 @@ Maintainer: Sovereign Prime <dev@sovereignprime.com>
 Homepage: http://sovereignprime.com
 Architecture: i386
 Version: %VERSION
-Depends: libqt4-webkit, erlang-base
+Depends: libqtwebkit4, erlang-base
 Description: Secure sharing and collaboration
  RISE is an open source sharing and collaboration suite that works over a distributed network. All information transmitted over this network (including the meta data) remains private, and anonymous.
  RISE offers.
