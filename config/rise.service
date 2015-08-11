@@ -1,0 +1,11 @@
+[Unit]
+Description=RISE secure sharing and collaboration system
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/rise/bin/rise_service start
+ExecReload=/opt/rise/bin/rise_service restart
+
+[Install]
+WantedBy=default.target
