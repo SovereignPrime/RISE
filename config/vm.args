@@ -9,6 +9,14 @@
 -simple_bridge_max_post_size 14096
 -simple_bridge_max_file_size 14096
 
+# Configs to use
+-config bitmessage
+-config app
+-config cowboy
+-config sasl
+-config eminer
+-config sync
+
 ## Run code at startup.
--eval "application:start(nitrogen)"
+-eval "application:start(rise)"
 -setcookie ZB1da1Qt3Lrj2Q7ghAF0ddIKtxn8f41nFI8nBeogQsvlj2ZlcoKPoQhAxeAW
