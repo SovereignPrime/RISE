@@ -54,8 +54,6 @@ start(_StartType, _StartArgs) ->
                                         ]),
     application:set_env(lager, crash_log, RiseDir ++ "/log/crash.log"),
     application:start(mnesia),
-    application:start(nprocreg),
-    application:start(simple_bridge),
     application:ensure_all_started(lager),
     application:start(bitmessage),
     % application:start(eminer),
