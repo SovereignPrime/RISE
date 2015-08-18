@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>[[[page:title()]]]</title>
+<script src='/nitrogen/jquery.js' type='text/javascript' charset='utf-8'></script>
+<script src='/nitrogen/jquery-ui.js' type='text/javascript' charset='utf-8'></script>
+<!--     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script> -->
+<!--     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script> -->
+<script src='/nitrogen/livevalidation.js' type='text/javascript' charset='utf-8'></script>
+<script src='/nitrogen/nitrogen.js' type='text/javascript' charset='utf-8'></script>
+<script src='/nitrogen/bert.js' type='text/javascript' charset='utf-8'></script>
+<script src='/js/bootstrap.min.js' type='text/javascript' charset='utf-8'></script>
+<link rel="stylesheet" href="/nitrogen/jquery-ui/jquery.ui.all.css" type="text/css" media="screen" charset="utf-8" />
+<!--     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/smoothness/jquery-ui.css" type="text/css" media="screen" charset="utf-8" /> -->
+<link rel="stylesheet" href="/nitrogen/nitrogen.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<audio id="notify" autobuffer preload="auto">
+    <source src="/sounds/receive.ogg" type="audio/ogg"/>
+    <source src="/sounds/receive.mp3" type="audio/mpeg"/>
+    <source src="/sounds/receive.wav" type="audio/wav"/>
+    <source src="/sounds/sent.ogg" type="audio/ogg"/>
+    <source src="/sounds/sent.mp3" type="audio/mpeg"/>
+    <source src="/sounds/sent.wav" type="audio/wav"/>
+</audio>
+<div class="container-fluid" style='padding-top:10px;'>
+    <div id="top" class="row-fluid" >
+        <div class="span1">
+            <div class="row-fluid">
+                <div class="span6" style="margin-top:5px;">
+                </div>   
+    
+                <div class="span6 dropdown">
+                    <a href="#" class="wfid_icon btn btn-link dropdown-toggle btn-block top-left-dropdown" style='margin-top: -5px;' data-toggle="dropdown">
+                        [[[page:icon()]]]
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="wfid_to_updates"><i class="icon-globe menu-left-icon"></i> Updates</a></li>
+                        <li><a href="#" class="wfid_to_tasks"><img src="/img/tasks.svg" class='icon menu-left-icon' style="height:16px;vertical-align:middle;">  Tasks</a></li>
+                        <li><a href="#" class="wfid_to_relationships"><i class="icon-user menu-left-icon"></i> Contacts</a></li>
+                        <!-- li><a href="#" class="wfid_to_files"><i class="icon-file menu-left-icon"></i> Files</a></li -->
+                        <!-- li><a href="/finances"><i class="icon-usd menu-left-icon"></i> Finances</a></li -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="span10">
+            [[[common:search()]]]
+        </div>
+        <div class="dropdown span1  wfid_plus_menu">
+            <a href="#" class="dropdown-toggle btn-block btn btn-link" data-toggle="dropdown" style="margin-top: -5px;">
+                <i class="icon-plus icon-2x icon-plus-upper-right"></i>
+            </a>
+            <ul class="dropdown-menu pull-right wfid_plus_dropdown" role="menu">
+                <li><a href="#" tabindex="-1" class="wfid_new_update"><i class="icon-globe menu-left-icon"></i> Message</a></li>
+                <li><a href="#" class="wfid_new_task"><img src="/img/tasks.svg" class='icon menu-left-icon' style="height:16px;vertical-align:middle;"> Task</a></li>
+                <li class="dropdown-submenu pull-left">
+                <a href="#" class="wfid_new_relationship"><i class="icon-user menu-left-icon"></i> Contacts</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" class="wfid_new_contact">New contact</a></li>
+                    <li><a href="#" class="wfid_new_group">New group</a></li>
+                </ul>
+                </li>
+                <!-- li><a href="/edit_file?type=new" class="wfid_new_file"><i class="icon-file menu-left-icon"></i> File</a></li -->
+                <!-- li><a href="#" class="wfid_new_expense">Expense</a></li -->
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid wfid_buttons" >
+        <div class='span2' style="text-align:right;">
+            [[[common:unread()]]]
+        </div>
+        <div class='span9' style="text-align:center;line-height:0.4;">
+            [[[page:buttons(main)]]]
+        </div>
+        <div class='span1 wfid_connection'>
+            [[[common:connection_status()]]]
+        </div>
+    </div>
+    [[[common:fade()]]]
+    <input type="hidden" class='wfid_backup_path'/>
+    <input type="hidden" class='wfid_logs_path'/>
+    <div class="row-fluid wfid_main" >
+            [[[page:left()]]]           
+            [[[page:body()]]]
+    </div>
+</div>
+<script type='text/javascript' src='/js/upload.js'></script>
+<script>
+$(".wfid_main").css('height', $(window).innerHeight() - $("#top").outerHeight() - $(".wfid_buttons").outerHeight() - 10 + 'px');
+//$(function() {
+//        $(".wfid_connection").tooltip({placement: 'right'});
+//        });
+$(window).resize(function() {
+        $(".wfid_main").css('height', $(window).innerHeight() - $("#top").outerHeight() - $(".wfid_buttons").outerHeight() - 10 + 'px');
+        });
+function sent() {
+    $('#notify')[0].src='/sounds/sent.wav';
+    $('#notify')[0].play();
+}
+
+function received() {
+    $('#notify')[0].src='/sounds/receive.wav';
+    $('#notify')[0].play();
+}
+</script>
+<script>
+[[[script]]]
+</script>
+</body>
+</html>

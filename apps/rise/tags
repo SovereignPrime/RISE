@@ -1,0 +1,990 @@
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted/
+#addable_row	./include/records.hrl	/^-\s\*record\s\*(\s\*addable_row\>/;"	r
+#attachment	./include/records.hrl	/^-\s\*record\s\*(\s\*attachment\>/;"	r
+#contact_li	./include/records.hrl	/^-\s\*record\s\*(\s\*contact_li\>/;"	r
+#db_attachment	./include/db.hrl	/^-\s\*record\s\*(\s\*db_attachment\>/;"	r
+#db_contact	./include/db.hrl	/^-\s\*record\s\*(\s\*db_contact\>/;"	r
+#db_contact_note	./include/db.hrl	/^-\s\*record\s\*(\s\*db_contact_note\>/;"	r
+#db_contact_roles	./include/db.hrl	/^-\s\*record\s\*(\s\*db_contact_roles\>/;"	r
+#db_expense	./include/db.hrl	/^-\s\*record\s\*(\s\*db_expense\>/;"	r
+#db_expense_tasks	./include/db.hrl	/^-\s\*record\s\*(\s\*db_expense_tasks\>/;"	r
+#db_file	./include/db.hrl	/^-\s\*record\s\*(\s\*db_file\>/;"	r
+#db_group	./include/db.hrl	/^-\s\*record\s\*(\s\*db_group\>/;"	r
+#db_group_members	./include/db.hrl	/^-\s\*record\s\*(\s\*db_group_members\>/;"	r
+#db_search	./include/db.hrl	/^-\s\*record\s\*(\s\*db_search\>/;"	r
+#db_task	./include/db.hrl	/^-\s\*record\s\*(\s\*db_task\>/;"	r
+#db_task_change	./include/db.hrl	/^-\s\*record\s\*(\s\*db_task_change\>/;"	r
+#db_task_tree	./include/db.hrl	/^-\s\*record\s\*(\s\*db_task_tree\>/;"	r
+#db_update	./include/db.hrl	/^-\s\*record\s\*(\s\*db_update\>/;"	r
+#expander	./include/records.hrl	/^-\s\*record\s\*(\s\*expander\>/;"	r
+#file_row	./include/records.hrl	/^-\s\*record\s\*(\s\*file_row\>/;"	r
+#group_item	./include/records.hrl	/^-\s\*record\s\*(\s\*group_item\>/;"	r
+#involved	./include/records.hrl	/^-\s\*record\s\*(\s\*involved\>/;"	r
+#message_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*message_packet\>/;"	r
+#payment_row	./include/records.hrl	/^-\s\*record\s\*(\s\*payment_row\>/;"	r
+#popup	./include/records.hrl	/^-\s\*record\s\*(\s\*popup\>/;"	r
+#progressbar	./include/records.hrl	/^-\s\*record\s\*(\s\*progressbar\>/;"	r
+#rise_upload	./include/records.hrl	/^-\s\*record\s\*(\s\*rise_upload\>/;"	r
+#role_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*role_packet\>/;"	r
+#row_fluid	./src/elements/element_row_fluid.erl	/^-\s\*record\s\*(\s\*row_fluid\>/;"	r	file:
+#state	./src/nitrogen_cowboy.erl	/^-\s\*record\s\*(\s\*state\>/;"	r	file:
+#state	./src/receiver.erl	/^-\s\*record\s\*(\s\*state\>/;"	r	file:
+#task_comment	./include/protokol.hrl	/^-\s\*record\s\*(\s\*task_comment\>/;"	r
+#task_leaf	./include/records.hrl	/^-\s\*record\s\*(\s\*task_leaf\>/;"	r
+#task_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*task_packet\>/;"	r
+#task_tree_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*task_tree_packet\>/;"	r
+#taskrow	./include/records.hrl	/^-\s\*record\s\*(\s\*taskrow\>/;"	r
+#to	./include/records.hrl	/^-\s\*record\s\*(\s\*to\>/;"	r
+#torrent	./include/torrent.hrl	/^-\s\*record\s\*(\s\*torrent\>/;"	r
+#update_element	./include/records.hrl	/^-\s\*record\s\*(\s\*update_element\>/;"	r
+#update_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*update_packet\>/;"	r
+#update_preview	./include/records.hrl	/^-\s\*record\s\*(\s\*update_preview\>/;"	r
+#vcard	./include/records.hrl	/^-\s\*record\s\*(\s\*vcard\>/;"	r
+?ALPHA	./src/elements/element_attachment.erl	/^-\s\*define\s\*(\s\*ALPHA\>/;"	d	file:
+?CHILD	./src/nitrogen_sup.erl	/^-\s\*define\s\*(\s\*CHILD\>/;"	d	file:
+?LISTEN	./src/nitrogen_sup.erl	/^-\s\*define\s\*(\s\*LISTEN\>/;"	d	file:
+?ROLES	./include/db.hrl	/^-\s\*define\s\*(\s\*ROLES\>/;"	d
+?UPDATE_CURRENT	./src/tasks.erl	/^-\s\*define\s\*(\s\*UPDATE_CURRENT\>/;"	d	file:
+?V	./src/db.erl	/^-\s\*define\s\*(\s\*V\>/;"	d	file:
+ALPHA	./src/elements/element_attachment.erl	/^-\s\*define\s\*(\s\*ALPHA\>/;"	d	file:
+CHILD	./src/nitrogen_sup.erl	/^-\s\*define\s\*(\s\*CHILD\>/;"	d	file:
+LISTEN	./src/nitrogen_sup.erl	/^-\s\*define\s\*(\s\*LISTEN\>/;"	d	file:
+ROLES	./include/db.hrl	/^-\s\*define\s\*(\s\*ROLES\>/;"	d
+UPDATE_CURRENT	./src/tasks.erl	/^-\s\*define\s\*(\s\*UPDATE_CURRENT\>/;"	d	file:
+V	./src/db.erl	/^-\s\*define\s\*(\s\*V\>/;"	d	file:
+accept	./src/legal.erl	/^accept\>/;"	f	file:
+account	./src/db.erl	/^account\>/;"	f	file:
+action	./.prototypes/action.erl	1;"	M
+action.erl	./.prototypes/action.erl	1;"	F
+action:render_action	./.prototypes/action.erl	/^render_action\>/;"	f
+add_existing_rows	./src/edit_task.erl	/^add_existing_rows\>/;"	f	file:
+add_existing_rows	./src/edit_update.erl	/^add_existing_rows\>/;"	f	file:
+add_participants	./src/index.erl	/^add_participants\>/;"	f	file:
+add_user_to_group	./src/db.erl	/^add_user_to_group\>/;"	f	file:
+addable_row	./include/records.hrl	/^-\s\*record\s\*(\s\*addable_row\>/;"	r
+all_attachments	./src/db.erl	/^all_attachments\>/;"	f	file:
+all_contacts	./src/db.erl	/^all_contacts\>/;"	f	file:
+all_expense_taskss	./src/db.erl	/^all_expense_taskss\>/;"	f	file:
+all_expenses	./src/db.erl	/^all_expenses\>/;"	f	file:
+all_files	./src/db.erl	/^all_files\>/;"	f	file:
+all_groups	./src/db.erl	/^all_groups\>/;"	f	file:
+all_involved	./src/db.erl	/^all_involved\>/;"	f	file:
+all_memberss	./src/db.erl	/^all_memberss\>/;"	f	file:
+all_tasks	./src/db.erl	/^all_tasks\>/;"	f	file:
+all_updates	./src/db.erl	/^all_updates\>/;"	f	file:
+apply_message	./src/receiver.erl	/^apply_message\>/;"	f	file:
+archive	./src/db.erl	/^archive\>/;"	f	file:
+archive_op	./src/db.erl	/^archive_op\>/;"	f	file:
+are_all_child_tasks_complete	./src/db.erl	/^are_all_child_tasks_complete\>/;"	f	file:
+attachment	./include/records.hrl	/^-\s\*record\s\*(\s\*attachment\>/;"	r
+autocomplete_enter_event	./src/common.erl	/^autocomplete_enter_event\>/;"	f	file:
+autocomplete_select_event	./src/common.erl	/^autocomplete_select_event\>/;"	f	file:
+backup	./src/db.erl	/^backup\>/;"	f	file:
+bage_types	./src/search.erl	/^bage_types\>/;"	f	file:
+body	./.prototypes/page.erl	/^body\>/;"	f	file:
+body	./src/edit_expense.erl	/^body\>/;"	f	file:
+body	./src/edit_file.erl	/^body\>/;"	f	file:
+body	./src/edit_task.erl	/^body\>/;"	f	file:
+body	./src/edit_update.erl	/^body\>/;"	f	file:
+body	./src/files.erl	/^body\>/;"	f	file:
+body	./src/finances.erl	/^body\>/;"	f	file:
+body	./src/index.erl	/^body\>/;"	f	file:
+body	./src/login.erl	/^body\>/;"	f	file:
+body	./src/mobile.erl	/^body\>/;"	f	file:
+body	./src/relationships.erl	/^body\>/;"	f	file:
+body	./src/tasks.erl	/^body\>/;"	f	file:
+buttons	./src/edit_expense.erl	/^buttons\>/;"	f	file:
+buttons	./src/edit_file.erl	/^buttons\>/;"	f	file:
+buttons	./src/edit_task.erl	/^buttons\>/;"	f	file:
+buttons	./src/edit_update.erl	/^buttons\>/;"	f	file:
+buttons	./src/files.erl	/^buttons\>/;"	f	file:
+buttons	./src/finances.erl	/^buttons\>/;"	f	file:
+buttons	./src/index.erl	/^buttons\>/;"	f	file:
+buttons	./src/relationships.erl	/^buttons\>/;"	f	file:
+buttons	./src/tasks.erl	/^buttons\>/;"	f	file:
+calculate_changes	./src/tasks.erl	/^calculate_changes\>/;"	f	file:
+check_changing_task_status	./src/tasks.erl	/^check_changing_task_status\>/;"	f	file:
+check_due	./src/db.erl	/^check_due\>/;"	f	file:
+check_roles	./src/db.erl	/^check_roles\>/;"	f	file:
+check_roles	./src/search.erl	/^check_roles\>/;"	f	file:
+check_status	./src/db.erl	/^check_status\>/;"	f	file:
+clear_roles	./src/db.erl	/^clear_roles\>/;"	f	file:
+coalesce_best_contact	./src/db.erl	/^coalesce_best_contact\>/;"	f	file:
+code_change	./src/receiver.erl	/^code_change\>/;"	f	file:
+common	./src/common.erl	1;"	M
+common.erl	./src/common.erl	1;"	F
+common:autocomplete_enter_event	./src/common.erl	/^autocomplete_enter_event\>/;"	f
+common:autocomplete_select_event	./src/common.erl	/^autocomplete_select_event\>/;"	f
+common:connection_status	./src/common.erl	/^connection_status\>/;"	f
+common:dropevent	./src/common.erl	/^dropevent\>/;"	f
+common:event	./src/common.erl	/^event\>/;"	f
+common:fade	./src/common.erl	/^fade\>/;"	f
+common:finish_upload_event	./src/common.erl	/^finish_upload_event\>/;"	f
+common:incoming	./src/common.erl	/^incoming\>/;"	f
+common:main	./src/common.erl	/^main\>/;"	f
+common:maybe_unsaved	./src/common.erl	/^maybe_unsaved\>/;"	f
+common:remove_duplicates	./src/common.erl	/^remove_duplicates\>/;"	f
+common:render_files	./src/common.erl	/^render_files\>/;"	f
+common:render_filters	./src/common.erl	/^render_filters\>/;"	f
+common:render_help	./src/common.erl	/^render_help\>/;"	f
+common:restore	./src/common.erl	/^restore\>/;"	f
+common:save_involved	./src/common.erl	/^save_involved\>/;"	f
+common:search	./src/common.erl	/^search\>/;"	f
+common:send_messages	./src/common.erl	/^send_messages\>/;"	f
+common:send_task_tree	./src/common.erl	/^send_task_tree\>/;"	f
+common:settings_menu	./src/common.erl	/^settings_menu\>/;"	f
+common:sigma_search_event	./src/common.erl	/^sigma_search_event\>/;"	f
+common:sigma_search_filter_clear	./src/common.erl	/^sigma_search_filter_clear\>/;"	f
+common:sigma_search_filter_event	./src/common.erl	/^sigma_search_filter_event\>/;"	f
+common:start_upload_event	./src/common.erl	/^start_upload_event\>/;"	f
+common:unread	./src/common.erl	/^unread\>/;"	f
+compare_task_date	./src/tasks.erl	/^compare_task_date\>/;"	f	file:
+connected	./src/receiver.erl	/^connected\>/;"	f	file:
+connection_status	./src/common.erl	/^connection_status\>/;"	f	file:
+contact_li	./include/records.hrl	/^-\s\*record\s\*(\s\*contact_li\>/;"	r
+contact_render	./src/relationships.erl	/^contact_render\>/;"	f	file:
+contacts	./src/search.erl	/^contacts\>/;"	f	file:
+counter	./src/legal.erl	/^counter\>/;"	f	file:
+create_account	./src/db.erl	/^create_account\>/;"	f	file:
+create_contacts_request	./src/db.erl	/^create_contacts_request\>/;"	f	file:
+create_dates_request	./src/db.erl	/^create_dates_request\>/;"	f	file:
+date_badge	./src/search.erl	/^date_badge\>/;"	f	file:
+date_format	./src/sugar.erl	/^date_format\>/;"	f	file:
+date_from_string	./src/sugar.erl	/^date_from_string\>/;"	f	file:
+date_string	./src/sugar.erl	/^date_string\>/;"	f	file:
+daterange_badge	./src/search.erl	/^daterange_badge\>/;"	f	file:
+dates	./src/search.erl	/^dates\>/;"	f	file:
+dates_if	./src/search.erl	/^dates_if\>/;"	f	file:
+datetime_to_timestamp	./src/sugar.erl	/^datetime_to_timestamp\>/;"	f	file:
+db	./src/db.erl	1;"	M
+db.erl	./src/db.erl	1;"	F
+db.hrl	./include/db.hrl	1;"	F
+db:account	./src/db.erl	/^account\>/;"	f
+db:add_user_to_group	./src/db.erl	/^add_user_to_group\>/;"	f
+db:all_attachments	./src/db.erl	/^all_attachments\>/;"	f
+db:all_contacts	./src/db.erl	/^all_contacts\>/;"	f
+db:all_expense_taskss	./src/db.erl	/^all_expense_taskss\>/;"	f
+db:all_expenses	./src/db.erl	/^all_expenses\>/;"	f
+db:all_files	./src/db.erl	/^all_files\>/;"	f
+db:all_groups	./src/db.erl	/^all_groups\>/;"	f
+db:all_involved	./src/db.erl	/^all_involved\>/;"	f
+db:all_memberss	./src/db.erl	/^all_memberss\>/;"	f
+db:all_tasks	./src/db.erl	/^all_tasks\>/;"	f
+db:all_updates	./src/db.erl	/^all_updates\>/;"	f
+db:archive	./src/db.erl	/^archive\>/;"	f
+db:archive_op	./src/db.erl	/^archive_op\>/;"	f
+db:are_all_child_tasks_complete	./src/db.erl	/^are_all_child_tasks_complete\>/;"	f
+db:backup	./src/db.erl	/^backup\>/;"	f
+db:check_due	./src/db.erl	/^check_due\>/;"	f
+db:check_roles	./src/db.erl	/^check_roles\>/;"	f
+db:check_status	./src/db.erl	/^check_status\>/;"	f
+db:clear_roles	./src/db.erl	/^clear_roles\>/;"	f
+db:coalesce_best_contact	./src/db.erl	/^coalesce_best_contact\>/;"	f
+db:create_account	./src/db.erl	/^create_account\>/;"	f
+db:create_contacts_request	./src/db.erl	/^create_contacts_request\>/;"	f
+db:create_dates_request	./src/db.erl	/^create_dates_request\>/;"	f
+db:delete	./src/db.erl	/^delete\>/;"	f
+db:delete_group	./src/db.erl	/^delete_group\>/;"	f
+db:filter_by_date	./src/db.erl	/^filter_by_date\>/;"	f
+db:get_addresat	./src/db.erl	/^get_addresat\>/;"	f
+db:get_archive	./src/db.erl	/^get_archive\>/;"	f
+db:get_attachments	./src/db.erl	/^get_attachments\>/;"	f
+db:get_children	./src/db.erl	/^get_children\>/;"	f
+db:get_contact	./src/db.erl	/^get_contact\>/;"	f
+db:get_contact_by_address	./src/db.erl	/^get_contact_by_address\>/;"	f
+db:get_contacts_by_group	./src/db.erl	/^get_contacts_by_group\>/;"	f
+db:get_contacts_by_name	./src/db.erl	/^get_contacts_by_name\>/;"	f
+db:get_expense	./src/db.erl	/^get_expense\>/;"	f
+db:get_expense_tasks	./src/db.erl	/^get_expense_tasks\>/;"	f
+db:get_files	./src/db.erl	/^get_files\>/;"	f
+db:get_filters	./src/db.erl	/^get_filters\>/;"	f
+db:get_groups	./src/db.erl	/^get_groups\>/;"	f
+db:get_groups_for_user	./src/db.erl	/^get_groups_for_user\>/;"	f
+db:get_involved	./src/db.erl	/^get_involved\>/;"	f
+db:get_involved_full	./src/db.erl	/^get_involved_full\>/;"	f
+db:get_linked_messages	./src/db.erl	/^get_linked_messages\>/;"	f
+db:get_my_accounts	./src/db.erl	/^get_my_accounts\>/;"	f
+db:get_notes_by_user	./src/db.erl	/^get_notes_by_user\>/;"	f
+db:get_orphan_tasks	./src/db.erl	/^get_orphan_tasks\>/;"	f
+db:get_subgroup	./src/db.erl	/^get_subgroup\>/;"	f
+db:get_task	./src/db.erl	/^get_task\>/;"	f
+db:get_task_comments	./src/db.erl	/^get_task_comments\>/;"	f
+db:get_task_history	./src/db.erl	/^get_task_history\>/;"	f
+db:get_tasks	./src/db.erl	/^get_tasks\>/;"	f
+db:get_tasks_by_month	./src/db.erl	/^get_tasks_by_month\>/;"	f
+db:get_tasks_by_subject	./src/db.erl	/^get_tasks_by_subject\>/;"	f
+db:get_tasks_by_user	./src/db.erl	/^get_tasks_by_user\>/;"	f
+db:get_tasks_completed	./src/db.erl	/^get_tasks_completed\>/;"	f
+db:get_tasks_due_today	./src/db.erl	/^get_tasks_due_today\>/;"	f
+db:get_tasks_no_deadline	./src/db.erl	/^get_tasks_no_deadline\>/;"	f
+db:get_tasks_overdue	./src/db.erl	/^get_tasks_overdue\>/;"	f
+db:get_unread_ids	./src/db.erl	/^get_unread_ids\>/;"	f
+db:get_unread_updates	./src/db.erl	/^get_unread_updates\>/;"	f
+db:get_update	./src/db.erl	/^get_update\>/;"	f
+db:get_updates	./src/db.erl	/^get_updates\>/;"	f
+db:get_updates_by_subject	./src/db.erl	/^get_updates_by_subject\>/;"	f
+db:get_updates_by_user	./src/db.erl	/^get_updates_by_user\>/;"	f
+db:get_users	./src/db.erl	/^get_users\>/;"	f
+db:install	./src/db.erl	/^install\>/;"	f
+db:iterate	./src/db.erl	/^iterate\>/;"	f
+db:next_id	./src/db.erl	/^next_id\>/;"	f
+db:nice_task_status_name	./src/db.erl	/^nice_task_status_name\>/;"	f
+db:qlc_result	./src/db.erl	/^qlc_result\>/;"	f
+db:restore	./src/db.erl	/^restore\>/;"	f
+db:sanitize_task_status	./src/db.erl	/^sanitize_task_status\>/;"	f
+db:save	./src/db.erl	/^save\>/;"	f
+db:save_attachment	./src/db.erl	/^save_attachment\>/;"	f
+db:save_attachments	./src/db.erl	/^save_attachments\>/;"	f
+db:save_file	./src/db.erl	/^save_file\>/;"	f
+db:save_subgroup	./src/db.erl	/^save_subgroup\>/;"	f
+db:save_subtask	./src/db.erl	/^save_subtask\>/;"	f
+db:save_task_tree	./src/db.erl	/^save_task_tree\>/;"	f
+db:save_uniq	./src/db.erl	/^save_uniq\>/;"	f
+db:search_contacts	./src/db.erl	/^search_contacts\>/;"	f
+db:search_dates	./src/db.erl	/^search_dates\>/;"	f
+db:search_files	./src/db.erl	/^search_files\>/;"	f
+db:search_groups	./src/db.erl	/^search_groups\>/;"	f
+db:search_messages	./src/db.erl	/^search_messages\>/;"	f
+db:search_parent	./src/db.erl	/^search_parent\>/;"	f
+db:search_parent_rec	./src/db.erl	/^search_parent_rec\>/;"	f
+db:search_roles	./src/db.erl	/^search_roles\>/;"	f
+db:search_tasks	./src/db.erl	/^search_tasks\>/;"	f
+db:set_read	./src/db.erl	/^set_read\>/;"	f
+db:task_status_list	./src/db.erl	/^task_status_list\>/;"	f
+db:transaction	./src/db.erl	/^transaction\>/;"	f
+db:update	./src/db.erl	/^update\>/;"	f
+db:update_group_name	./src/db.erl	/^update_group_name\>/;"	f
+db:verify_create_table	./src/db.erl	/^verify_create_table\>/;"	f
+db_attachment	./include/db.hrl	/^-\s\*record\s\*(\s\*db_attachment\>/;"	r
+db_contact	./include/db.hrl	/^-\s\*record\s\*(\s\*db_contact\>/;"	r
+db_contact_note	./include/db.hrl	/^-\s\*record\s\*(\s\*db_contact_note\>/;"	r
+db_contact_roles	./include/db.hrl	/^-\s\*record\s\*(\s\*db_contact_roles\>/;"	r
+db_expense	./include/db.hrl	/^-\s\*record\s\*(\s\*db_expense\>/;"	r
+db_expense_tasks	./include/db.hrl	/^-\s\*record\s\*(\s\*db_expense_tasks\>/;"	r
+db_file	./include/db.hrl	/^-\s\*record\s\*(\s\*db_file\>/;"	r
+db_group	./include/db.hrl	/^-\s\*record\s\*(\s\*db_group\>/;"	r
+db_group_members	./include/db.hrl	/^-\s\*record\s\*(\s\*db_group_members\>/;"	r
+db_search	./include/db.hrl	/^-\s\*record\s\*(\s\*db_search\>/;"	r
+db_task	./include/db.hrl	/^-\s\*record\s\*(\s\*db_task\>/;"	r
+db_task_change	./include/db.hrl	/^-\s\*record\s\*(\s\*db_task_change\>/;"	r
+db_task_tree	./include/db.hrl	/^-\s\*record\s\*(\s\*db_task_tree\>/;"	r
+db_update	./include/db.hrl	/^-\s\*record\s\*(\s\*db_update\>/;"	r
+decline	./src/legal.erl	/^decline\>/;"	f	file:
+decode_enc	./src/elements/element_update.erl	/^decode_enc\>/;"	f	file:
+decode_type	./src/elements/element_update_preview.erl	/^decode_type\>/;"	f	file:
+delete	./src/db.erl	/^delete\>/;"	f	file:
+delete_group	./src/db.erl	/^delete_group\>/;"	f	file:
+disconnected	./src/receiver.erl	/^disconnected\>/;"	f	file:
+does_task_have_attachments	./src/tasks.erl	/^does_task_have_attachments\>/;"	f	file:
+done_button	./src/files.erl	/^done_button\>/;"	f	file:
+downloaded	./src/receiver.erl	/^downloaded\>/;"	f	file:
+drop_event	./src/relationships.erl	/^drop_event\>/;"	f	file:
+drop_event	./src/tasks.erl	/^drop_event\>/;"	f	file:
+dropevent	./src/common.erl	/^dropevent\>/;"	f	file:
+edit_expense	./src/edit_expense.erl	1;"	M
+edit_expense.erl	./src/edit_expense.erl	1;"	F
+edit_expense:body	./src/edit_expense.erl	/^body\>/;"	f
+edit_expense:buttons	./src/edit_expense.erl	/^buttons\>/;"	f
+edit_expense:event	./src/edit_expense.erl	/^event\>/;"	f
+edit_expense:icon	./src/edit_expense.erl	/^icon\>/;"	f
+edit_expense:left	./src/edit_expense.erl	/^left\>/;"	f
+edit_expense:main	./src/edit_expense.erl	/^main\>/;"	f
+edit_expense:render_left	./src/edit_expense.erl	/^render_left\>/;"	f
+edit_expense:title	./src/edit_expense.erl	/^title\>/;"	f
+edit_file	./src/edit_file.erl	1;"	M
+edit_file.erl	./src/edit_file.erl	1;"	F
+edit_file:body	./src/edit_file.erl	/^body\>/;"	f
+edit_file:buttons	./src/edit_file.erl	/^buttons\>/;"	f
+edit_file:event	./src/edit_file.erl	/^event\>/;"	f
+edit_file:icon	./src/edit_file.erl	/^icon\>/;"	f
+edit_file:incoming	./src/edit_file.erl	/^incoming\>/;"	f
+edit_file:left	./src/edit_file.erl	/^left\>/;"	f
+edit_file:main	./src/edit_file.erl	/^main\>/;"	f
+edit_file:title	./src/edit_file.erl	/^title\>/;"	f
+edit_task	./src/edit_task.erl	1;"	M
+edit_task.erl	./src/edit_task.erl	1;"	F
+edit_task:add_existing_rows	./src/edit_task.erl	/^add_existing_rows\>/;"	f
+edit_task:body	./src/edit_task.erl	/^body\>/;"	f
+edit_task:buttons	./src/edit_task.erl	/^buttons\>/;"	f
+edit_task:event	./src/edit_task.erl	/^event\>/;"	f
+edit_task:fix_addable_rows	./src/edit_task.erl	/^fix_addable_rows\>/;"	f
+edit_task:icon	./src/edit_task.erl	/^icon\>/;"	f
+edit_task:incoming	./src/edit_task.erl	/^incoming\>/;"	f
+edit_task:left	./src/edit_task.erl	/^left\>/;"	f
+edit_task:main	./src/edit_task.erl	/^main\>/;"	f
+edit_task:save_payments	./src/edit_task.erl	/^save_payments\>/;"	f
+edit_task:title	./src/edit_task.erl	/^title\>/;"	f
+edit_update	./src/edit_update.erl	1;"	M
+edit_update.erl	./src/edit_update.erl	1;"	F
+edit_update:add_existing_rows	./src/edit_update.erl	/^add_existing_rows\>/;"	f
+edit_update:body	./src/edit_update.erl	/^body\>/;"	f
+edit_update:buttons	./src/edit_update.erl	/^buttons\>/;"	f
+edit_update:event	./src/edit_update.erl	/^event\>/;"	f
+edit_update:icon	./src/edit_update.erl	/^icon\>/;"	f
+edit_update:incoming	./src/edit_update.erl	/^incoming\>/;"	f
+edit_update:left	./src/edit_update.erl	/^left\>/;"	f
+edit_update:main	./src/edit_update.erl	/^main\>/;"	f
+edit_update:title	./src/edit_update.erl	/^title\>/;"	f
+element	./.prototypes/element.erl	1;"	M
+element.erl	./.prototypes/element.erl	1;"	F
+element:reflect	./.prototypes/element.erl	/^reflect\>/;"	f
+element:render_element	./.prototypes/element.erl	/^render_element\>/;"	f
+element_addable_row	./src/elements/element_addable_row.erl	1;"	M
+element_addable_row.erl	./src/elements/element_addable_row.erl	1;"	F
+element_addable_row:event	./src/elements/element_addable_row.erl	/^event\>/;"	f
+element_addable_row:reflect	./src/elements/element_addable_row.erl	/^reflect\>/;"	f
+element_addable_row:render_element	./src/elements/element_addable_row.erl	/^render_element\>/;"	f
+element_attachment	./src/elements/element_attachment.erl	1;"	M
+element_attachment.erl	./src/elements/element_attachment.erl	1;"	F
+element_attachment:event	./src/elements/element_attachment.erl	/^event\>/;"	f
+element_attachment:reflect	./src/elements/element_attachment.erl	/^reflect\>/;"	f
+element_attachment:render_element	./src/elements/element_attachment.erl	/^render_element\>/;"	f
+element_contact_li	./src/elements/element_contact_li.erl	1;"	M
+element_contact_li.erl	./src/elements/element_contact_li.erl	1;"	F
+element_contact_li:reflect	./src/elements/element_contact_li.erl	/^reflect\>/;"	f
+element_contact_li:render_element	./src/elements/element_contact_li.erl	/^render_element\>/;"	f
+element_expander	./src/elements/element_expander.erl	1;"	M
+element_expander.erl	./src/elements/element_expander.erl	1;"	F
+element_expander:event	./src/elements/element_expander.erl	/^event\>/;"	f
+element_expander:open_or_closed	./src/elements/element_expander.erl	/^open_or_closed\>/;"	f
+element_expander:reflect	./src/elements/element_expander.erl	/^reflect\>/;"	f
+element_expander:render_element	./src/elements/element_expander.erl	/^render_element\>/;"	f
+element_file_row	./src/elements/element_file_row.erl	1;"	M
+element_file_row.erl	./src/elements/element_file_row.erl	1;"	F
+element_file_row:event	./src/elements/element_file_row.erl	/^event\>/;"	f
+element_file_row:get_file_senders	./src/elements/element_file_row.erl	/^get_file_senders\>/;"	f
+element_file_row:reflect	./src/elements/element_file_row.erl	/^reflect\>/;"	f
+element_file_row:render_element	./src/elements/element_file_row.erl	/^render_element\>/;"	f
+element_group_item	./src/elements/element_group_item.erl	1;"	M
+element_group_item.erl	./src/elements/element_group_item.erl	1;"	F
+element_group_item:event	./src/elements/element_group_item.erl	/^event\>/;"	f
+element_group_item:reflect	./src/elements/element_group_item.erl	/^reflect\>/;"	f
+element_group_item:render_element	./src/elements/element_group_item.erl	/^render_element\>/;"	f
+element_group_item:render_group	./src/elements/element_group_item.erl	/^render_group\>/;"	f
+element_involved	./src/elements/element_involved.erl	1;"	M
+element_involved.erl	./src/elements/element_involved.erl	1;"	F
+element_involved:reflect	./src/elements/element_involved.erl	/^reflect\>/;"	f
+element_involved:render_element	./src/elements/element_involved.erl	/^render_element\>/;"	f
+element_involved:role_dropdown	./src/elements/element_involved.erl	/^role_dropdown\>/;"	f
+element_payment_row	./src/elements/element_payment_row.erl	1;"	M
+element_payment_row.erl	./src/elements/element_payment_row.erl	1;"	F
+element_payment_row:reflect	./src/elements/element_payment_row.erl	/^reflect\>/;"	f
+element_payment_row:render_element	./src/elements/element_payment_row.erl	/^render_element\>/;"	f
+element_popup	./src/elements/element_popup.erl	1;"	M
+element_popup.erl	./src/elements/element_popup.erl	1;"	F
+element_popup:event	./src/elements/element_popup.erl	/^event\>/;"	f
+element_popup:reflect	./src/elements/element_popup.erl	/^reflect\>/;"	f
+element_popup:render_element	./src/elements/element_popup.erl	/^render_element\>/;"	f
+element_progressbar	./src/elements/element_progressbar.erl	1;"	M
+element_progressbar.erl	./src/elements/element_progressbar.erl	1;"	F
+element_progressbar:reflect	./src/elements/element_progressbar.erl	/^reflect\>/;"	f
+element_progressbar:render_element	./src/elements/element_progressbar.erl	/^render_element\>/;"	f
+element_rise_upload	./src/elements/element_rise_upload.erl	1;"	M
+element_rise_upload.erl	./src/elements/element_rise_upload.erl	1;"	F
+element_rise_upload:event	./src/elements/element_rise_upload.erl	/^event\>/;"	f
+element_rise_upload:reflect	./src/elements/element_rise_upload.erl	/^reflect\>/;"	f
+element_rise_upload:render_element	./src/elements/element_rise_upload.erl	/^render_element\>/;"	f
+element_row_fluid	./src/elements/element_row_fluid.erl	1;"	M
+element_row_fluid.erl	./src/elements/element_row_fluid.erl	1;"	F
+element_row_fluid:reflect	./src/elements/element_row_fluid.erl	/^reflect\>/;"	f
+element_row_fluid:render_element	./src/elements/element_row_fluid.erl	/^render_element\>/;"	f
+element_task_leaf	./src/elements/element_task_leaf.erl	1;"	M
+element_task_leaf.erl	./src/elements/element_task_leaf.erl	1;"	F
+element_task_leaf:reflect	./src/elements/element_task_leaf.erl	/^reflect\>/;"	f
+element_task_leaf:render_element	./src/elements/element_task_leaf.erl	/^render_element\>/;"	f
+element_taskrow	./src/elements/element_taskrow.erl	1;"	M
+element_taskrow.erl	./src/elements/element_taskrow.erl	1;"	F
+element_taskrow:reflect	./src/elements/element_taskrow.erl	/^reflect\>/;"	f
+element_taskrow:render_element	./src/elements/element_taskrow.erl	/^render_element\>/;"	f
+element_to	./src/elements/element_to.erl	1;"	M
+element_to.erl	./src/elements/element_to.erl	1;"	F
+element_to:reflect	./src/elements/element_to.erl	/^reflect\>/;"	f
+element_to:render_element	./src/elements/element_to.erl	/^render_element\>/;"	f
+element_update	./src/elements/element_update.erl	1;"	M
+element_update.erl	./src/elements/element_update.erl	1;"	F
+element_update:decode_enc	./src/elements/element_update.erl	/^decode_enc\>/;"	f
+element_update:format_status	./src/elements/element_update.erl	/^format_status\>/;"	f
+element_update:name_from_address	./src/elements/element_update.erl	/^name_from_address\>/;"	f
+element_update:reflect	./src/elements/element_update.erl	/^reflect\>/;"	f
+element_update:render_element	./src/elements/element_update.erl	/^render_element\>/;"	f
+element_update_preview	./src/elements/element_update_preview.erl	1;"	M
+element_update_preview.erl	./src/elements/element_update_preview.erl	1;"	F
+element_update_preview:decode_type	./src/elements/element_update_preview.erl	/^decode_type\>/;"	f
+element_update_preview:get_name	./src/elements/element_update_preview.erl	/^get_name\>/;"	f
+element_update_preview:participant_list	./src/elements/element_update_preview.erl	/^participant_list\>/;"	f
+element_update_preview:reflect	./src/elements/element_update_preview.erl	/^reflect\>/;"	f
+element_update_preview:render_element	./src/elements/element_update_preview.erl	/^render_element\>/;"	f
+element_update_preview:render_icon	./src/elements/element_update_preview.erl	/^render_icon\>/;"	f
+element_vcard	./src/elements/element_vcard.erl	1;"	M
+element_vcard.erl	./src/elements/element_vcard.erl	1;"	F
+element_vcard:event	./src/elements/element_vcard.erl	/^event\>/;"	f
+element_vcard:finish_upload_event	./src/elements/element_vcard.erl	/^finish_upload_event\>/;"	f
+element_vcard:reflect	./src/elements/element_vcard.erl	/^reflect\>/;"	f
+element_vcard:render_element	./src/elements/element_vcard.erl	/^render_element\>/;"	f
+element_vcard:start_upload_event	./src/elements/element_vcard.erl	/^start_upload_event\>/;"	f
+event	./.prototypes/page.erl	/^event\>/;"	f	file:
+event	./src/common.erl	/^event\>/;"	f	file:
+event	./src/edit_expense.erl	/^event\>/;"	f	file:
+event	./src/edit_file.erl	/^event\>/;"	f	file:
+event	./src/edit_task.erl	/^event\>/;"	f	file:
+event	./src/edit_update.erl	/^event\>/;"	f	file:
+event	./src/elements/element_addable_row.erl	/^event\>/;"	f	file:
+event	./src/elements/element_attachment.erl	/^event\>/;"	f	file:
+event	./src/elements/element_expander.erl	/^event\>/;"	f	file:
+event	./src/elements/element_file_row.erl	/^event\>/;"	f	file:
+event	./src/elements/element_group_item.erl	/^event\>/;"	f	file:
+event	./src/elements/element_popup.erl	/^event\>/;"	f	file:
+event	./src/elements/element_rise_upload.erl	/^event\>/;"	f	file:
+event	./src/elements/element_vcard.erl	/^event\>/;"	f	file:
+event	./src/files.erl	/^event\>/;"	f	file:
+event	./src/finances.erl	/^event\>/;"	f	file:
+event	./src/index.erl	/^event\>/;"	f	file:
+event	./src/legal.erl	/^event\>/;"	f	file:
+event	./src/login.erl	/^event\>/;"	f	file:
+event	./src/mobile.erl	/^event\>/;"	f	file:
+event	./src/relationships.erl	/^event\>/;"	f	file:
+event	./src/tasks.erl	/^event\>/;"	f	file:
+expand_task	./src/tasks.erl	/^expand_task\>/;"	f	file:
+expand_to_task	./src/tasks.erl	/^expand_to_task\>/;"	f	file:
+expander	./include/records.hrl	/^-\s\*record\s\*(\s\*expander\>/;"	r
+extract_task	./src/receiver.erl	/^extract_task\>/;"	f	file:
+fade	./src/common.erl	/^fade\>/;"	f	file:
+file_row	./include/records.hrl	/^-\s\*record\s\*(\s\*file_row\>/;"	r
+filechunk_received	./src/receiver.erl	/^filechunk_received\>/;"	f	file:
+filechunk_sent	./src/receiver.erl	/^filechunk_sent\>/;"	f	file:
+files	./src/files.erl	1;"	M
+files	./src/search.erl	/^files\>/;"	f	file:
+files.erl	./src/files.erl	1;"	F
+files:body	./src/files.erl	/^body\>/;"	f
+files:buttons	./src/files.erl	/^buttons\>/;"	f
+files:done_button	./src/files.erl	/^done_button\>/;"	f
+files:event	./src/files.erl	/^event\>/;"	f
+files:icon	./src/files.erl	/^icon\>/;"	f
+files:incoming	./src/files.erl	/^incoming\>/;"	f
+files:left	./src/files.erl	/^left\>/;"	f
+files:main	./src/files.erl	/^main\>/;"	f
+files:more_options_buttons	./src/files.erl	/^more_options_buttons\>/;"	f
+files:sortheader	./src/files.erl	/^sortheader\>/;"	f
+files:title	./src/files.erl	/^title\>/;"	f
+filter_by_date	./src/db.erl	/^filter_by_date\>/;"	f	file:
+finances	./src/finances.erl	1;"	M
+finances.erl	./src/finances.erl	1;"	F
+finances:body	./src/finances.erl	/^body\>/;"	f
+finances:buttons	./src/finances.erl	/^buttons\>/;"	f
+finances:event	./src/finances.erl	/^event\>/;"	f
+finances:icon	./src/finances.erl	/^icon\>/;"	f
+finances:left	./src/finances.erl	/^left\>/;"	f
+finances:main	./src/finances.erl	/^main\>/;"	f
+finances:title	./src/finances.erl	/^title\>/;"	f
+finish_upload_event	./src/common.erl	/^finish_upload_event\>/;"	f	file:
+finish_upload_event	./src/elements/element_vcard.erl	/^finish_upload_event\>/;"	f	file:
+fix_addable_rows	./src/edit_task.erl	/^fix_addable_rows\>/;"	f	file:
+format_dates	./src/search.erl	/^format_dates\>/;"	f	file:
+format_dropdown_group	./src/search.erl	/^format_dropdown_group\>/;"	f	file:
+format_file_size	./src/sugar.erl	/^format_file_size\>/;"	f	file:
+format_status	./src/elements/element_update.erl	/^format_status\>/;"	f	file:
+format_timedelta	./src/sugar.erl	/^format_timedelta\>/;"	f	file:
+get_addresat	./src/db.erl	/^get_addresat\>/;"	f	file:
+get_archive	./src/db.erl	/^get_archive\>/;"	f	file:
+get_attachments	./src/db.erl	/^get_attachments\>/;"	f	file:
+get_badge_for_type	./src/search.erl	/^get_badge_for_type\>/;"	f	file:
+get_children	./src/db.erl	/^get_children\>/;"	f	file:
+get_contact	./src/db.erl	/^get_contact\>/;"	f	file:
+get_contact_by_address	./src/db.erl	/^get_contact_by_address\>/;"	f	file:
+get_contacts_by_group	./src/db.erl	/^get_contacts_by_group\>/;"	f	file:
+get_contacts_by_name	./src/db.erl	/^get_contacts_by_name\>/;"	f	file:
+get_expense	./src/db.erl	/^get_expense\>/;"	f	file:
+get_expense_tasks	./src/db.erl	/^get_expense_tasks\>/;"	f	file:
+get_file_senders	./src/elements/element_file_row.erl	/^get_file_senders\>/;"	f	file:
+get_files	./src/db.erl	/^get_files\>/;"	f	file:
+get_filters	./src/db.erl	/^get_filters\>/;"	f	file:
+get_groups	./src/db.erl	/^get_groups\>/;"	f	file:
+get_groups_for_user	./src/db.erl	/^get_groups_for_user\>/;"	f	file:
+get_involved	./src/db.erl	/^get_involved\>/;"	f	file:
+get_involved_full	./src/db.erl	/^get_involved_full\>/;"	f	file:
+get_involved_full	./src/tasks.erl	/^get_involved_full\>/;"	f	file:
+get_linked_messages	./src/db.erl	/^get_linked_messages\>/;"	f	file:
+get_my_accounts	./src/db.erl	/^get_my_accounts\>/;"	f	file:
+get_name	./src/elements/element_update_preview.erl	/^get_name\>/;"	f	file:
+get_next_tasks_by_date	./src/tasks.erl	/^get_next_tasks_by_date\>/;"	f	file:
+get_notes_by_user	./src/db.erl	/^get_notes_by_user\>/;"	f	file:
+get_or_request_contact	./src/receiver.erl	/^get_or_request_contact\>/;"	f	file:
+get_orphan_tasks	./src/db.erl	/^get_orphan_tasks\>/;"	f	file:
+get_subgroup	./src/db.erl	/^get_subgroup\>/;"	f	file:
+get_task	./src/db.erl	/^get_task\>/;"	f	file:
+get_task_comments	./src/db.erl	/^get_task_comments\>/;"	f	file:
+get_task_history	./src/db.erl	/^get_task_history\>/;"	f	file:
+get_tasks	./src/db.erl	/^get_tasks\>/;"	f	file:
+get_tasks_by_filter	./src/tasks.erl	/^get_tasks_by_filter\>/;"	f	file:
+get_tasks_by_month	./src/db.erl	/^get_tasks_by_month\>/;"	f	file:
+get_tasks_by_subject	./src/db.erl	/^get_tasks_by_subject\>/;"	f	file:
+get_tasks_by_user	./src/db.erl	/^get_tasks_by_user\>/;"	f	file:
+get_tasks_completed	./src/db.erl	/^get_tasks_completed\>/;"	f	file:
+get_tasks_due_today	./src/db.erl	/^get_tasks_due_today\>/;"	f	file:
+get_tasks_no_deadline	./src/db.erl	/^get_tasks_no_deadline\>/;"	f	file:
+get_tasks_overdue	./src/db.erl	/^get_tasks_overdue\>/;"	f	file:
+get_tasks_sorted_by_date	./src/tasks.erl	/^get_tasks_sorted_by_date\>/;"	f	file:
+get_term	./src/search.erl	/^get_term\>/;"	f	file:
+get_unread_ids	./src/db.erl	/^get_unread_ids\>/;"	f	file:
+get_unread_updates	./src/db.erl	/^get_unread_updates\>/;"	f	file:
+get_update	./src/db.erl	/^get_update\>/;"	f	file:
+get_updates	./src/db.erl	/^get_updates\>/;"	f	file:
+get_updates_by_subject	./src/db.erl	/^get_updates_by_subject\>/;"	f	file:
+get_updates_by_user	./src/db.erl	/^get_updates_by_user\>/;"	f	file:
+get_users	./src/db.erl	/^get_users\>/;"	f	file:
+get_vcard	./src/receiver.erl	/^get_vcard\>/;"	f	file:
+group_item	./include/records.hrl	/^-\s\*record\s\*(\s\*group_item\>/;"	r
+group_updates	./src/index.erl	/^group_updates\>/;"	f	file:
+groups	./src/search.erl	/^groups\>/;"	f	file:
+handle	./src/nitrogen_cowboy.erl	/^handle\>/;"	f	file:
+handle_call	./src/receiver.erl	/^handle_call\>/;"	f	file:
+handle_cast	./src/receiver.erl	/^handle_cast\>/;"	f	file:
+handle_info	./src/receiver.erl	/^handle_info\>/;"	f	file:
+highlight_selected	./src/tasks.erl	/^highlight_selected\>/;"	f	file:
+icon	./src/edit_expense.erl	/^icon\>/;"	f	file:
+icon	./src/edit_file.erl	/^icon\>/;"	f	file:
+icon	./src/edit_task.erl	/^icon\>/;"	f	file:
+icon	./src/edit_update.erl	/^icon\>/;"	f	file:
+icon	./src/files.erl	/^icon\>/;"	f	file:
+icon	./src/finances.erl	/^icon\>/;"	f	file:
+icon	./src/index.erl	/^icon\>/;"	f	file:
+icon	./src/relationships.erl	/^icon\>/;"	f	file:
+icon	./src/tasks.erl	/^icon\>/;"	f	file:
+incoming	./src/common.erl	/^incoming\>/;"	f	file:
+incoming	./src/edit_file.erl	/^incoming\>/;"	f	file:
+incoming	./src/edit_task.erl	/^incoming\>/;"	f	file:
+incoming	./src/edit_update.erl	/^incoming\>/;"	f	file:
+incoming	./src/files.erl	/^incoming\>/;"	f	file:
+incoming	./src/index.erl	/^incoming\>/;"	f	file:
+incoming	./src/relationships.erl	/^incoming\>/;"	f	file:
+incoming	./src/tasks.erl	/^incoming\>/;"	f	file:
+index	./src/index.erl	1;"	M
+index.erl	./src/index.erl	1;"	F
+index:add_participants	./src/index.erl	/^add_participants\>/;"	f
+index:body	./src/index.erl	/^body\>/;"	f
+index:buttons	./src/index.erl	/^buttons\>/;"	f
+index:event	./src/index.erl	/^event\>/;"	f
+index:group_updates	./src/index.erl	/^group_updates\>/;"	f
+index:icon	./src/index.erl	/^icon\>/;"	f
+index:incoming	./src/index.erl	/^incoming\>/;"	f
+index:left	./src/index.erl	/^left\>/;"	f
+index:main	./src/index.erl	/^main\>/;"	f
+index:render_body	./src/index.erl	/^render_body\>/;"	f
+index:render_left	./src/index.erl	/^render_left\>/;"	f
+index:replace_left	./src/index.erl	/^replace_left\>/;"	f
+index:subject_exists_in_updates	./src/index.erl	/^subject_exists_in_updates\>/;"	f
+index:title	./src/index.erl	/^title\>/;"	f
+init	./src/nitrogen_cowboy.erl	/^init\>/;"	f	file:
+init	./src/nitrogen_sup.erl	/^init\>/;"	f	file:
+init	./src/receiver.erl	/^init\>/;"	f	file:
+init_dispatch	./src/nitrogen_sup.erl	/^init_dispatch\>/;"	f	file:
+inplace_event	./src/tasks.erl	/^inplace_event\>/;"	f	file:
+inplace_textarea_event	./src/tasks.erl	/^inplace_textarea_event\>/;"	f	file:
+inplace_textbox_event	./src/relationships.erl	/^inplace_textbox_event\>/;"	f	file:
+inplace_textbox_event	./src/tasks.erl	/^inplace_textbox_event\>/;"	f	file:
+install	./src/db.erl	/^install\>/;"	f	file:
+involved	./include/records.hrl	/^-\s\*record\s\*(\s\*involved\>/;"	r
+iterate	./src/db.erl	/^iterate\>/;"	f	file:
+key_ready	./src/legal.erl	/^key_ready\>/;"	f	file:
+key_ready	./src/receiver.erl	/^key_ready\>/;"	f	file:
+left	./src/edit_expense.erl	/^left\>/;"	f	file:
+left	./src/edit_file.erl	/^left\>/;"	f	file:
+left	./src/edit_task.erl	/^left\>/;"	f	file:
+left	./src/edit_update.erl	/^left\>/;"	f	file:
+left	./src/files.erl	/^left\>/;"	f	file:
+left	./src/finances.erl	/^left\>/;"	f	file:
+left	./src/index.erl	/^left\>/;"	f	file:
+left	./src/relationships.erl	/^left\>/;"	f	file:
+left	./src/tasks.erl	/^left\>/;"	f	file:
+legal	./src/legal.erl	1;"	M
+legal.erl	./src/legal.erl	1;"	F
+legal:accept	./src/legal.erl	/^accept\>/;"	f
+legal:counter	./src/legal.erl	/^counter\>/;"	f
+legal:decline	./src/legal.erl	/^decline\>/;"	f
+legal:event	./src/legal.erl	/^event\>/;"	f
+legal:key_ready	./src/legal.erl	/^key_ready\>/;"	f
+legal:main	./src/legal.erl	/^main\>/;"	f
+legal:progress	./src/legal.erl	/^progress\>/;"	f
+localized_dir_file	./src/nitrogen_sup.erl	/^localized_dir_file\>/;"	f	file:
+login	./src/login.erl	1;"	M
+login.erl	./src/login.erl	1;"	F
+login:body	./src/login.erl	/^body\>/;"	f
+login:event	./src/login.erl	/^event\>/;"	f
+login:main	./src/login.erl	/^main\>/;"	f
+login:title	./src/login.erl	/^title\>/;"	f
+main	./.prototypes/page.erl	/^main\>/;"	f	file:
+main	./src/common.erl	/^main\>/;"	f	file:
+main	./src/edit_expense.erl	/^main\>/;"	f	file:
+main	./src/edit_file.erl	/^main\>/;"	f	file:
+main	./src/edit_task.erl	/^main\>/;"	f	file:
+main	./src/edit_update.erl	/^main\>/;"	f	file:
+main	./src/files.erl	/^main\>/;"	f	file:
+main	./src/finances.erl	/^main\>/;"	f	file:
+main	./src/index.erl	/^main\>/;"	f	file:
+main	./src/legal.erl	/^main\>/;"	f	file:
+main	./src/login.erl	/^main\>/;"	f	file:
+main	./src/mobile.erl	/^main\>/;"	f	file:
+main	./src/photo.erl	/^main\>/;"	f	file:
+main	./src/raw.erl	/^main\>/;"	f	file:
+main	./src/relationships.erl	/^main\>/;"	f	file:
+main	./src/tasks.erl	/^main\>/;"	f	file:
+maybe_show_top_buttons	./src/tasks.erl	/^maybe_show_top_buttons\>/;"	f	file:
+maybe_unsaved	./src/common.erl	/^maybe_unsaved\>/;"	f	file:
+maybe_wrap_list	./src/sugar.erl	/^maybe_wrap_list\>/;"	f	file:
+md5	./src/tasks.erl	/^md5\>/;"	f	file:
+message_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*message_packet\>/;"	r
+messages	./src/search.erl	/^messages\>/;"	f	file:
+mobile	./src/mobile.erl	1;"	M
+mobile.erl	./src/mobile.erl	1;"	F
+mobile:body	./src/mobile.erl	/^body\>/;"	f
+mobile:event	./src/mobile.erl	/^event\>/;"	f
+mobile:main	./src/mobile.erl	/^main\>/;"	f
+mobile:mobile_list_link	./src/mobile.erl	/^mobile_list_link\>/;"	f
+mobile:title	./src/mobile.erl	/^title\>/;"	f
+mobile_list_link	./src/mobile.erl	/^mobile_list_link\>/;"	f	file:
+more_options_buttons	./src/files.erl	/^more_options_buttons\>/;"	f	file:
+name_from_address	./src/elements/element_update.erl	/^name_from_address\>/;"	f	file:
+next_id	./src/db.erl	/^next_id\>/;"	f	file:
+nice_task_status_name	./src/db.erl	/^nice_task_status_name\>/;"	f	file:
+nitrogen_app	./src/nitrogen_app.erl	1;"	M
+nitrogen_app.erl	./src/nitrogen_app.erl	1;"	F
+nitrogen_app:start	./src/nitrogen_app.erl	/^start\>/;"	f
+nitrogen_app:stop	./src/nitrogen_app.erl	/^stop\>/;"	f
+nitrogen_cowboy	./src/nitrogen_cowboy.erl	1;"	M
+nitrogen_cowboy.erl	./src/nitrogen_cowboy.erl	1;"	F
+nitrogen_cowboy:handle	./src/nitrogen_cowboy.erl	/^handle\>/;"	f
+nitrogen_cowboy:init	./src/nitrogen_cowboy.erl	/^init\>/;"	f
+nitrogen_cowboy:terminate	./src/nitrogen_cowboy.erl	/^terminate\>/;"	f
+nitrogen_sup	./src/nitrogen_sup.erl	1;"	M
+nitrogen_sup.erl	./src/nitrogen_sup.erl	1;"	F
+nitrogen_sup:init	./src/nitrogen_sup.erl	/^init\>/;"	f
+nitrogen_sup:init_dispatch	./src/nitrogen_sup.erl	/^init_dispatch\>/;"	f
+nitrogen_sup:localized_dir_file	./src/nitrogen_sup.erl	/^localized_dir_file\>/;"	f
+nitrogen_sup:reformat_path	./src/nitrogen_sup.erl	/^reformat_path\>/;"	f
+nitrogen_sup:start_link	./src/nitrogen_sup.erl	/^start_link\>/;"	f
+once_join	./src/sugar.erl	/^once_join\>/;"	f	file:
+open_or_closed	./src/elements/element_expander.erl	/^open_or_closed\>/;"	f	file:
+page	./.prototypes/page.erl	1;"	M
+page.erl	./.prototypes/page.erl	1;"	F
+page:body	./.prototypes/page.erl	/^body\>/;"	f
+page:event	./.prototypes/page.erl	/^event\>/;"	f
+page:main	./.prototypes/page.erl	/^main\>/;"	f
+page:title	./.prototypes/page.erl	/^title\>/;"	f
+participant_list	./src/elements/element_update_preview.erl	/^participant_list\>/;"	f	file:
+payment_row	./include/records.hrl	/^-\s\*record\s\*(\s\*payment_row\>/;"	r
+peer_id	./include/torrent.hrl	/^-\s\*type\s\*peer_id\>/;"	t	file:
+photo	./src/photo.erl	1;"	M
+photo.erl	./src/photo.erl	1;"	F
+photo:main	./src/photo.erl	/^main\>/;"	f
+photo:sanitize	./src/photo.erl	/^sanitize\>/;"	f
+plugins.hrl	./include/plugins.hrl	1;"	F
+popup	./include/records.hrl	/^-\s\*record\s\*(\s\*popup\>/;"	r
+progress	./src/legal.erl	/^progress\>/;"	f	file:
+progressbar	./include/records.hrl	/^-\s\*record\s\*(\s\*progressbar\>/;"	r
+protokol.hrl	./include/protokol.hrl	1;"	F
+qlc_result	./src/db.erl	/^qlc_result\>/;"	f	file:
+raw	./src/raw.erl	1;"	M
+raw.erl	./src/raw.erl	1;"	F
+raw:main	./src/raw.erl	/^main\>/;"	f
+received	./src/receiver.erl	/^received\>/;"	f	file:
+receiver	./src/receiver.erl	1;"	M
+receiver.erl	./src/receiver.erl	1;"	F
+receiver:apply_message	./src/receiver.erl	/^apply_message\>/;"	f
+receiver:code_change	./src/receiver.erl	/^code_change\>/;"	f
+receiver:connected	./src/receiver.erl	/^connected\>/;"	f
+receiver:disconnected	./src/receiver.erl	/^disconnected\>/;"	f
+receiver:downloaded	./src/receiver.erl	/^downloaded\>/;"	f
+receiver:extract_task	./src/receiver.erl	/^extract_task\>/;"	f
+receiver:filechunk_received	./src/receiver.erl	/^filechunk_received\>/;"	f
+receiver:filechunk_sent	./src/receiver.erl	/^filechunk_sent\>/;"	f
+receiver:get_or_request_contact	./src/receiver.erl	/^get_or_request_contact\>/;"	f
+receiver:get_vcard	./src/receiver.erl	/^get_vcard\>/;"	f
+receiver:handle_call	./src/receiver.erl	/^handle_call\>/;"	f
+receiver:handle_cast	./src/receiver.erl	/^handle_cast\>/;"	f
+receiver:handle_info	./src/receiver.erl	/^handle_info\>/;"	f
+receiver:init	./src/receiver.erl	/^init\>/;"	f
+receiver:key_ready	./src/receiver.erl	/^key_ready\>/;"	f
+receiver:received	./src/receiver.erl	/^received\>/;"	f
+receiver:register_receiver	./src/receiver.erl	/^register_receiver\>/;"	f
+receiver:save_attachments	./src/receiver.erl	/^save_attachments\>/;"	f
+receiver:sent	./src/receiver.erl	/^sent\>/;"	f
+receiver:start_link	./src/receiver.erl	/^start_link\>/;"	f
+receiver:terminate	./src/receiver.erl	/^terminate\>/;"	f
+records.hrl	./include/records.hrl	1;"	F
+reflect	./.prototypes/element.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_addable_row.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_attachment.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_contact_li.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_expander.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_file_row.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_group_item.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_involved.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_payment_row.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_popup.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_progressbar.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_rise_upload.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_row_fluid.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_task_leaf.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_taskrow.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_to.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_update.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_update_preview.erl	/^reflect\>/;"	f	file:
+reflect	./src/elements/element_vcard.erl	/^reflect\>/;"	f	file:
+reformat_path	./src/nitrogen_sup.erl	/^reformat_path\>/;"	f	file:
+register_receiver	./src/receiver.erl	/^register_receiver\>/;"	f	file:
+relationships	./src/relationships.erl	1;"	M
+relationships.erl	./src/relationships.erl	1;"	F
+relationships:body	./src/relationships.erl	/^body\>/;"	f
+relationships:buttons	./src/relationships.erl	/^buttons\>/;"	f
+relationships:contact_render	./src/relationships.erl	/^contact_render\>/;"	f
+relationships:drop_event	./src/relationships.erl	/^drop_event\>/;"	f
+relationships:event	./src/relationships.erl	/^event\>/;"	f
+relationships:icon	./src/relationships.erl	/^icon\>/;"	f
+relationships:incoming	./src/relationships.erl	/^incoming\>/;"	f
+relationships:inplace_textbox_event	./src/relationships.erl	/^inplace_textbox_event\>/;"	f
+relationships:left	./src/relationships.erl	/^left\>/;"	f
+relationships:main	./src/relationships.erl	/^main\>/;"	f
+relationships:render_contact_list	./src/relationships.erl	/^render_contact_list\>/;"	f
+relationships:render_group_list	./src/relationships.erl	/^render_group_list\>/;"	f
+relationships:title	./src/relationships.erl	/^title\>/;"	f
+remove_duplicates	./src/common.erl	/^remove_duplicates\>/;"	f	file:
+render_action	./.prototypes/action.erl	/^render_action\>/;"	f	file:
+render_attachments	./src/tasks.erl	/^render_attachments\>/;"	f	file:
+render_body	./src/index.erl	/^render_body\>/;"	f	file:
+render_calendar_view	./src/tasks.erl	/^render_calendar_view\>/;"	f	file:
+render_comment	./src/tasks.erl	/^render_comment\>/;"	f	file:
+render_comments	./src/tasks.erl	/^render_comments\>/;"	f	file:
+render_contact_list	./src/relationships.erl	/^render_contact_list\>/;"	f	file:
+render_element	./.prototypes/element.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_addable_row.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_attachment.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_contact_li.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_expander.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_file_row.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_group_item.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_involved.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_payment_row.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_popup.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_progressbar.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_rise_upload.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_row_fluid.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_task_leaf.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_taskrow.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_to.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_update.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_update_preview.erl	/^render_element\>/;"	f	file:
+render_element	./src/elements/element_vcard.erl	/^render_element\>/;"	f	file:
+render_files	./src/common.erl	/^render_files\>/;"	f	file:
+render_filters	./src/common.erl	/^render_filters\>/;"	f	file:
+render_flat_task	./src/tasks.erl	/^render_flat_task\>/;"	f	file:
+render_group	./src/elements/element_group_item.erl	/^render_group\>/;"	f	file:
+render_group_list	./src/relationships.erl	/^render_group_list\>/;"	f	file:
+render_help	./src/common.erl	/^render_help\>/;"	f	file:
+render_icon	./src/elements/element_update_preview.erl	/^render_icon\>/;"	f	file:
+render_left	./src/edit_expense.erl	/^render_left\>/;"	f	file:
+render_left	./src/index.erl	/^render_left\>/;"	f	file:
+render_role_edit_row	./src/tasks.erl	/^render_role_edit_row\>/;"	f	file:
+render_role_row	./src/tasks.erl	/^render_role_row\>/;"	f	file:
+render_roles	./src/tasks.erl	/^render_roles\>/;"	f	file:
+render_side_buttons	./src/tasks.erl	/^render_side_buttons\>/;"	f	file:
+render_subtask	./src/tasks.erl	/^render_subtask\>/;"	f	file:
+render_task	./src/tasks.erl	/^render_task\>/;"	f	file:
+render_task_change	./src/tasks.erl	/^render_task_change\>/;"	f	file:
+render_task_changes	./src/tasks.erl	/^render_task_changes\>/;"	f	file:
+render_task_link	./src/tasks.erl	/^render_task_link\>/;"	f	file:
+render_task_list	./src/tasks.erl	/^render_task_list\>/;"	f	file:
+render_task_tree	./src/tasks.erl	/^render_task_tree\>/;"	f	file:
+render_task_tree_buttons	./src/tasks.erl	/^render_task_tree_buttons\>/;"	f	file:
+render_top_buttons	./src/tasks.erl	/^render_top_buttons\>/;"	f	file:
+render_updates	./src/tasks.erl	/^render_updates\>/;"	f	file:
+replace_left	./src/index.erl	/^replace_left\>/;"	f	file:
+restore	./src/common.erl	/^restore\>/;"	f	file:
+restore	./src/db.erl	/^restore\>/;"	f	file:
+rise_upload	./include/records.hrl	/^-\s\*record\s\*(\s\*rise_upload\>/;"	r
+role_dropdown	./src/elements/element_involved.erl	/^role_dropdown\>/;"	f	file:
+role_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*role_packet\>/;"	r
+row_fluid	./src/elements/element_row_fluid.erl	/^-\s\*record\s\*(\s\*row_fluid\>/;"	r	file:
+sanitize	./src/photo.erl	/^sanitize\>/;"	f	file:
+sanitize_task_status	./src/db.erl	/^sanitize_task_status\>/;"	f	file:
+save	./src/db.erl	/^save\>/;"	f	file:
+save_attachment	./src/db.erl	/^save_attachment\>/;"	f	file:
+save_attachments	./src/db.erl	/^save_attachments\>/;"	f	file:
+save_attachments	./src/receiver.erl	/^save_attachments\>/;"	f	file:
+save_contact_role	./src/tasks.erl	/^save_contact_role\>/;"	f	file:
+save_file	./src/db.erl	/^save_file\>/;"	f	file:
+save_involved	./src/common.erl	/^save_involved\>/;"	f	file:
+save_payments	./src/edit_task.erl	/^save_payments\>/;"	f	file:
+save_subgroup	./src/db.erl	/^save_subgroup\>/;"	f	file:
+save_subtask	./src/db.erl	/^save_subtask\>/;"	f	file:
+save_task_tree	./src/db.erl	/^save_task_tree\>/;"	f	file:
+save_uniq	./src/db.erl	/^save_uniq\>/;"	f	file:
+search	./src/common.erl	/^search\>/;"	f	file:
+search	./src/search.erl	1;"	M
+search.erl	./src/search.erl	1;"	F
+search:bage_types	./src/search.erl	/^bage_types\>/;"	f
+search:check_roles	./src/search.erl	/^check_roles\>/;"	f
+search:contacts	./src/search.erl	/^contacts\>/;"	f
+search:date_badge	./src/search.erl	/^date_badge\>/;"	f
+search:daterange_badge	./src/search.erl	/^daterange_badge\>/;"	f
+search:dates	./src/search.erl	/^dates\>/;"	f
+search:dates_if	./src/search.erl	/^dates_if\>/;"	f
+search:files	./src/search.erl	/^files\>/;"	f
+search:format_dates	./src/search.erl	/^format_dates\>/;"	f
+search:format_dropdown_group	./src/search.erl	/^format_dropdown_group\>/;"	f
+search:get_badge_for_type	./src/search.erl	/^get_badge_for_type\>/;"	f
+search:get_term	./src/search.erl	/^get_term\>/;"	f
+search:groups	./src/search.erl	/^groups\>/;"	f
+search:messages	./src/search.erl	/^messages\>/;"	f
+search:simple_badge	./src/search.erl	/^simple_badge\>/;"	f
+search:statuses	./src/search.erl	/^statuses\>/;"	f
+search:tasks	./src/search.erl	/^tasks\>/;"	f
+search:terms	./src/search.erl	/^terms\>/;"	f
+search_contacts	./src/db.erl	/^search_contacts\>/;"	f	file:
+search_dates	./src/db.erl	/^search_dates\>/;"	f	file:
+search_files	./src/db.erl	/^search_files\>/;"	f	file:
+search_groups	./src/db.erl	/^search_groups\>/;"	f	file:
+search_messages	./src/db.erl	/^search_messages\>/;"	f	file:
+search_parent	./src/db.erl	/^search_parent\>/;"	f	file:
+search_parent_rec	./src/db.erl	/^search_parent_rec\>/;"	f	file:
+search_roles	./src/db.erl	/^search_roles\>/;"	f	file:
+search_tasks	./src/db.erl	/^search_tasks\>/;"	f	file:
+send_messages	./src/common.erl	/^send_messages\>/;"	f	file:
+send_task_tree	./src/common.erl	/^send_task_tree\>/;"	f	file:
+sent	./src/receiver.erl	/^sent\>/;"	f	file:
+set_read	./src/db.erl	/^set_read\>/;"	f	file:
+settings_menu	./src/common.erl	/^settings_menu\>/;"	f	file:
+sigma_search_event	./src/common.erl	/^sigma_search_event\>/;"	f	file:
+sigma_search_filter_clear	./src/common.erl	/^sigma_search_filter_clear\>/;"	f	file:
+sigma_search_filter_event	./src/common.erl	/^sigma_search_filter_event\>/;"	f	file:
+simple_badge	./src/search.erl	/^simple_badge\>/;"	f	file:
+sort_by_timestamp	./src/sugar.erl	/^sort_by_timestamp\>/;"	f	file:
+sortheader	./src/files.erl	/^sortheader\>/;"	f	file:
+start	./src/nitrogen_app.erl	/^start\>/;"	f	file:
+start_link	./src/nitrogen_sup.erl	/^start_link\>/;"	f	file:
+start_link	./src/receiver.erl	/^start_link\>/;"	f	file:
+start_upload_event	./src/common.erl	/^start_upload_event\>/;"	f	file:
+start_upload_event	./src/elements/element_vcard.erl	/^start_upload_event\>/;"	f	file:
+state	./src/nitrogen_cowboy.erl	/^-\s\*record\s\*(\s\*state\>/;"	r	file:
+state	./src/receiver.erl	/^-\s\*record\s\*(\s\*state\>/;"	r	file:
+statuses	./src/search.erl	/^statuses\>/;"	f	file:
+stop	./src/nitrogen_app.erl	/^stop\>/;"	f	file:
+subject_exists_in_updates	./src/index.erl	/^subject_exists_in_updates\>/;"	f	file:
+sugar	./src/sugar.erl	1;"	M
+sugar.erl	./src/sugar.erl	1;"	F
+sugar:date_format	./src/sugar.erl	/^date_format\>/;"	f
+sugar:date_from_string	./src/sugar.erl	/^date_from_string\>/;"	f
+sugar:date_string	./src/sugar.erl	/^date_string\>/;"	f
+sugar:datetime_to_timestamp	./src/sugar.erl	/^datetime_to_timestamp\>/;"	f
+sugar:format_file_size	./src/sugar.erl	/^format_file_size\>/;"	f
+sugar:format_timedelta	./src/sugar.erl	/^format_timedelta\>/;"	f
+sugar:maybe_wrap_list	./src/sugar.erl	/^maybe_wrap_list\>/;"	f
+sugar:once_join	./src/sugar.erl	/^once_join\>/;"	f
+sugar:sort_by_timestamp	./src/sugar.erl	/^sort_by_timestamp\>/;"	f
+sugar:time_string	./src/sugar.erl	/^time_string\>/;"	f
+sugar:timestamp_from_string	./src/sugar.erl	/^timestamp_from_string\>/;"	f
+sugar:timestamp_to_datetime	./src/sugar.erl	/^timestamp_to_datetime\>/;"	f
+sugar:ttl_from_string	./src/sugar.erl	/^ttl_from_string\>/;"	f
+sugar:ttl_to_datetime	./src/sugar.erl	/^ttl_to_datetime\>/;"	f
+sugar:ttl_to_readable	./src/sugar.erl	/^ttl_to_readable\>/;"	f
+sugar:ttl_to_timestamp	./src/sugar.erl	/^ttl_to_timestamp\>/;"	f
+summarize_involved	./src/tasks.erl	/^summarize_involved\>/;"	f	file:
+task_comment	./include/protokol.hrl	/^-\s\*record\s\*(\s\*task_comment\>/;"	r
+task_leaf	./include/records.hrl	/^-\s\*record\s\*(\s\*task_leaf\>/;"	r
+task_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*task_packet\>/;"	r
+task_status_list	./src/db.erl	/^task_status_list\>/;"	f	file:
+task_tree_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*task_tree_packet\>/;"	r
+taskrow	./include/records.hrl	/^-\s\*record\s\*(\s\*taskrow\>/;"	r
+tasks	./src/search.erl	/^tasks\>/;"	f	file:
+tasks	./src/tasks.erl	1;"	M
+tasks.erl	./src/tasks.erl	1;"	F
+tasks:body	./src/tasks.erl	/^body\>/;"	f
+tasks:buttons	./src/tasks.erl	/^buttons\>/;"	f
+tasks:calculate_changes	./src/tasks.erl	/^calculate_changes\>/;"	f
+tasks:check_changing_task_status	./src/tasks.erl	/^check_changing_task_status\>/;"	f
+tasks:compare_task_date	./src/tasks.erl	/^compare_task_date\>/;"	f
+tasks:does_task_have_attachments	./src/tasks.erl	/^does_task_have_attachments\>/;"	f
+tasks:drop_event	./src/tasks.erl	/^drop_event\>/;"	f
+tasks:event	./src/tasks.erl	/^event\>/;"	f
+tasks:expand_task	./src/tasks.erl	/^expand_task\>/;"	f
+tasks:expand_to_task	./src/tasks.erl	/^expand_to_task\>/;"	f
+tasks:get_involved_full	./src/tasks.erl	/^get_involved_full\>/;"	f
+tasks:get_next_tasks_by_date	./src/tasks.erl	/^get_next_tasks_by_date\>/;"	f
+tasks:get_tasks_by_filter	./src/tasks.erl	/^get_tasks_by_filter\>/;"	f
+tasks:get_tasks_sorted_by_date	./src/tasks.erl	/^get_tasks_sorted_by_date\>/;"	f
+tasks:highlight_selected	./src/tasks.erl	/^highlight_selected\>/;"	f
+tasks:icon	./src/tasks.erl	/^icon\>/;"	f
+tasks:incoming	./src/tasks.erl	/^incoming\>/;"	f
+tasks:inplace_event	./src/tasks.erl	/^inplace_event\>/;"	f
+tasks:inplace_textarea_event	./src/tasks.erl	/^inplace_textarea_event\>/;"	f
+tasks:inplace_textbox_event	./src/tasks.erl	/^inplace_textbox_event\>/;"	f
+tasks:left	./src/tasks.erl	/^left\>/;"	f
+tasks:main	./src/tasks.erl	/^main\>/;"	f
+tasks:maybe_show_top_buttons	./src/tasks.erl	/^maybe_show_top_buttons\>/;"	f
+tasks:md5	./src/tasks.erl	/^md5\>/;"	f
+tasks:render_attachments	./src/tasks.erl	/^render_attachments\>/;"	f
+tasks:render_calendar_view	./src/tasks.erl	/^render_calendar_view\>/;"	f
+tasks:render_comment	./src/tasks.erl	/^render_comment\>/;"	f
+tasks:render_comments	./src/tasks.erl	/^render_comments\>/;"	f
+tasks:render_flat_task	./src/tasks.erl	/^render_flat_task\>/;"	f
+tasks:render_role_edit_row	./src/tasks.erl	/^render_role_edit_row\>/;"	f
+tasks:render_role_row	./src/tasks.erl	/^render_role_row\>/;"	f
+tasks:render_roles	./src/tasks.erl	/^render_roles\>/;"	f
+tasks:render_side_buttons	./src/tasks.erl	/^render_side_buttons\>/;"	f
+tasks:render_subtask	./src/tasks.erl	/^render_subtask\>/;"	f
+tasks:render_task	./src/tasks.erl	/^render_task\>/;"	f
+tasks:render_task_change	./src/tasks.erl	/^render_task_change\>/;"	f
+tasks:render_task_changes	./src/tasks.erl	/^render_task_changes\>/;"	f
+tasks:render_task_link	./src/tasks.erl	/^render_task_link\>/;"	f
+tasks:render_task_list	./src/tasks.erl	/^render_task_list\>/;"	f
+tasks:render_task_tree	./src/tasks.erl	/^render_task_tree\>/;"	f
+tasks:render_task_tree_buttons	./src/tasks.erl	/^render_task_tree_buttons\>/;"	f
+tasks:render_top_buttons	./src/tasks.erl	/^render_top_buttons\>/;"	f
+tasks:render_updates	./src/tasks.erl	/^render_updates\>/;"	f
+tasks:save_contact_role	./src/tasks.erl	/^save_contact_role\>/;"	f
+tasks:summarize_involved	./src/tasks.erl	/^summarize_involved\>/;"	f
+tasks:title	./src/tasks.erl	/^title\>/;"	f
+tasks:update_current_task	./src/tasks.erl	/^update_current_task\>/;"	f
+tasks:update_task_tree	./src/tasks.erl	/^update_task_tree\>/;"	f
+terminate	./src/nitrogen_cowboy.erl	/^terminate\>/;"	f	file:
+terminate	./src/receiver.erl	/^terminate\>/;"	f	file:
+terms	./src/search.erl	/^terms\>/;"	f	file:
+time_string	./src/sugar.erl	/^time_string\>/;"	f	file:
+timestamp_from_string	./src/sugar.erl	/^timestamp_from_string\>/;"	f	file:
+timestamp_to_datetime	./src/sugar.erl	/^timestamp_to_datetime\>/;"	f	file:
+title	./.prototypes/page.erl	/^title\>/;"	f	file:
+title	./src/edit_expense.erl	/^title\>/;"	f	file:
+title	./src/edit_file.erl	/^title\>/;"	f	file:
+title	./src/edit_task.erl	/^title\>/;"	f	file:
+title	./src/edit_update.erl	/^title\>/;"	f	file:
+title	./src/files.erl	/^title\>/;"	f	file:
+title	./src/finances.erl	/^title\>/;"	f	file:
+title	./src/index.erl	/^title\>/;"	f	file:
+title	./src/login.erl	/^title\>/;"	f	file:
+title	./src/mobile.erl	/^title\>/;"	f	file:
+title	./src/relationships.erl	/^title\>/;"	f	file:
+title	./src/tasks.erl	/^title\>/;"	f	file:
+to	./include/records.hrl	/^-\s\*record\s\*(\s\*to\>/;"	r
+torrent	./include/torrent.hrl	/^-\s\*record\s\*(\s\*torrent\>/;"	r
+torrent.hrl	./include/torrent.hrl	1;"	F
+torrent:peer_id	./include/torrent.hrl	/^-\s\*type\s\*peer_id\>/;"	t
+torrent:torrent_id	./include/torrent.hrl	/^-\s\*type\s\*torrent_id\>/;"	t
+torrent:torrent_mode	./include/torrent.hrl	/^-\s\*type\s\*torrent_mode\>/;"	t
+torrent:torrent_state	./include/torrent.hrl	/^-\s\*type\s\*torrent_state\>/;"	t
+torrent_id	./include/torrent.hrl	/^-\s\*type\s\*torrent_id\>/;"	t	file:
+torrent_mode	./include/torrent.hrl	/^-\s\*type\s\*torrent_mode\>/;"	t	file:
+torrent_state	./include/torrent.hrl	/^-\s\*type\s\*torrent_state\>/;"	t	file:
+transaction	./src/db.erl	/^transaction\>/;"	f	file:
+ttl_from_string	./src/sugar.erl	/^ttl_from_string\>/;"	f	file:
+ttl_to_datetime	./src/sugar.erl	/^ttl_to_datetime\>/;"	f	file:
+ttl_to_readable	./src/sugar.erl	/^ttl_to_readable\>/;"	f	file:
+ttl_to_timestamp	./src/sugar.erl	/^ttl_to_timestamp\>/;"	f	file:
+unread	./src/common.erl	/^unread\>/;"	f	file:
+update	./src/db.erl	/^update\>/;"	f	file:
+update_current_task	./src/tasks.erl	/^update_current_task\>/;"	f	file:
+update_element	./include/records.hrl	/^-\s\*record\s\*(\s\*update_element\>/;"	r
+update_group_name	./src/db.erl	/^update_group_name\>/;"	f	file:
+update_packet	./include/protokol.hrl	/^-\s\*record\s\*(\s\*update_packet\>/;"	r
+update_preview	./include/records.hrl	/^-\s\*record\s\*(\s\*update_preview\>/;"	r
+update_task_tree	./src/tasks.erl	/^update_task_tree\>/;"	f	file:
+vcard	./include/records.hrl	/^-\s\*record\s\*(\s\*vcard\>/;"	r
+verify_create_table	./src/db.erl	/^verify_create_table\>/;"	f	file:

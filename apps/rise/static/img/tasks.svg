@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- The icon can be used freely in both personal and commercial projects with no attribution required, but always appreciated. You may NOT sub-license, resell, rent, redistribute or otherwise transfer the icon without express written permission from iconmonstr.com -->
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<path id="clipboard-8-icon" d="M171.941,291.333l14.721-13.609c17.22,8.332,28.139,14.672,47.493,28.469
+	c36.384-41.29,60.425-62.238,105.113-90.041l4.79,11.018c-36.853,32.161-63.843,67.982-102.708,137.68
+	C217.38,336.616,201.381,318.621,171.941,291.333z M432.816,109.791V462H79.184V109.791h79.888l-40.317,39.904v271.732h273.49
+	V149.695l-39.729-39.904H432.816z M308.232,108.902v-7.047c0-28.639-23.216-51.855-51.855-51.855
+	c-28.639,0-51.854,23.217-51.854,51.855v7.047l-56.612,57.086h217.18L308.232,108.902z M256.753,118.166
+	c-9.842,0-17.82-7.979-17.82-17.822c0-9.842,7.979-17.82,17.82-17.82c9.845,0,17.823,7.979,17.823,17.82
+	C274.576,110.188,266.598,118.166,256.753,118.166z"/>
+</svg>

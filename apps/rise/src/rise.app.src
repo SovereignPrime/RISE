@@ -1,0 +1,18 @@
+% vim: ft=erlang ts=4 sw=4 et
+{application, 'rise',
+ [{description, "Secure Sharing and Collaborating"},
+  {vsn, "0.2.5"},
+  {registered, []},
+  {mod, {'rise_app', []}},
+  {applications,
+   [kernel,
+    stdlib,
+    sasl
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {contributors, []},
+  {licenses, ["GPL"]},
+  {links, []}
+ ]}.
