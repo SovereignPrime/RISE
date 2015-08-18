@@ -10,4 +10,4 @@ addons:
             - libqt4-webkit
             - libqt4-dev
 
-script: "./rebar3 do update, compile"
+script: "./rebar3 as lin update, release"
