@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Categories=Application;Network;
+Exec=/usr/lib/rise/bin/rise
+Icon=/usr/lib/rise/site/static/img/rise.ico
+StartupNotify=true
+Terminal=false
+Type=Application
+Name=RISE secure sharing and collaboration

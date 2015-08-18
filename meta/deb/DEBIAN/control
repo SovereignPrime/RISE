@@ -1,0 +1,16 @@
+Package: rise
+Priority: optional
+Section: internet
+Installed-Size: 300000
+Maintainer: Sovereign Prime <dev@sovereignprime.com>
+Homepage: http://sovereignprime.com
+Architecture: i386
+Version: {{rel_vsn}}
+Depends: libqtwebkit4, erlang-base
+Description: Secure sharing and collaboration
+ RISE is an open source sharing and collaboration suite that works over a distributed network. All information transmitted over this network (including the meta data) remains private, and anonymous.
+ RISE offers.
+ - group messaging
+ - task/ project management
+ - relationship management
+ - financial accounting.
