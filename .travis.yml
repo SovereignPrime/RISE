@@ -1,8 +1,13 @@
 language: erlang
+sudo: false
 otp_release:
-    -17
-    -17.2
-install: 
-    - sudo apt-get update
-    - sudo apt-get --yes --force-yes install libqt4-webkit libqt4-dev
+   - 17.5
+   - 17.1
+   - 17.0
+addons:
+    apt:
+        packages:
+            - libqt4-webkit
+            - libqt4-dev
+
 script: "./rebar3 do update, compile"
