@@ -9,14 +9,17 @@
 -simple_bridge_max_post_size 14096
 -simple_bridge_max_file_size 14096
 
+-env ERL_LIBS ./lib
+-pa ./site/ebin
+-pa ./site/include
+-boot ./releases/0.1.5/rise
+-embded
 # Configs to use
--config bitmessage
--config app
--config cowboy
--config sasl
--config eminer
--config sync
+-config ./etc/bitmessage
+-config ./etc/app
+-config ./etc/cowboy
+# -config ./etc/sasl
+-config ./etc/eminer
+-config ./etc/simple_bridge
+#-config ./etc/sync
 
-## Run code at startup.
--eval "application:start(rise)"
--setcookie ZB1da1Qt3Lrj2Q7ghAF0ddIKtxn8f41nFI8nBeogQsvlj2ZlcoKPoQhAxeAW
