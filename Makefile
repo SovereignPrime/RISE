@@ -31,27 +31,10 @@ thanks:
 	rm -fr simple_bridge nprocreg nitrogen_core NitrogenProject.com; \
 	echo "Thanks file generated in thanks.txt - please review")
 	
-version:
-	@(echo "Building RISE-$(RISE_VERSION)")
-	@(sed 's/".[0-9]*\.[0-9]*\.[0-9]*"/"$(RISE_VERSION)"/' rel/reltool_base.config > rel/reltool_tmp.config)
-	@(sed 's/%VERSION/$(strip $(RISE_VERSION:v%=%))/' packages/debian/DEBIAN/control.src > packages/debian/DEBIAN/control)
-	@(sed 's/%VERSION/$(RISE_VERSION)/' packages/win/rise.iss.src > packages/win/rise.iss)
-
-
-deb: lin
-	@(echo "Creating DEB package for rise-$(RISE_VERSION)")
-	@(rm -rf rel/Release)
-	@(mkdir rel/Release)
-	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/usr/lib)
-	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/DEBIAN)
-	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/etc/profile.d)
-	@(mkdir -p rel/Release/rise-$(RISE_VERSION)/usr/bin)
-	@(cd rel; mv rise Release/rise-$(RISE_VERSION)/usr/lib)
-	@(cd rel/Release/rise-$(RISE_VERSION); cp usr/lib/rise/etc/rise.sh etc/profile.d)
-	@(cd rel/Release/rise-$(RISE_VERSION); cp usr/lib/rise/bin/rise usr/bin)
-	@(cp -r packages/debian/* rel/Release/rise-$(RISE_VERSION))
-	@(cd rel/Release; sudo chown -R root:root rise-$(RISE_VERSION); chmod 644 rise-$(RISE_VERSION)/DEBIAN/conffiles)
-	@(cd rel/Release; dpkg-deb -z8 -Zgzip --build rise-$(RISE_VERSION))
+deb: 
+	@(echo "Creating DEB package for rise-{{rel_vsn}}")
+	# @(cd rel/Release; sudo chown -R root:root rise-$(RISE_VERSION); chmod 644 rise-$(RISE_VERSION)/DEBIAN/conffiles)
+	dpkg-deb -z8 -Zgzip --build rise-{{rel_vsn}}
 
 mac:
 	@($(MAKE) rel PLATFORM=mac)
