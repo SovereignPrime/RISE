@@ -18,28 +18,13 @@ compile:
 clean:
 	./rebar3 clean -a
 
+distclean: 
+	@(rm -rf _build)
+	@(rm -rf frontend)
 
-## Produce a list of contributors from the main repo and the dependent repos
-thanks: 
-	@(cd support/list_thanks; \
-	rm -fr simple_bridge nprocreg nitrogen_core NitrogenProject.com; \
-	git clone git://github.com/nitrogen/simple_bridge; \
-	git clone git://github.com/nitrogen/nprocreg; \
-	git clone git://github.com/nitrogen/nitrogen_core; \
-	git clone git://github.com/nitrogen/NitrogenProject.com; \
-	perl list_thanks.pl >> ../../thanks.txt; \
-	rm -fr simple_bridge nprocreg nitrogen_core NitrogenProject.com; \
-	echo "Thanks file generated in thanks.txt - please review")
-	
 deb: 
 	@(echo "Creating DEB package for rise-{{rel_vsn}}")
-	# @(cd rel/Release; sudo chown -R root:root rise-$(RISE_VERSION); chmod 644 rise-$(RISE_VERSION)/DEBIAN/conffiles)
 	dpkg-deb -z8 -Zgzip --build rise-{{rel_vsn}}
-
-mac:
-	@($(MAKE) rel PLATFORM=mac)
-	@($(MAKE) mac_frontend PLATFORM=mac)
-	@($(MAKE) dmg PLATFORM=mac)
 
 win:
 	@(CC=gcc && $(MAKE) rel_win PLATFORM=win)
@@ -61,14 +46,13 @@ lin:
 	@(git clone git://github.com/SovereignPrime/RISE-frontend.git frontend)
 	@(cd frontend; qmake sp-rise.pro -config release && make)
 
-mac_frontend:
-	@(rm -rf rel/frontend)
-	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git rel/frontend)
-	@(cd rel/frontend; xcodebuild && mkdir ../Release)
-	@(cd rel; cp -r frontend/build/Release/RISE.app Release/RISE.app && cp -r rise Release/RISE.app/Contents/Backend && ln -s /Applications ./Release/Applications) 
+mac:
+	@(rm -rf frontend)
+	@(git clone git://github.com/SovereignPrime/RISE-macosx-frontend.git frontend)
+	@(cd frontend; xcodebuild)
 
 dmg:
-	@(cd rel; hdiutil create ./Release/RISE_${RISE_VERSION}.dmg -volname RISE -srcdir ./Release)
+	hdiutil create ./Release/RISE_{{rel_vsn}}.dmg -volname RISE-{{rel_vsn}} -srcdir ./Release
 
 setup:
 	@(rm -rf rel/Release)

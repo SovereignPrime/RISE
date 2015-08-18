@@ -10,7 +10,7 @@
 start(_StartType, _StartArgs) ->
     application:load(mnesia),
     application:load(sasl),
-    application:load(lager),
+    application:stop(lager),
     RiseDir = case os:type() of
         {win32, _} ->
             os:getenv("APPDATA") ++ "/RISE";
