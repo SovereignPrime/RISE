@@ -24,7 +24,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=C:\RISE\LICENSE
-OutputDir=C:\RISE\rel\Release
+OutputDir=C:\RISE\_build\win\rel
 OutputBaseFilename={#MyAppName}_{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
@@ -38,8 +38,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\RISE\rel\rise\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\RISE\packages\win\sovereignprime.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\RISE\_build\win\rel\rise\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\RISE\meta\win\sovereignprime.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Qt\5.3\mingw482_32\plugins\platforms\*"; Excludes: "*d.dll"; DestDir: "{app}\bin\platforms"; Flags: recursesubdirs
 Source: "C:\Qt\5.3\mingw482_32\bin\*.dll"; Excludes: "*d.dll"; DestDir: "{app}\bin"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
