@@ -1,12 +1,18 @@
 language: erlang
 sudo: false
 otp_release:
-   - 17.5
-   - 17.0
+- 17.5
+- 17.0
 addons:
-    apt:
-        packages:
-            - libqt4-webkit
-            - libqt4-dev
-
+  apt:
+    packages:
+    - libqt4-webkit
+    - libqt4-dev
 script: "./rebar3 as lin update, release"
+deploy:
+  provider: releases
+  api_key:
+    secure: toSjs/DggPdv45/xi/Tev2cu5cyCMX0amgFXDUJbBHAPmWAojkJCcPCwUOzML24jS63Hak+EuDVCWKW83JOhKbWJyecQQ08JDQGP2/Fo84J7Vn9fr6FVI2/CfK4vvEmm4eOqvefoQB2hWVejXebao7BIEnwDqishEELyQq7+Mo0=
+  file: _build/lin/rel/rise-*.deb
+  on:
+    repo: SovereignPrime/RISE
