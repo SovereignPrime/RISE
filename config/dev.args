@@ -23,5 +23,5 @@
 # -config ./etc/sasl
 -config ./etc/eminer
 -config ./etc/simple_bridge
--config ./etc/sync
+#-config ./etc/sync
 

@@ -1,9 +1,13 @@
 language: erlang
+sudo: false
 otp_release:
-  - R16B02
-  - R16B01
-  - R16B03
-install: 
-    - sudo apt-get update
-    - sudo apt-get --yes --force-yes install libpam0g-dev libqt4-webkit libqt4-dev
-script: "make linux"
+   - 17.5
+   - 17.1
+   - 17.0
+addons:
+    apt:
+        packages:
+            - libqt4-webkit
+            - libqt4-dev
+
+script: "./rebar3 as lin update, release"
