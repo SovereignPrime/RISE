@@ -290,7 +290,7 @@ format_status(encrypt_message) ->  % {{{1
 format_status(Status) ->  % {{{1
     " " ++ wf:to_list(Status).
 
-decode_enc(Enc, Data, Collapsed) when Enc == 2; Enc == 3; Enc == 4 ->  % {{{1
+decode_enc(Enc, Data, Collapsed) when is_binary(Data) andalso Enc == 2; Enc == 3; Enc == 4 ->  % {{{1
     try binary_to_term(Data) of
         #message_packet{text=T, time=TS} ->
             Text = ?WF_IF(Collapsed, wf:html_encode(T), wf:html_encode(T, whites)),
@@ -312,31 +312,33 @@ decode_enc(Enc, Data, Collapsed) when Enc == 2; Enc == 3; Enc == 4 ->  % {{{1
                       text=Txt} ->
             {Txt, sugar:datetime_to_timestamp(TS), 4};
         Task when element(1, Task) == task_packet ->
-            #task_packet{id=Id,
-                         text=T,
-                         due=Due, 
-                         involved=Involved,
-                         status=Status,
-                         time=TS} = receiver:extract_task(Task),
-            Body = #panel{ class="",
-                           body= [ 
-                                  #panel{class="", 
-                                         body=["Due: ", sugar:date_format(Due)]
-                                        },
-                                  #panel{class="", 
-                                         body=["Status: ", Status]
-                                        },
-                                  lists:map(fun(#role_packet{address=Address,
-                                                             role=R}) ->
-                                                    {ok,
-                                                     #db_contact{name=Name}} = db:get_contact_by_address(Address),
-                                                    #panel{class="",
-                                                           body=[Name ++ " - " ++ R]}
-                                            end,
-                                            Involved),
-                                  #br{},
-                                  wf:html_encode(T, whites)
-                                 ]},
+            decode_enc(Enc, receiver:extract_task(Task), Collapsed);
+        #{type => task,
+          id => Id,
+          text => T,
+          due => Due, 
+          involved => Involved,
+          status => Status,
+          time => TS} = _TaskMap ->
+            Body = #panel{class="",
+                          body= [ 
+                                 #panel{class="", 
+                                        body=["Due: ", sugar:date_format(Due)]
+                                       },
+                                 #panel{class="", 
+                                        body=["Status: ", Status]
+                                       },
+                                 lists:map(fun(#role_packet{address=Address,
+                                                            role=R}) ->
+                                                   {ok,
+                                                    #db_contact{name=Name}} = db:get_contact_by_address(Address),
+                                                   #panel{class="",
+                                                          body=[Name ++ " - " ++ R]}
+                                           end,
+                                           Involved),
+                                 #br{},
+                                 wf:html_encode(T, whites)
+                                ]},
             Text = ?WF_IF(Collapsed, wf:html_encode(T, whites), Body),
             {Text, TS, Id}
     catch

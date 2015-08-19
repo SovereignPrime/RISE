@@ -314,14 +314,15 @@ apply_message(#message{from=BMF,
             db:save_attachments(Message, sets:from_list(Attachments)),
             State#state.pid ! received;
         Task when is_record(Task, task_packet) ->
-            #task_packet{id=UID, 
-                         due=Due, 
-                         text=Text, 
-                         parent=Parent, 
-                         status=Status, 
-                         time=Time,
-                         changes=Changes,
-                         involved=Involved} = extract_task(Task),
+            #{type => task,
+              id => UID, 
+              due => Due, 
+              text => Text, 
+              parent => Parent, 
+              status => Status, 
+              time => Time,
+              changes => Changes,
+              involved => Involved} = extract_task(Task),
 
             NewParent = case db:get_task(Parent) of
                             {ok, []} ->
@@ -387,27 +388,45 @@ extract_task(Data) when is_binary(Data) ->  % {{{1
 	extract_task(binary_to_term(Data));
 extract_task(Task) ->  % {{{1
     case Task of
-        T = #task_packet{} -> T;
+        T when is_map(T) -> T;
+        #task_packet{id=Id,
+                     name=Name,
+                     due=Due,
+                     text=Text,
+                     parent=Parent,
+                     status=Status,
+                     involved=Involved,
+                     attachments=Attachments,
+                     time=Time,
+                     changes=Changes} ->
+            #{type => task,
+              id => UID, 
+              due => Due, 
+              text => Text, 
+              parent => Parent, 
+              status => Status, 
+              time => Time,
+              changes => Changes,
+              involved => Involved};
         {task_packet,
          Id,
-         Name,
+         _Name,
          Due,
          Text,
          Parent,
          Status,
          Involved,
-         Attachments,
+         _Attachments,
          Time} ->
-            #task_packet{id=Id,
-                         name=Name,
-                         due=Due,
-                         text=Text,
-                         parent=Parent,
-                         status=Status,
-                         involved=Involved,
-                         attachments=Attachments,
-                         time=Time,
-                         changes=[]}
+            #{type => task,
+              id => Id, 
+              due => Due, 
+              text => Text, 
+              parent => Parent, 
+              status => Status, 
+              time => Time,
+              changes => [],
+              involved => Involved}
 	end.
 
 -spec save_attachments(non_neg_integer(), record(), [#bm_file{}]) -> {ok, ok}.  % {{{1

@@ -1,10 +1,11 @@
+%% Moved to maps. 
+%% Will be removed in future
 -record(task_packet,
         {id,
          name,
          due,
          text,
          parent,
-         effort={1.0, day} :: {float(), atom()},
          status,
          involved,
          attachments,
