@@ -37,7 +37,7 @@ dmg:
 	@(hdiutil create ./Release/RISE_{{rel_vsn}}.dmg -volname RISE-{{rel_vsn}} -srcdir ./Release)
 
 setup:
-	@(iscc meta/win/rise.iss)
+	@(iscc $(REBAR_BUILD_DIR)/rel/rise.iss)
 
 deb: 
 	@(echo "Creating DEB package for rise-{{rel_vsn}}")
