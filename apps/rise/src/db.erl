@@ -173,7 +173,7 @@ update(6) ->  % {{{1
     mnesia:delete_table(db_update),
     ?V(mnesia:create_table(db_contact_note, [{disc_copies, [node()]}, {attributes, record_info(fields, db_contact_note)}, {type, ordered_set}, {index, [contact]}])),
     ?V(mnesia:create_table(db_update, [{disc_copies, [node()]}, {attributes, record_info(fields, db_update)}, {type, ordered_set}]));
-update({0, 1, 5}) ->
+update({0, 1, 5}) ->  % {{{1
     [ update(X) || X <- lists:seq(1, 6)],
     update_table(db_task,
                  [{due, fun(D) -> sugar:date_from_string(D) end},

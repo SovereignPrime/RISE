@@ -109,6 +109,7 @@ render_element(#update_element{id=Id,
                       Status
               end,
     Packet = receiver:extract_packet(Data),
+    wf:info("Packet ~p", [Packet]),
     TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
     #panel{id=Id,
            body=[
