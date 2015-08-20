@@ -881,7 +881,7 @@ event(save) -> % {{{1
     Task2 = calculate_changes(Task),
     db:save(Task2),
     [save_contact_role(ContactRole) || {ContactRole, _} <- Involved],
-    %common:send_messages(Task2),
+    common:send_messages(Task2),
     wf:state(unsaved, false),
     update_task_tree(),
     event({task_chosen, Task#db_task.id});
