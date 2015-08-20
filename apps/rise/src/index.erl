@@ -116,7 +116,7 @@ render_body(Subject, Archive) -> % {{{1
     Type = case Updates of
                [] -> 2;
                [#message{text=Data}|_] ->
-                   {_, _, T} = element_update_preview:decode_type(Data),
+                   #{type := T} = receiver:extract_packet(Data),
                    T
            end,
     Icon = element_update_preview:render_icon(Type),

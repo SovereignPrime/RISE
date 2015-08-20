@@ -39,7 +39,16 @@ render_element(#update_element{id=Id,
                                }=Record) ->
     {FromId, FromName} = name_from_address(From),
     {ToId, ToName} = name_from_address(To),
-    {Text, Timestamp, _} = decode_enc(Enc, Data, true),
+
+    Text = case receiver:extract_packet(Data) of
+               #{type := Type,
+                 text := T} when Type == message;
+                                 Type == task; 
+                                 Type == task_comment ->
+                   wf:html_encode(T);
+               Packet ->
+                   wf:f("Packet: ~p", [Packet])
+           end,
     TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
     #panel{id=Id,
            class="row-fluid clickable",
@@ -99,7 +108,7 @@ render_element(#update_element{id=Id,
                   {ok, _} ->
                       Status
               end,
-    {Text, Timestamp, TID} = decode_enc(Enc, Data, false),
+    Packet = receiver:extract_packet(Data),
     TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
     #panel{id=Id,
            body=[
@@ -134,8 +143,45 @@ render_element(#update_element{id=Id,
                  #panel{
                     class="row-fluid",
                     body=[
-                          #panel{class="span12",
-                                 body=Text}
+                          #panel{
+                             class="span12",
+                             body=case Packet of
+                                      #{type := task,
+                                        due := Due,
+                                        involved := Involved,
+                                        status := Status,
+                                        text := Text} ->
+                                          #panel{
+                                             class="",
+                                             body=[
+                                                   #panel{
+                                                      class="", 
+                                                      body=["Due: ", sugar:date_format(Due)]
+                                                     },
+                                                   #panel{
+                                                      class="", 
+                                                      body=["Status: ", Status]
+                                                     },
+                                                   lists:map(fun(#role_packet{
+                                                                    address=Address,
+                                                                    role=R}) ->
+                                                                     {ok,
+                                                                      #db_contact{
+                                                                         name=Name}
+                                                                     } = db:get_contact_by_address(Address),
+                                                                     #panel{
+                                                                        class="",
+                                                                        body=[Name ++ " - " ++ R]}
+                                                             end,
+                                                             Involved),
+                                                   #br{},
+                                                   wf:html_encode(Text, whites)
+                                            ]};
+                                      #{text := Text} ->
+                                          wf:html_encode(Text, whites)
+
+                                  end
+                            }
                          ]},
                  #panel{
                     class="row-fluid",
@@ -154,7 +200,7 @@ render_element(#update_element{id=Id,
                                                    E when E == 3; E == 2 -> 
                                                        {reply, Subject, From};
                                                    4 ->
-                                                       {to_task, TID}
+                                                       {to_task, maps:get(tid, Packet, empty)}
                                                end,
                                       new=false,
                                       delegate=common},
@@ -249,7 +295,16 @@ render_element(#update_element{
                             } = Message,
                   age=Age,
                   collapse=paragraph}) ->
-    {Text, Timestamp, _} = decode_enc(Enc, Data, true),
+    Text = case receiver:extract_packet(Data) of
+               #{type := Type,
+                 text := T} when Type == message;
+                                 Type == task; 
+                                 Type == task_comment ->
+                   wf:html_encode(T);
+               Packet ->
+                   wf:f("Packet: ~p", [Packet])
+           end,
+
     TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
     [
      #panel{class="row-fluid",
@@ -290,72 +345,3 @@ format_status(encrypt_message) ->  % {{{1
 format_status(Status) ->  % {{{1
     " " ++ wf:to_list(Status).
 
-decode_enc(Enc, Data, Collapsed) when is_binary(Data) andalso Enc == 2; Enc == 3; Enc == 4 ->  % {{{1
-    try binary_to_term(Data) of
-        #message_packet{text=T, time=TS} ->
-            Text = ?WF_IF(Collapsed, wf:html_encode(T), wf:html_encode(T, whites)),
-            {Text, TS, empty};
-        #update_packet{text=T, time=TS} ->
-            EncodedT = wf:html_encode(T, whites),
-            TB = [EncodedT, #panel{id=command, 
-                                   body=[
-                                         #link{class="btn btn-link",
-                                               body="<i class='icon-ok'></i> Start-update",
-                                               %postback={start_update, A}, 
-                                               new=false,
-                                               delegate=common}
-                                        ]}],
-            Text = ?WF_IF(Collapsed, wf:html_encode(T), wf:html_encode(T, whites)),
-            {Text, TS, empty};
-        #task_comment{task=TID,
-                      time=TS,
-                      text=Txt} ->
-            {Txt, sugar:datetime_to_timestamp(TS), 4};
-        Task when element(1, Task) == task_packet ->
-            decode_enc(Enc, receiver:extract_task(Task), Collapsed);
-        #{type => task,
-          id => Id,
-          text => T,
-          due => Due, 
-          involved => Involved,
-          status => Status,
-          time => TS} = _TaskMap ->
-            Body = #panel{class="",
-                          body= [ 
-                                 #panel{class="", 
-                                        body=["Due: ", sugar:date_format(Due)]
-                                       },
-                                 #panel{class="", 
-                                        body=["Status: ", Status]
-                                       },
-                                 lists:map(fun(#role_packet{address=Address,
-                                                            role=R}) ->
-                                                   {ok,
-                                                    #db_contact{name=Name}} = db:get_contact_by_address(Address),
-                                                   #panel{class="",
-                                                          body=[Name ++ " - " ++ R]}
-                                           end,
-                                           Involved),
-                                 #br{},
-                                 wf:html_encode(T, whites)
-                                ]},
-            Text = ?WF_IF(Collapsed, wf:html_encode(T, whites), Body),
-            {Text, TS, Id}
-    catch
-        error:badarg ->
-            {"Decoding error", bm_types:timestamp(), empty}
-    end;
-%decode_enc(5, Data, false) ->  % {{{1
-%     = binary_to_term(Data),
-%    EncodedT = wf:html_encode(T, whites),
-%    TB = [EncodedT, #panel{id=command, 
-%                           body=[
-%                                 #link{class="btn btn-link",
-%                                       body="<i class='icon-ok'></i> Start-update",
-%                                       %postback={start_update, A}, 
-%                                       new=false,
-%                                       delegate=common}
-%                                ]}],
-%    {EncodedT, TS, empty};
-decode_enc(_, Data, _) ->  % {{{1
-    {wf:html_encode(wf:to_list( Data ), whites), bm_types:timestamp(), empty}.

@@ -18,7 +18,7 @@
     downloaded/1,
     filechunk_sent/2,
     filechunk_received/3,
-	extract_task/1
+	extract_packet/1
     ]). % }}}
 
 %% gen_server callbacks
@@ -298,10 +298,10 @@ apply_message(#message{from=BMF,
     error_logger:info_msg("Message from ~s received subject ~s~n", [BMF, Subject]),
     {ok, Id} = db:next_id(db_update),
 
-    try binary_to_term(Data) of
-        #message_packet{text=Text,
-                        involved=Involved}  ->
-
+    case extract_packet(Data) of
+        #{type := message,
+          text := Text,
+          involved := Involved}  ->
             Message = #db_update{id=Id,
                                  date=date(),
                                  from=FID,
@@ -313,16 +313,15 @@ apply_message(#message{from=BMF,
             db:save(Message),
             db:save_attachments(Message, sets:from_list(Attachments)),
             State#state.pid ! received;
-        Task when is_record(Task, task_packet) ->
-            #{type => task,
-              id => UID, 
-              due => Due, 
-              text => Text, 
-              parent => Parent, 
-              status => Status, 
-              time => Time,
-              changes => Changes,
-              involved => Involved} = extract_task(Task),
+        #{type := task,
+          id := UID, 
+          due := Due, 
+          text := Text, 
+          parent := Parent, 
+          status := Status, 
+          time := Time,
+          changes := Changes,
+          involved := Involved} ->
 
             NewParent = case db:get_task(Parent) of
                             {ok, []} ->
@@ -355,11 +354,10 @@ apply_message(#message{from=BMF,
                                   db:save_subtask(T, UID, TS)
                           end, Children),
             State#state.pid ! received;
-        _ ->
-            error_logger:warning_msg("Wrong incomming message: ~p from ~p~n", [Data, FID])
-    catch
-        error:badarg ->
-            error_logger:warning_msg("Wrong incomming message: ~p from ~p~n", [Data, FID])
+        Packet ->
+            error_logger:warning_msg("Wrong incomming packet: ~p from ~p~n",
+                                     [Packet, FID]),
+            State#state.pid ! received
     end;
 
 % Default  {{{1
@@ -384,50 +382,96 @@ get_or_request_contact(BM, From, To) ->  % {{{1
             CID
     end.
 
-extract_task(Data) when is_binary(Data) ->  % {{{1
-	extract_task(binary_to_term(Data));
-extract_task(Task) ->  % {{{1
-    case Task of
-        T when is_map(T) -> T;
-        #task_packet{id=Id,
-                     name=Name,
-                     due=Due,
-                     text=Text,
-                     parent=Parent,
-                     status=Status,
-                     involved=Involved,
-                     attachments=Attachments,
-                     time=Time,
-                     changes=Changes} ->
-            #{type => task,
-              id => UID, 
-              due => Due, 
-              text => Text, 
-              parent => Parent, 
-              status => Status, 
-              time => Time,
-              changes => Changes,
-              involved => Involved};
-        {task_packet,
-         Id,
-         _Name,
-         Due,
-         Text,
-         Parent,
-         Status,
-         Involved,
-         _Attachments,
-         Time} ->
-            #{type => task,
-              id => Id, 
-              due => Due, 
-              text => Text, 
-              parent => Parent, 
-              status => Status, 
-              time => Time,
-              changes => [],
-              involved => Involved}
-	end.
+extract_packet(Data) when is_binary(Data) ->  % {{{1
+    try binary_to_term(Data, []) of
+        Packet ->
+            extract_packet(Packet)
+    catch
+        error:badarg ->
+            #{type => error,
+              text =>  <<"Decoding error! Data: ", Data/bytes>>}
+    end;
+extract_packet(Packet) when is_map(Packet) ->  % {{{1
+    Packet;
+extract_packet(#task_packet{id=Id,
+                            due=Due,
+                            text=Text,
+                            parent=Parent,
+                            status=Status,
+                            involved=Involved,
+                            time=Time,
+                            changes=Changes}) ->
+    #{type => task,
+      id => Id, 
+      due => Due, 
+      text => Text, 
+      parent => Parent, 
+      status => Status, 
+      time => Time,
+      changes => Changes,
+      involved => Involved};
+extract_packet({task_packet,
+                Id,
+                _Name,
+                Due,
+                Text,
+                Parent,
+                Status,
+                Involved,
+                _Attachments,
+                Time}) ->
+    #{type => task,
+      id => Id, 
+      due => Due, 
+      text => Text, 
+      parent => Parent, 
+      status => Status, 
+      time => Time,
+      changes => [],
+      involved => Involved};
+extract_packet({task_packet,
+                Id,
+                _Name,
+                Due,
+                _Effort,
+                Text,
+                Parent,
+                Status,
+                Involved,
+                _Attachments,
+                Time}) ->
+    #{type => task,
+      id => Id, 
+      due => Due, 
+      text => Text, 
+      parent => Parent, 
+      status => Status, 
+      time => Time,
+      changes => [],
+      involved => Involved};
+extract_packet(#message_packet{subject=S,
+                               text=Text,
+                               involved=Involved,
+                               attachments=Attachments,
+                               time=Time}) ->
+    #{type => message,
+      subject => S,
+      text => Text,
+      involved => Involved,
+      attachments => Attachments,
+      time => Time};
+
+extract_packet(#task_comment{task=TID,
+                             time=TS,
+                             text=Txt}) ->
+    #{type => task_comment,
+      task => TID,
+      time => TS,
+      text => Txt};
+
+extract_packet(Packet) ->
+    #{type => error,
+      text =>  <<"Decoding error! Data: ", Packet/bytes>>}.
 
 -spec save_attachments(non_neg_integer(), record(), [#bm_file{}]) -> {ok, ok}.  % {{{1
 save_attachments(UID, Message, Attachments) ->

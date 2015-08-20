@@ -9,8 +9,7 @@
 -export([
          reflect/0,
          render_element/1,
-         render_icon/1,
-         decode_type/1
+         render_icon/1
         ]).
 
 -spec reflect() -> [atom()].
@@ -30,9 +29,9 @@ render_element(#update_preview{id=Id,
                                           status=Status},
                                flag=Flag,
                                archive=Archive}) -> 
-    {Text, Timestamp, Icon} = decode_type(Data),
+    #{type := Icon,
+      text := Text} = receiver:extract_packet(Data),
     TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
-    %TD = bm_types:timestamp() - Timestamp,
     CurrentId = wf:session(current_update_id),
     HasCurrent = lists:any(fun(I) -> (I == CurrentId) end, sugar:maybe_wrap_list(UID)),
     Class = if HasCurrent ->
@@ -88,17 +87,19 @@ render_element(#update_preview{id=Id,
 render_icon(Icon) ->  % {{{1
     render_icon(Icon, true).
 
-render_icon(Icon, unread) when Icon==1; Icon==2; Icon==3 ->  % {{{1
+render_icon(Icon, unread) when Icon == message;
+                               Icon == error ->  % {{{1
     #span{
        class="icon-stack",
        body="<i class='icon-sign-blank icon-stack-base'></i><i class='icon-envelope' style='color:#fff'></i>"
       };
-render_icon(Icon, State) when Icon==1; Icon==2; Icon==3 ->  % {{{1
+render_icon(Icon, State) when Icon == message;
+                              Icon == error ->  % {{{1
     #span{
        class="icon-stack",
        body="<i class='icon-sign icon-stack-base'></i><i class='icon-envelope'></i>"
       };
-render_icon(4, unread) ->  % {{{1
+render_icon(task, unread) ->  % {{{1
     #span{
           body=[
                 "<i class='icon-sign-blank icon-stack-blank icon-2x'>",
@@ -106,7 +107,7 @@ render_icon(4, unread) ->  % {{{1
                 #image{image="/img/tasks.svg", class='icon-task-unread'}
                ]
       };
-render_icon(4, State) ->  % {{{1
+render_icon(task, State) ->  % {{{1
     #span{
           body=[
                 #image{image="/img/tasks.svg",
@@ -114,11 +115,11 @@ render_icon(4, State) ->  % {{{1
                        class='icon-task-unread'}
                ]
       };
-render_icon(5, unread) ->  % {{{1
+render_icon(update, unread) ->  % {{{1
     #span{
        body="<i class='icon-sign-blank icon-stack-base'></i><i class='icon-refresh'></i>"
       };
-render_icon(5, State) ->  % {{{1
+render_icon(update, State) ->  % {{{1
     #span{
        class="icon-stack",
        body="<i class='icon-sign icon-stack-base'></i><i class='icon-refresh' style='color:#fff'></i>"
@@ -135,27 +136,5 @@ get_name(UID) ->  % {{{1
         {ok, none} ->
             "User " ++ sugar:date_string(date())
             %wf:to_list(UID)
-    end.
-
-decode_type(Data) ->  % {{{1
-    try binary_to_term(Data, []) of
-        #message_packet{text=Txt,
-                        time=TS} ->
-            {Txt, TS, 3};
-        #update_packet{text=Txt, time=TS} -> 
-            {Txt, TS, 5};
-        #task_comment{task=TID,
-                      time=TS,
-                      text=Txt} ->
-            {Txt, sugar:datetime_to_timestamp(TS), 4};
-        Task when element(1, Task) == task_packet ->
-            #task_packet{text=Txt,
-                         time=TS} = receiver:extract_task(Task),
-            {Txt, TS, 4};
-        _ ->
-            {<<"Decoding error! Data: ", Data/bytes>>, bm_types:timestamp(), 1}
-    catch
-        error:badarg ->
-            {<<"Decoding error! Data: ", Data/bytes>>, bm_types:timestamp(), 1}
     end.
 
