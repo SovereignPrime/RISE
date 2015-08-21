@@ -150,7 +150,7 @@ render_element(#update_element{id=Id,
                                       #{type := task,
                                         due := Due,
                                         involved := Involved,
-                                        status := Status,
+                                        status := TStatus,
                                         text := Text} ->
                                           #panel{
                                              class="",
@@ -161,7 +161,7 @@ render_element(#update_element{id=Id,
                                                      },
                                                    #panel{
                                                       class="", 
-                                                      body=["Status: ", Status]
+                                                      body=["Status: ", TStatus]
                                                      },
                                                    lists:map(fun(#role_packet{
                                                                     address=Address,
