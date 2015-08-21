@@ -87,14 +87,16 @@ render_element(#update_preview{id=Id,
 render_icon(Icon) ->  % {{{1
     render_icon(Icon, true).
 
-render_icon(Icon, unread) when Icon == message;
-                               Icon == error ->  % {{{1
+render_icon(Icon, unread) when Icon == message;  % {{{1
+                               Icon == task_comment;
+                               Icon == error ->
     #span{
        class="icon-stack",
        body="<i class='icon-sign-blank icon-stack-base'></i><i class='icon-envelope' style='color:#fff'></i>"
       };
-render_icon(Icon, State) when Icon == message;
-                              Icon == error ->  % {{{1
+render_icon(Icon, State) when Icon == message;  % {{{1
+                              Icon == task_comment;
+                              Icon == error ->
     #span{
        class="icon-stack",
        body="<i class='icon-sign icon-stack-base'></i><i class='icon-envelope'></i>"

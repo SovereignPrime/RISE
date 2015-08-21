@@ -597,6 +597,7 @@ start_upload_event(_) -> %{{{1
     ok.
 finish_upload_event(restore, FPath) -> %{{{1
     FID = filename:basename(FPath),
+    wf:info("FID: ~p", [FID]),
     common:restore(FID),
     timer:sleep(100),
     wf:redirect("/relationships");
@@ -674,10 +675,11 @@ send_messages(#db_update{subject=Subject, % {{{1
     #db_contact{address=From} = wf:user(),
     wf:info("Sending ~p~n", [U]),
     Attachments = sets:to_list(wf:session_default(attached_files, sets:new())),
-    MSG = term_to_binary(#message_packet{subject=Subject,
-                                         text=Text,
-                                         involved=[From | Contacts],
-                                         time=bm_types:timestamp()}),
+    MSG = term_to_binary(#{type => message,
+                           subject => Subject,
+                           text => Text,
+                           involved => [From | Contacts],
+                           time => bm_types:timestamp()}),
 
     lists:foreach(fun(To) ->
                           error_logger:info_msg("Message to ~s sent subject ~s~n",
@@ -706,15 +708,16 @@ send_messages(#db_task{id=UID, %{{{1
                 bitmessage:send_message(From,
                                         wf:to_binary(To), 
                                         wf:to_binary(Subject), 
-                                        term_to_binary(#task_packet{id=UID,
-                                                                    name=Subject,
-                                                                    due=Date,
-                                                                    text=Text,
-                                                                    parent=Parent,
-                                                                    status=Status,
-                                                                    involved=Contacts,
-                                                                    time=bm_types:timestamp(),
-                                                                    changes=Changes}),
+                                        term_to_binary(#{type => task,
+                                                         id => UID,
+                                                         name => Subject,
+                                                         due => Date,
+                                                         text => Text,
+                                                         parent => Parent,
+                                                         status => Status,
+                                                         involved => Contacts,
+                                                         time => bm_types:timestamp(),
+                                                         changes => Changes}),
 
                                         Attachments);
             (_) ->
@@ -738,6 +741,7 @@ send_task_tree(Id, Parent, Time) -> %{{{1
                   end, Involved).
 
 restore(FID) -> %{{{1
+    wf:info("FID1: ~p", [FID]),
     mnesia:restore(FID, [{clear_tables, mnesia:system_info(tables) -- [schema, addr]}, {skip_tables, [addr]}]),
     {ok, [Me]} = db:get_my_accounts(),
     wf:user(Me).
