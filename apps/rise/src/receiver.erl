@@ -433,9 +433,9 @@ extract_packet({task_packet,
                 Id,
                 _Name,
                 Due,
-                _Effort,
                 Text,
                 Parent,
+                _Effort,
                 Status,
                 Involved,
                 _Attachments,
@@ -470,8 +470,9 @@ extract_packet(#task_comment{task=TID,
       text => Txt};
 
 extract_packet(Packet) ->
+    Text = wf:f("Decoding error! Data: ~p", [Packet]),
     #{type => error,
-      text =>  <<"Decoding error! Data: ", Packet/bytes>>}.
+      text =>  wf:to_binary(Text)}.
 
 -spec save_attachments(non_neg_integer(), record(), [#bm_file{}]) -> {ok, ok}.  % {{{1
 save_attachments(UID, Message, Attachments) ->
