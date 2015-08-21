@@ -439,7 +439,8 @@ extract_packet({task_packet,
                 Status,
                 Involved,
                 _Attachments,
-                Time}) ->
+                Time,
+                Changes}) ->
     #{type => task,
       id => Id, 
       due => Due, 
@@ -447,7 +448,7 @@ extract_packet({task_packet,
       parent => Parent, 
       status => Status, 
       time => Time,
-      changes => [],
+      changes => Changes,
       involved => Involved};
 extract_packet(#message_packet{subject=S,
                                text=Text,
