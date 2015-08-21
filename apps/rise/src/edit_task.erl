@@ -75,7 +75,7 @@ left() ->  % {{{1
 
 
 body() ->  % {{{1
-	fix_addable_rows(),
+	%fix_addable_rows(),
 	Statuses = db:task_status_list(),
     #db_task{id=Id, name=Name, due=Due, text=Text, status=Status} = wf:session(current_task),
     #db_contact{id=MID, name=Me} = wf:user(),
@@ -105,8 +105,9 @@ body() ->  % {{{1
 				#span{class='add-on', body="<i class='icon-caret-down'></i>"}
 			]}
         ]},
-        #addable_row{id=roles, body= #involved{person=Me, role=accountable}},
-        add_existing_rows(Id),
+        tasks:render_roles(Id),
+        %#addable_row{id=roles, body= #involved{person=Me, role=accountable}},
+        %add_existing_rows(Id),
         #panel{ class="row-fluid", body=[
             #panel{class="span12", body=[
                 #textarea{class="input-block-level",rows=15, placeholder="Some text here", id=text, text=Text}
