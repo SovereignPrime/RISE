@@ -727,20 +727,27 @@ get_updates(Archive) ->  % {{{1
                                         ['$_']}])
                 end).
 
-get_updates_by_subject(Subject) ->  % {{{1
-    get_updates_by_subject(Subject, false).
+get_updates_by_thread(Thread) ->  % {{{1
+    get_updates_by_thread(Thread, false).
 
-get_updates_by_subject(Subject, Archive) when is_list(Subject) ->  % {{{1
-    get_updates_by_subject(list_to_binary(Subject), Archive);
-get_updates_by_subject(Subject, Archive) ->  % {{{1
+get_updates_by_thread(Thread, Archive) ->  % {{{1
     ArchOp = archive_op(Archive),
     transaction(fun() ->
-                        mnesia:select(message,
-                                      [{#message{status='$1',
-                                                 subject=Subject,
-                                                 _='_'},
-                                          [{ArchOp, '$1', archive}],
-                                        ['$_']}])
+                        Messages = mnesia:select(message,
+                                                [{#message{status='$1',
+                                                           _='_'},
+                                                  [{ArchOp, '$1', archive}],
+                                                  ['$_']}]),
+                        lists:filter(fun(#message{hash=Thread}) -> true;
+                                        (#message{text=Data}) ->
+                                             case receiver:extract_packet(Data) of
+                                                 #{thread := Thread} ->
+                                                     true;
+                                                 _ -> false
+                                             end;
+                                        (_) -> false
+                                     end,
+                                     Messages)
                 end).
 
 get_updates_by_user(UID) when is_list(UID) ->   % {{{1
@@ -1027,9 +1034,11 @@ get_attachments(Record) ->  % {{{1
                         iterate(bm_file, A)
                 end).
 
-save_attachments(Record, Files) ->  % {{{1
+save_attachments(Record, Files) when is_tuple(Record) ->  % {{{1
     Type = element(1, Record),
     Id = element(2, Record),
+    save_attachments(#{type => Type, id => Id}, Files);
+save_attachments(#{type := Type, id := Id}, Files) ->  % {{{1
     transaction(fun() ->
                         {ok, NId} = db:next_id(db_attachment),
                         save_attachment(Type, Id, sets:to_list(Files), NId)

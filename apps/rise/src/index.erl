@@ -49,18 +49,37 @@ left(Archive) -> % {{{1
     end.
 
 render_left(Updates) -> % {{{1
-    SortedUpdates = sugar:sort_by_timestamp(Updates),
-    GroupedUpdates = group_updates(SortedUpdates),
-    Render = [#update_preview{message=M,
-                              flag=true,
-                              archive = (Status == archive)} || 
-              #message{status=Status} = M <- GroupedUpdates],
-    #panel{id=left,
-           class="span4 scrollable",
-           body=Render}.
+    maybe_update_current(Updates, 
+                        fun([]) -> [];
+                           (_) ->
+                                SortedUpdates = sugar:sort_by_timestamp(Updates),
+                                GroupedUpdates = group_updates(SortedUpdates),
+                                Render = [#update_preview{message=M,
+                                                          flag=true,
+                                                          archive = (Status == archive)} || 
+                                          {T, Ms} <- GroupedUpdates,
+                                          #message{status=Status} = M <- Ms
+                                         ],
+                                #panel{id=left,
+                                       class="span4 scrollable",
+                                       body=Render}
+                        end).
 
 group_updates(List) ->  % {{{1
-    group_updates(List, []).
+    lists:foldl(fun(#message{hash=Hash, text=Data}=M, Threads) ->
+                        #{thread := RawThread} = receiver:extract_packet(Data),
+                        Thread = if RawThread == undefined -> Hash;
+                                    true -> RawThread
+                                 end,
+                        case proplists:get_value(Thread, Threads) of
+                            undefined ->
+                                [{Thread, [M]} | Threads];
+                            Ms -> 
+                                [{Thread, [M | Ms]} | proplists:delete(Thread, Threads)]
+                        end
+                end,
+                [],
+                List).
 
 group_updates([], Acc) -> Acc;
 group_updates([U | Rest], Acc0) ->  % {{{1
@@ -102,31 +121,32 @@ body() -> % {{{1
 body(Archive) -> % {{{1
     #panel{id=body,
            class="span8 scrollable",
-           body=case wf:session(current_subject) of
+           body=case wf:session(current_thread) of
                     undefined ->
                         [];
-                    Subject ->
-                        render_body(Subject, Archive)
+                    Thread ->
+                        render_body(Thread, Archive)
                 end
           }.
 
-render_body(Subject, Archive) -> % {{{1
-    wf:session(current_subject, Subject),
-    {ok, Updates} = db:get_updates_by_subject(Subject, Archive),
-    Type = case Updates of
-               [] -> 2;
-               [#message{text=Data}|_] ->
-                   #{type := T} = receiver:extract_packet(Data),
-                   T
-           end,
-    Icon = element_update_preview:render_icon(Type),
-    CurrentId = wf:session(current_update_id),
-    [
-     #h1{body=[Icon," ",wf:html_encode(Subject)]},
-     [
-      #update_element{collapse=(Id /= CurrentId),
-                      message = M} || #message{hash=Id} = M <- sugar:sort_by_timestamp(Updates)] 
-    ].
+render_body(Thread, Archive) -> % {{{1
+    wf:session(current_thread, Thread),
+    {ok, Updates} = db:get_updates_by_thread(Thread, Archive),
+    maybe_update_current(Updates,
+                         fun([]) -> [];
+                            (_) ->
+                                 U = wf:session(current_update),
+                                 Type = maps:get(type, U, message),
+                                 Icon = element_update_preview:render_icon(Type),
+                                 CurrentId = maps:get(id, U),
+                                 Subject = maps:get(subject, U),
+                                 [
+                                  #h1{body=[Icon," ",wf:html_encode(Subject)]},
+                                  [
+                                   #update_element{collapse=(Id /= CurrentId),
+                                                   message = M} || #message{hash=Id} = M <- sugar:sort_by_timestamp(Updates)] 
+                                 ]
+                         end).
 
 replace_left() -> % {{{1
     replace_left(left()).
@@ -136,12 +156,12 @@ replace_left(Body) -> % {{{1
     wf:replace(left, Body),
     wf:wire("objs('left').scrollTop(scrolltop_temp)").
 
-event({selected, Ids, Subject, Archive}) -> % {{{1
-    wf:session(current_subject, Subject),
+event({selected, Ids, Thread, Archive}) -> % {{{1
+    wf:session(current_thread, Thread),
     [Id | _] = lists:reverse(Ids),
-    wf:session(current_update_id, Id),
+    wf:session(current_update, Id),
     replace_left(left(Archive)),
-    wf:update(body, render_body(Subject, Archive)),
+    wf:update(body, render_body(Thread, Archive)),
     wf:wire("$(\".update-preview\").has(\"input[type=checkbox]:checked\").addClass(\"related-message\");"),
     wf:wire("$(\".update-preview\").has(\"input[type=checkbox]:not(:checked)\").removeClass(\"related-message\");");
 
@@ -194,3 +214,12 @@ event(Click) -> % {{{1
 
 incoming() -> % {{{1
     replace_left().
+
+maybe_update_current([], Fun) -> Fun([]);  % {{{1
+maybe_update_current([#message{hash=FirstId,  % {{{1
+                               text=Data}|_] = Messages,
+                     Fun) ->
+    U = receiver:extract_packet(Data),
+    CurrentUpdate = wf:session_default(current_update, U#{id => FirstId}),
+    wf:session(current_update, CurrentUpdate),
+    Fun(Messages).

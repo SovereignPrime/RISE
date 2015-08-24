@@ -199,7 +199,7 @@ files(Files) ->  % {{{1
     end.
 
 messages(Messages) ->  % {{{1
-    M = lists:foldl(fun(#message{hash=Id, subject=Subject, from=FID, text=Data}, A) ->
+    M = lists:foldl(fun(#message{hash=Id, subject=Subject, from=FID, text=Data}=M, A) ->
                           {ok,
                            #db_contact{name=From}} = db:get_contact_by_address(FID),
                           try binary_to_term(Data) of
@@ -212,7 +212,7 @@ messages(Messages) ->  % {{{1
                                                                       Text
                                                                      ]),
                                                            postback={to_message,
-                                                                     Id},
+                                                                     M},
                                                            delegate=common}
                                                     ]}];
                               _ ->
