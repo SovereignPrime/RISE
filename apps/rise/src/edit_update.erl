@@ -31,9 +31,10 @@ buttons(main) -> % {{{1
             ]}.
 
 left() -> % {{{1
-    Subject = wf:session(current_subject),
+    Current = wf:session(current_update),
+    Thread = maps:get(tread, Current, undefined),
     wf:info("Left"),
-    {ok, Updates} = db:get_updates_by_subject(Subject),
+    {ok, Updates} = db:get_updates_by_thread(Thread),
     [
     #panel{class="span3",
            body=[
@@ -59,7 +60,10 @@ left() -> % {{{1
                              ]}
                 ]}].
 body() -> % {{{1
-    #db_update{subject=Subject, text=Text, to=To}  = wf:session(current_update),
+    Current  = wf:session(current_update),
+    Subject = maps:get(subject, Current, <<>>),
+    Text = maps:get(text, Current, <<>>),
+    To = maps:get(to, Current, <<>>),
     #panel{class="span9",
            body=[
                  #panel{class="row-fluid",
@@ -122,12 +126,12 @@ event(add_file) -> % {{{1
                     BM
             end, InvolvedS) -- [<<"">>],
     io:format("~p~n", [Involved]),
-    NUpdate = Update#db_update{subject=Subject,
-                               text=Text,
-                               from=UID, 
-                               to=Involved,
-                               date=date(),
-                               status=new},
+    NUpdate = Update#{type => message,
+                      subject => Subject,
+                      text => Text,
+                      from => UID, 
+                      to => Involved,
+                      status => new},
     wf:session(current_update, NUpdate),
     wf:redirect("/files?from=message");
 event(save) -> % {{{1

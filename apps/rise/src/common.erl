@@ -250,14 +250,13 @@ sigma_search_filter_event(to, Terms) ->  % {{{1
                            Terms),
 
     io:format("~p~n", [Involved]),
-    NUpdate = Update#db_update{subject=Subject,
-                               text=Text,
-                               from=UID, 
-                               to=Involved,
-                               date=date(),
-                               status=new},
-    db:save(NUpdate),
-    db:save_attachments(NUpdate, wf:session_default(attached_files, sets:new())),
+    NUpdate = Update#{type => message,
+                      subject => Subject,
+                      text => Text,
+                      from => UID, 
+                      to => Involved,
+                      status => new},
+    %db:save_attachments(NUpdate, wf:session_default(attached_files, sets:new())),
     common:send_messages(NUpdate),
     wf:redirect("/");
 sigma_search_filter_event(search, Terms) ->  % {{{1
@@ -419,11 +418,10 @@ event(add_expense) -> %{{{1
               end);
 event(add_update) -> %{{{1
     maybe_unsaved(fun() ->
-                      {ok, Id} = db:next_id(db_update),
                       wf:session(current_subject, undefined),
-                      wf:session(current_update_id, Id),
                       wf:session(current_update,
-                                 #db_update{id=Id}),
+                                 #{type=mesasage,
+                                   id=new}),
                       wf:session(attached_files, sets:new()),
                       wf:redirect("/edit_update")
               end);
@@ -486,10 +484,10 @@ event({filter_load, Name, Terms}) ->  % {{{1
     wf:session(filter_name, Name),
     sigma_search_filter_event(search, Terms);
     
-event({reply, Subject, To}) -> % {{{1
-    {ok, Id} = db:next_id(db_update),
-    wf:session(current_subject, Subject),
-    wf:session(current_update, #db_update{id=Id, to=[ To ], subject=Subject}),
+event({reply, Thread, To}) -> % {{{1
+    wf:session(current_update, #{type => message,
+                                 thread => Thread,
+                                 to => [ To ]}),
     wf:session(attached_files, undefined),
     wf:redirect("/edit_update");
 
@@ -667,19 +665,15 @@ send_messages(#task_comment{task=TID}=TP) -> % {{{1
                           ok
                   end,
                   Contacts);
-send_messages(#db_update{subject=Subject, % {{{1
-                         text=Text,
-                         from=FID,
-                         to=Contacts,
-                         date=Date}=U) ->
+send_messages(#{type :=  message, % {{{1
+                from := FID,
+                subject := Subject,
+                to := Contacts} = U) ->
     #db_contact{address=From} = wf:user(),
     wf:info("Sending ~p~n", [U]),
     Attachments = sets:to_list(wf:session_default(attached_files, sets:new())),
-    MSG = term_to_binary(#{type => message,
-                           subject => Subject,
-                           text => Text,
-                           involved => [From | Contacts],
-                           time => bm_types:timestamp()}),
+    MSG = term_to_binary(U#{to => [From | Contacts],
+                            time => bm_types:timestamp()}),
 
     lists:foreach(fun(To) ->
                           error_logger:info_msg("Message to ~s sent subject ~s~n",

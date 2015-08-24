@@ -199,7 +199,7 @@ render_element(#update_element{id=Id,
                                       postback=case Enc of
 
                                                    E when E == 3; E == 2 -> 
-                                                       {reply, Subject, From};
+                                                       {reply, UID, From};
                                                    4 ->
                                                        {to_task, maps:get(tid, Packet, empty)}
                                                end,

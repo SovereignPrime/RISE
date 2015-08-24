@@ -304,8 +304,8 @@ event({group_rename, Id, Archive}) ->  % {{{1
     wf:update(wf:f("group_~p", [Id]), render_group_list(Archive));
 
 event({write_to, Addr}) ->  % {{{1
-    {ok, Id} = db:next_id(db_update),
-    wf:session(current_update, #db_update{id=Id, to=[Addr]}),
+    wf:session(current_update, #{type => message,
+                                 to => [Addr]}),
     wf:redirect("/edit_update");
 
 event({task_for, Addr}) ->  % {{{1
