@@ -109,7 +109,6 @@ render_element(#update_element{id=Id,
                       Status
               end,
     Packet = receiver:extract_packet(Data),
-    wf:info("Packet ~p", [Packet]),
     TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
     #panel{id=Id,
            body=[
@@ -163,9 +162,9 @@ render_element(#update_element{id=Id,
                                                       class="", 
                                                       body=["Status: ", TStatus]
                                                      },
-                                                   lists:map(fun(#role_packet{
-                                                                    address=Address,
-                                                                    role=R}) ->
+                                                   lists:map(fun(#{type := role,
+                                                                   address := Address,
+                                                                   role := R}) ->
                                                                      {ok,
                                                                       #db_contact{
                                                                          name=Name}
@@ -317,7 +316,7 @@ render_element(#update_element{
                          body=sugar:format_timedelta(TD)}
                  ],
             actions=#event{type=click,
-                           postback={to_message, UID},
+                           postback={to_message, Message},
                            delegate=common}},
      #panel{class="row-fluid",
             body=[
