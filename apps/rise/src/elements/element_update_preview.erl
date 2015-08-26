@@ -41,7 +41,6 @@ render_element(#update_preview{id=Id,
     CurrentUpdateThread = maps:get(thread, CurrentUpdate, Thread),
     CurrentThread = wf:session_default(current_thread, Thread),
 
-    wf:info("Thread: ~p, current: ~p", [Thread, CurrentThread]),
     Class = if Thread == CurrentThread ->
            "current";
        true ->

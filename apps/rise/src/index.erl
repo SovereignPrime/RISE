@@ -116,10 +116,8 @@ body(Archive) -> % {{{1
           }.
 
 render_body(Thread, Archive) -> % {{{1
-    wf:info("Thread: ~p", [Thread]),
     wf:session(current_thread, Thread),
     {ok, Updates} = db:get_updates_by_thread(Thread, Archive),
-    wf:info("Updetes: ~p", [Updates]),
     maybe_update_current(Updates,
                          fun([]) -> [];
                             (_) ->
