@@ -232,7 +232,7 @@ sigma_search_event(search, Terms) -> % {{{1
 sigma_search_filter_event(to, Terms) ->  % {{{1
     Subject = wf:q(name),
     Text = wf:q(text),
-    Update = wf:session(current_update),
+    Update = wf:session_default(current_update, #{}),
     #db_contact{id=UID} = wf:user(),
     Involved = lists:foldl(fun({"Term", _}, A) ->
                                    A;
@@ -258,6 +258,7 @@ sigma_search_filter_event(to, Terms) ->  % {{{1
                       status => new},
     %db:save_attachments(NUpdate, wf:session_default(attached_files, sets:new())),
     common:send_messages(NUpdate),
+    wf:session(current_update, NUpdate),
     wf:redirect("/");
 sigma_search_filter_event(search, Terms) ->  % {{{1
     wf:session(filter, Terms),
@@ -419,8 +420,7 @@ event(add_expense) -> %{{{1
 event(add_update) -> %{{{1
     maybe_unsaved(fun() ->
                       wf:session(current_update,
-                                 #{type => mesasage,
-                                   thread => undefined,
+                                 #{type => message,
                                    id => new}),
                       wf:session(attached_files, sets:new()),
                       wf:redirect("/edit_update")

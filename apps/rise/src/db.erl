@@ -626,10 +626,10 @@ get_updates_by_thread(Thread, Archive) ->  % {{{1
                                                            _='_'},
                                                   [{ArchOp, '$1', archive}],
                                                   ['$_']}]),
-                        lists:filter(fun(#message{hash=Thread}) -> true;
+                        lists:filter(fun(#message{hash=T}) when T == Thread-> true;
                                         (#message{text=Data}) ->
                                              case receiver:extract_packet(Data) of
-                                                 #{thread := Thread} ->
+                                                 #{thread := T} when T == Thread->
                                                      true;
                                                  _ -> false
                                              end;

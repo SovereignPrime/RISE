@@ -381,7 +381,6 @@ extract_packet(Data) when is_binary(Data) ->  % {{{1
     catch
         error:badarg ->
             #{type => error,
-              thread => undefined,
               text =>  <<"Decoding error! Data: ", Data/bytes>>}
     end;
 extract_packet(Packet) when is_map(Packet) ->  % {{{1
@@ -390,7 +389,6 @@ extract_packet(Packet) when is_map(Packet) ->  % {{{1
 extract_packet(Packet) ->
     Text = wf:f("Decoding error! Data: ~p", [Packet]),
     #{type => error,
-      thread => undefined,
       text =>  wf:to_binary(Text)}.
 
 -spec save_attachments(non_neg_integer(), record(), [#bm_file{}]) -> {ok, ok}.  % {{{1

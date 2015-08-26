@@ -31,9 +31,8 @@ buttons(main) -> % {{{1
             ]}.
 
 left() -> % {{{1
-    Current = wf:session(current_update),
+    Current = wf:session_default(current_update, #{}),
     Thread = maps:get(tread, Current, undefined),
-    wf:info("Left"),
     {ok, Updates} = db:get_updates_by_thread(Thread),
     [
     #panel{class="span3",
@@ -60,7 +59,7 @@ left() -> % {{{1
                              ]}
                 ]}].
 body() -> % {{{1
-    Current  = wf:session_default(current_update),
+    Current  = wf:session_default(current_update, #{}),
     Subject = maps:get(subject, Current, <<>>),
     Text = maps:get(text, Current, <<>>),
     To = maps:get(to, Current, []),

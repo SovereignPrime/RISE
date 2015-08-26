@@ -49,28 +49,26 @@ left(Archive) -> % {{{1
     end.
 
 render_left(Updates) -> % {{{1
-    maybe_update_current(Updates, 
-                        fun([]) -> [];
-                           (_) ->
-                                SortedUpdates = sugar:sort_by_timestamp(Updates),
-                                GroupedUpdates = group_updates(SortedUpdates),
-                                Render = [#update_preview{message=M,
-                                                          flag=true,
-                                                          archive = (Status == archive)} || 
-                                          {T, Ms} <- GroupedUpdates,
-                                          #message{status=Status} = M <- Ms
-                                         ],
-                                #panel{id=left,
-                                       class="span4 scrollable",
-                                       body=Render}
-                        end).
+    SortedUpdates = sugar:sort_by_timestamp(Updates),
+    GroupedUpdates = group_updates(SortedUpdates),
+    maybe_update_current(SortedUpdates, 
+                         fun([]) -> [];
+                            (_) ->
+                                 Render = [#update_preview{message=M,
+                                                           flag=true,
+                                                           archive = (Status == archive)} || 
+                                           {T, [#message{status=Status}=M|_]} <- GroupedUpdates
+                                           
+                                          ],
+                                 #panel{id=left,
+                                        class="span4 scrollable",
+                                        body=Render}
+                         end).
 
 group_updates(List) ->  % {{{1
-    lists:foldl(fun(#message{hash=Hash, text=Data}=M, Threads) ->
-                        #{thread := RawThread} = receiver:extract_packet(Data),
-                        Thread = if RawThread == undefined -> Hash;
-                                    true -> RawThread
-                                 end,
+    lists:foldr(fun(#message{hash=Hash, text=Data}=M, Threads) ->
+                        Packet = receiver:extract_packet(Data),
+                        Thread = maps:get(thread, Packet, Hash),
                         case proplists:get_value(Thread, Threads) of
                             undefined ->
                                 [{Thread, [M]} | Threads];
@@ -80,14 +78,6 @@ group_updates(List) ->  % {{{1
                 end,
                 [],
                 List).
-
-group_updates([], Acc) -> Acc;
-group_updates([U | Rest], Acc0) ->  % {{{1
-    Acc = case subject_exists_in_updates(U#message.subject, Acc0) of
-        true -> add_participants(U, Acc0);
-        false -> Acc0 ++ [U]
-    end,
-    group_updates(Rest, Acc).
 
 add_participants(Update, Messages) ->  % {{{1
     lists:map(fun
@@ -119,19 +109,17 @@ body() -> % {{{1
     body(false).
 
 body(Archive) -> % {{{1
+    Thread = wf:session(current_thread),
     #panel{id=body,
            class="span8 scrollable",
-           body=case wf:session(current_thread) of
-                    undefined ->
-                        [];
-                    Thread ->
-                        render_body(Thread, Archive)
-                end
+           body=render_body(Thread, Archive)
           }.
 
 render_body(Thread, Archive) -> % {{{1
+    wf:info("Thread: ~p", [Thread]),
     wf:session(current_thread, Thread),
     {ok, Updates} = db:get_updates_by_thread(Thread, Archive),
+    wf:info("Updetes: ~p", [Updates]),
     maybe_update_current(Updates,
                          fun([]) -> [];
                             (_) ->
@@ -156,10 +144,10 @@ replace_left(Body) -> % {{{1
     wf:replace(left, Body),
     wf:wire("objs('left').scrollTop(scrolltop_temp)").
 
-event({selected, Ids, Thread, Archive}) -> % {{{1
+event({selected, CurrentUpdate, Thread, Archive}) -> % {{{1
+    wf:info("Thread: ~p", [Thread]),
     wf:session(current_thread, Thread),
-    [Id | _] = lists:reverse(Ids),
-    wf:session(current_update, Id),
+    wf:session(current_update, CurrentUpdate),
     replace_left(left(Archive)),
     wf:update(body, render_body(Thread, Archive)),
     wf:wire("$(\".update-preview\").has(\"input[type=checkbox]:checked\").addClass(\"related-message\");"),
@@ -221,6 +209,11 @@ maybe_update_current([#message{hash=FirstId,  % {{{1
                                text=Data}|_] = Messages,
                      Fun) ->
     U = receiver:extract_packet(Data),
-    CurrentUpdate = wf:session_default(current_update, U#{id => FirstId}),
-    wf:session(current_update, CurrentUpdate),
+    maybe_update_session(current_update, U#{id => FirstId}),
+    maybe_update_session(current_thread,  FirstId),
     Fun(Messages).
+
+maybe_update_session(K, Default) ->  % {{{1
+    Current = wf:session_default(K, Default),
+    wf:session(K, Current),
+    Current.

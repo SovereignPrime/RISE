@@ -30,17 +30,19 @@ render_element(#update_preview{id=Id,
                                flag=Flag,
                                archive=Archive}) -> 
     #{type := Icon,
-      thread := RawThread,
-      text := Text} = receiver:extract_packet(Data),
+      text := Text} = Packet = receiver:extract_packet(Data),
     TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
-    CurrentUpdate = wf:session(current_update),
-    CurrentId = maps:get(id, CurrentUpdate, new),
-    HasCurrent = lists:any(fun(I) -> (I == CurrentId) end, sugar:maybe_wrap_list(UID)),
-    Thread = case RawThread of
+    CurrentUpdate = wf:session_default(current_update, Packet),
+
+    Thread = case maps:get(thread, Packet, UID) of
                  undefined -> UID;
-                 _ -> RawThread
+                 T -> T
              end,
-    Class = if HasCurrent ->
+    CurrentUpdateThread = maps:get(thread, CurrentUpdate, Thread),
+    CurrentThread = wf:session_default(current_thread, Thread),
+
+    wf:info("Thread: ~p, current: ~p", [Thread, CurrentThread]),
+    Class = if Thread == CurrentThread ->
            "current";
        true ->
            ""
@@ -86,8 +88,11 @@ render_element(#update_preview{id=Id,
                 ],
            actions=#event{type=click,
                           postback={selected,
-                                    sugar:maybe_wrap_list(UID),
-                                    Thread,
+                                    if Thread == CurrentUpdateThread ->
+                                           CurrentUpdate;
+                                       thue -> Packet
+                                    end,
+                                    Thread, 
                                     Archive}}}.
 
 render_icon(Icon) ->  % {{{1
