@@ -203,7 +203,8 @@ messages(Messages) ->  % {{{1
                           {ok,
                            #db_contact{name=From}} = db:get_contact_by_address(FID),
                           try binary_to_term(Data) of
-                              #message_packet{text=Text} ->
+                              #{type := message,
+                                text := Text} ->
                                   A ++ [#panel{body=[
                                                      #link{text=wf:f("~s (~s) ~100s",
                                                                      [
@@ -243,7 +244,10 @@ tasks(Messages) ->  % {{{1
                                 {ok,
                                  #db_contact{name=From}} = db:get_contact_by_address(FID),
                                 try binary_to_term(Data) of
-                                    #task_packet{id=ID, name=Subject, text=Text} ->
+                                    #{type := task,
+                                      id := ID,
+                                      name := Subject,
+                                      text := Text} ->
                                         A ++ [#panel{
                                                  body=[
                                                        #link{text=wf:f("~s - ~100s",

@@ -253,7 +253,10 @@ apply_message(#message{from=BMF,
                        text=Data
                        }, FID, ToID, State) ->
     try
-        #task_tree_packet{task=Task, parent=Parent, time=TS} = binary_to_term(Data),
+        #{type := task_tree,
+          task := Task,
+          parent := Parent,
+          time := TS} = binary_to_term(Data),
         db:save_subtask(Task, Parent, TS)
     catch 
         _:_ ->
@@ -299,19 +302,7 @@ apply_message(#message{from=BMF,
     {ok, Id} = db:next_id(db_update),
 
     case extract_packet(Data) of
-        #{type := message,
-          text := Text,
-          involved := Involved}  ->
-            Message = #db_update{id=Id,
-                                 date=date(),
-                                 from=FID,
-                                 to=Involved -- [BMT],
-                                 subject=wf:to_list(Subject),
-                                 text=Text,
-                                 status=unread},
-
-            db:save(Message),
-            db:save_attachments(Message, sets:from_list(Attachments)),
+        #{type := message}  ->
             State#state.pid ! received;
         #{type := task,
           id := UID, 
@@ -340,7 +331,8 @@ apply_message(#message{from=BMF,
             db:save(NewTask),
             db:clear_roles(db_task, UID),
             db:save_attachments(NewTask, sets:from_list(Attachments)),
-            lists:foreach(fun(#role_packet{address=A, role=R}) ->
+            lists:foreach(fun(#{address := A,
+                                role := R}) ->
                                   {ok, NPUID} = db:next_id(db_contact_roles),
                                   C = get_or_request_contact(A, BMF, BMT),
                                   db:save(#db_contact_roles{id=NPUID,
@@ -394,87 +386,6 @@ extract_packet(Data) when is_binary(Data) ->  % {{{1
     end;
 extract_packet(Packet) when is_map(Packet) ->  % {{{1
     Packet;
-extract_packet(#task_packet{id=Id,
-                            due=Due,
-                            text=Text,
-                            parent=Parent,
-                            status=Status,
-                            involved=Involved,
-                            time=Time,
-                            changes=Changes}) ->
-    #{type => task,
-      id => Id, 
-      due => Due, 
-      text => Text, 
-      parent => Parent, 
-      status => Status, 
-      thread => undefined,
-      time => Time,
-      changes => Changes,
-      involved => Involved};
-extract_packet({task_packet,
-                Id,
-                _Name,
-                Due,
-                Text,
-                Parent,
-                Status,
-                Involved,
-                _Attachments,
-                Time}) ->
-    #{type => task,
-      id => Id, 
-      due => Due, 
-      text => Text, 
-      thread => undefined,
-      parent => Parent, 
-      status => Status, 
-      time => Time,
-      changes => [],
-      involved => Involved};
-extract_packet({task_packet,
-                Id,
-                _Name,
-                Due,
-                Text,
-                Parent,
-                _Effort,
-                Status,
-                Involved,
-                _Attachments,
-                Time,
-                Changes}) ->
-    #{type => task,
-      id => Id, 
-      due => Due, 
-      text => Text, 
-      parent => Parent, 
-      status => Status, 
-      thread => undefined,
-      time => Time,
-      changes => Changes,
-      involved => Involved};
-extract_packet(#message_packet{subject=S,
-                               text=Text,
-                               involved=Involved,
-                               attachments=Attachments,
-                               time=Time}) ->
-    #{type => message,
-      subject => S,
-      thread => undefined,
-      text => Text,
-      involved => Involved,
-      attachments => Attachments,
-      time => Time};
-
-extract_packet(#task_comment{task=TID,
-                             time=TS,
-                             text=Txt}) ->
-    #{type => task_comment,
-      task => TID,
-      thread => undefined,
-      time => TS,
-      text => Txt};
 
 extract_packet(Packet) ->
     Text = wf:f("Decoding error! Data: ~p", [Packet]),

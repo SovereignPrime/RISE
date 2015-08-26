@@ -653,9 +653,12 @@ send_messages(#task_comment{task=TID}=TP) -> % {{{1
     #db_task{id=TID, name=Subject} = wf:session(current_task),
     #db_contact{address=From} = wf:user(),
     {ok, Involved} = db:get_involved(TID),
-    Contacts = [#role_packet{address=C, role=R} || {_, R, #db_contact{bitmessage=C}}  <- Involved],
+    Contacts = [#{type => role,
+                  address => C,
+                  role => R} || {_, R, #db_contact{bitmessage=C}}  <- Involved],
     #db_contact{address=From} = wf:user(),
-    lists:foreach(fun(#role_packet{address=To}) when To /= From ->
+    lists:foreach(fun(#{type := role,
+                        address := To}) when To /= From ->
                           bitmessage:send_message(From,
                                                   wf:to_binary(To), 
                                                   wf:to_binary(Subject), 
@@ -694,10 +697,13 @@ send_messages(#db_task{id=UID, %{{{1
                        status=Status,
                        changes=Changes} = U) ->
     {ok, Involved} = db:get_involved(UID),
-    Contacts = [#role_packet{address=C, role=R} || {_, R, #db_contact{bitmessage=C}}  <- Involved],
+    Contacts = [#{type => role,
+                  address => C,
+                  role => R} || {_, R, #db_contact{bitmessage=C}}  <- Involved],
     #db_contact{address=From} = wf:user(),
     Attachments = sets:to_list(wf:session_default(attached_files, sets:new())),
-    lists:foreach(fun(#role_packet{address=To}) when To /= From ->
+    lists:foreach(fun(#{type := role,
+                        address := To}) when To /= From ->
                 bitmessage:send_message(From,
                                         wf:to_binary(To), 
                                         wf:to_binary(Subject), 
@@ -725,7 +731,10 @@ send_task_tree(Id, Parent, Time) -> %{{{1
     lists:foreach(fun({_, _, #db_contact{bitmessage=To, my=false}}) ->
                           IsAdresat = sets:is_element(To, PContact),
                           if IsAdresat ->
-                                  MSG = term_to_binary(#task_tree_packet{task=Id, parent=Parent, time=Time}),
+                                  MSG = term_to_binary(#{type => task_tree,
+                                                         task => Id,
+                                                         parent => Parent,
+                                                         time => Time}),
                                   bitmessage:send_message(From, wf:to_binary(To), <<"$Task tree$">>, MSG);
                               true -> ok
                           end;

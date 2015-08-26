@@ -174,7 +174,8 @@ event({to_task, #message{from=From, subject=Subject, text=Data}}) -> % {{{1
     #db_contact{id=Me} = wf:user(),
     {ok, #db_contact{id=CID}} = db:get_contact_by_address(From),
     try binary_to_term(Data) of
-        #message_packet{text=Text} ->
+        #{type := message,
+          text := Text} ->
             ID = crypto:hash(sha512, <<Subject/bytes, (wf:to_binary(Text))/bytes>>),
             Task = #db_task{id=ID, name=Subject, text=Text},
             wf:state(current_task, Task),

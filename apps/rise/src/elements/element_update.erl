@@ -163,9 +163,9 @@ render_element(#update_element{id=Id,
                                                       class="", 
                                                       body=["Status: ", TStatus]
                                                      },
-                                                   lists:map(fun(#role_packet{
-                                                                    address=Address,
-                                                                    role=R}) ->
+                                                   lists:map(fun(#{type := role,
+                                                                   address := Address,
+                                                                   role := R}) ->
                                                                      {ok,
                                                                       #db_contact{
                                                                          name=Name}

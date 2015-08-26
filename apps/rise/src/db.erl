@@ -21,14 +21,11 @@ create_tables() -> % {{{1
     ?V(mnesia:create_table(db_group, [{disc_copies, [node()]}, {attributes, record_info(fields, db_group)}, {type, ordered_set}, {index, [name]}])),
     ?V(mnesia:create_table(db_contact, [{disc_copies, [node()]}, {attributes, record_info(fields, db_contact)}, {type, ordered_set}, {index, [address]}])),
     ?V(mnesia:create_table(db_task, [{disc_copies, [node()]}, {attributes, record_info(fields, db_task)}, {type, ordered_set}])),
-    ?V(mnesia:create_table(db_update, [{disc_copies, [node()]}, {attributes, record_info(fields, db_update)}, {type, ordered_set}])),
-    ?V(mnesia:create_table(db_file, [{disc_copies, [node()]}, {attributes, record_info(fields, db_file)}, {type, ordered_set}])),
     ?V(mnesia:create_table(db_expense, [{disc_copies, [node()]}, {attributes, record_info(fields, db_expense)}, {type, ordered_set}])),
     ?V(mnesia:create_table(db_search, [{disc_copies, [node()]}, {attributes, record_info(fields, db_search)}])),
     ?V(mnesia:create_table(db_contact_roles, [{disc_copies, [node()]}, {attributes, record_info(fields, db_contact_roles)}, {type, ordered_set}])),
     ?V(mnesia:create_table(db_group_members, [{disc_copies, [node()]}, {attributes, record_info(fields, db_group_members)}, {type, bag}])),
     ?V(mnesia:create_table(db_expense_tasks, [{disc_copies, [node()]}, {attributes, record_info(fields, db_expense_tasks)}, {type, bag}])),
-    ?V(mnesia:create_table(db_attachment, [{disc_copies, [node()]}, {attributes, record_info(fields, db_attachment)}, {type, ordered_set}, {index, [file]}])),
     ?V(mnesia:create_table(db_task_tree, [{disc_copies, [node()]}, {attributes, record_info(fields, db_task_tree)}, {type, bag}, {index, [parent, visible]}])),
     ?V(mnesia:create_table(db_contact_note, [{disc_copies, [node()]}, {attributes, record_info(fields, db_contact_note)}, {type, ordered_set}, {index, [contact]}])).
     
@@ -60,119 +57,6 @@ update() ->  % {{{1
 
 
 
-update(1) -> % {{{1
-    Fields = mnesia:table_info(db_task_tree, attributes),
-	Transform = fun({db_task_tree, T, P, V}) ->
-		#db_task_tree{task=T,
-				   	  parent=P,
-				      time=bm_types:timestamp(),
-				      visible=V}
-	end,
-    case Fields of
-        [task, parent,visible] ->
-            mnesia:transform_table(db_task_tree, Transform, record_info(fields, db_task_tree));
-        _ ->
-            ok
-    end;
-
-update(2) -> % {{{1
-	Fields = mnesia:table_info(db_task, attributes),
-	io:format("Fields: ~p",[Fields]),
-	Transform = fun({db_task, ID, Due, Name, Text, Parent, Status}) ->
-		io:format("Transforming Record~n"),
-		#db_task{id=ID, due=Due, name=Name, text=Text, parent=Parent, status=Status, changes=[]}
-	end,
-	case Fields of
-		[id, due, name, text, parent, status] ->
-			mnesia:transform_table(db_task, Transform, record_info(fields, db_task));
-		_ ->
-			ok
-	end;
-update(3) ->  % {{{1
-	Fields = mnesia:table_info(db_search, attributes),
-    NFields = record_info(fields, db_search),
-    mnesia:transform_table(db_search,
-                           fun({db_search, Text, undefined}) ->
-                                   #db_search{text=Text, name="Updated"};
-                              (R) ->
-                                   R
-                           end,
-                           NFields),
-    mnesia:add_table_index(db_group, name);
-update(4) ->  % {{{1
-    NFields = record_info(fields, pubkey),
-    mnesia:transform_table(pubkey,
-                           fun(In) when size(In) == 7 ->
-                                   LIn = tuple_to_list(In),
-                                   LOut = LIn ++ [1000, 1000],
-                                   list_to_tuple(LOut);
-                              (R) ->
-                                   R
-                           end,
-                           NFields);
-update(5) ->  % {{{1
-    mnesia:transaction(fun() ->
-                       Files = mnesia:select(db_file, [{#db_file{status='$1', _='_'}, [{'/=', '$1', archive}], ['$_']}]),
-                        lists:foreach(fun(#db_file{id=Id,
-                                                   path=Path,
-                                                   status=Status,
-                                                   date=Date,
-                                                   size=Size}) ->
-                                              mnesia:write(#bm_file{
-                                                              hash=wf:to_binary(Id),
-                                                              name=Path,
-                                                              size=Size,
-                                                              time=sugar:datetime_to_timestamp({Date, {0,0,0}}),
-                                                              status=imported})
-                                      end,
-                                      Files)
-                       end),
-    UpdMsg = fun(#message{time=DateTime,
-                          subject=Subject}=M) ->
-                     mnesia:write(M#message{time=if is_integer(DateTime) ->
-                                                        DateTime;
-                                                    true ->
-                                                        sugar:timestamp_to_ttl(sugar:datetime_to_timestamp(DateTime))
-                                                 end,
-                                            subject=case Subject of
-                                                        S when S == <<"Task tree">>;
-                                                               S == <<"vCard">>;
-                                                               S == <<"Get vCard">> ->
-                                                            <<"$", S/bytes, "$">>;
-                                                        S -> 
-                                                            error_logger:info_msg("Not updating subject: ~p", [S]),
-                                                            S
-                                                    end})
-             end,
-    mnesia:transaction(fun() ->
-                               mnesia:foldl(fun(#message{time=DateTime,
-                                                         subject=S}=M,
-                                                _) when not is_integer(DateTime) andalso DateTime /= undefined;
-                                                        S == <<"Task tree">>;
-                                                        S == <<"vCard">>;
-                                                        S == <<"Get vCard">> ->
-                                                    error_logger:info_msg("Updating: ~p ~p", [DateTime, S]),
-                                                    UpdMsg(M);
-                                               (T, _) ->
-                                                    error_logger:info_msg("Not updating: ~p", [T#message.subject]),
-                                                    ok
-                                            end,
-                                            [],
-                                            message)
-                       end),
-    mnesia:transaction(fun() ->
-                               mnesia:foldl(fun(#db_task{due=undefined}=T, _) ->
-                                                    ok;
-                                               (#db_task{due=D}=T, _) ->
-                                                    mnesia:write(T#db_task{due=sugar:date_from_string(D)})
-                                            end,
-                                            [],
-                                            db_task)
-                       end);
-update(6) ->  % {{{1
-    mnesia:delete_table(db_update),
-    ?V(mnesia:create_table(db_contact_note, [{disc_copies, [node()]}, {attributes, record_info(fields, db_contact_note)}, {type, ordered_set}, {index, [contact]}])),
-    ?V(mnesia:create_table(db_update, [{disc_copies, [node()]}, {attributes, record_info(fields, db_update)}, {type, ordered_set}]));
 update({0, 1, 5}) ->  % {{{1
     [ update(X) || X <- lists:seq(1, 6)],
     update_table(db_task,
@@ -405,15 +289,17 @@ search_messages(Terms) ->  % {{{1
               QH = qlc:q([G || G <- Msg,
                                G#message.status /= archive,
                                try binary_to_term(G#message.text) of
-                                   #message_packet{text=T} ->
+                                   #{type := message,
+                                     text := T} ->
                                        check_roles(Terms,
                                                    fun() ->
                                                            SearchText(G, T) 
                                                    end);
-                                   #task_packet{text=T,
-                                                involved=I,
-                                                due=D,
-                                                status=S} ->
+                                   #{type := task,
+                                     text := T,
+                                     involved := I,
+                                     due := D,
+                                     status := S} ->
                                        search:check_roles(Terms,
                                                           fun() ->
                                                                   check_due(D, Terms) 
@@ -442,7 +328,8 @@ search_tasks(Terms) ->  % {{{1
     {ok, Messages} = search_messages(Terms),
     {ok, lists:foldl(fun(#message{text=Data}, A) ->
                         try binary_to_term(Data) of
-                            #task_packet{id=Id} ->
+                            #{type := task,
+                              id := Id} ->
                                 {ok, T} = db:get_task(Id),
                                 A ++ T;
                             _ ->
@@ -490,7 +377,8 @@ get_task_history(Hash) ->  % {{{1
     transaction(fun() ->
                         mnesia:foldr(fun(#message{hash=Id, text=D, status=S}=Msg, A) when S /= archive ->
                                              try binary_to_term(D) of
-                                                 #task_packet{id=Hash}=Task ->
+                                                 #{type := task,
+                                                   id := Hash}=Task ->
                                                      A ++ [Msg];
                                                  _ ->
                                                      A
@@ -1390,7 +1278,9 @@ search_roles(Involved, Terms) ->  % {{{1
                                        proplists:is_defined(Role, Terms)
                                end,
                                ?ROLES),
-    IsInRole = lists:any(fun(#role_packet{role=R, address=A}) ->
+    IsInRole = lists:any(fun(#{type := role,
+                               role := R,
+                               address := A}) ->
                                  {value, {Role, _R}, _} = lists:keytake(R, 2, ?ROLES),
                                  case proplists:get_value(Role, Terms, error) of
                                      error ->
