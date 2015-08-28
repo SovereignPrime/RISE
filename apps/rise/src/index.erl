@@ -79,31 +79,6 @@ group_updates(List) ->  % {{{1
                 [],
                 List).
 
-add_participants(Update, Messages) ->  % {{{1
-    lists:map(fun
-                  (M) when M#message.subject==Update#message.subject ->
-                      Ids= sugar:maybe_wrap_list(M#message.hash),
-                      Id = Update#message.hash,
-                      M#message{
-                        hash= [Id|Ids],
-                        status=case M#message.status of 
-                                   unread ->
-                                       unread;
-                                   _ ->
-                                       Update#message.status
-                               end,
-                        from=sugar:maybe_wrap_list(M#message.from) ++ [Update#message.from],
-                        to=sugar:maybe_wrap_list(M#message.to) ++ [Update#message.to]
-                       };
-                  (M) -> M
-              end, Messages).
-                     
-
-subject_exists_in_updates(Subject, Messages) ->  % {{{1
-    case [X || X <- Messages, X#message.subject==Subject] of
-        [] -> false;
-        [X] -> true
-    end.
 
 body() -> % {{{1
     body(false).
@@ -124,7 +99,7 @@ render_body(Thread, Archive) -> % {{{1
                                  U = wf:session(current_update),
                                  Type = maps:get(type, U, message),
                                  Icon = element_update_preview:render_icon(Type),
-                                 CurrentId = maps:get(id, U),
+                                 CurrentId = maps:get(id, U, unknown),
                                  Subject = maps:get(subject, U),
                                  [
                                   #h1{body=[Icon," ",wf:html_encode(Subject)]},

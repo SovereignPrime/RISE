@@ -233,7 +233,7 @@ sigma_search_filter_event(to, Terms) ->  % {{{1
     Subject = wf:q(name),
     Text = wf:q(text),
     Update = wf:session_default(current_update, #{}),
-    #db_contact{id=UID} = wf:user(),
+    #db_contact{address=My} = wf:user(),
     Involved = lists:foldl(fun({"Term", _}, A) ->
                                    A;
                               ({"Contact", Name}, A) ->
@@ -253,7 +253,7 @@ sigma_search_filter_event(to, Terms) ->  % {{{1
     NUpdate = Update#{type => message,
                       subject => Subject,
                       text => Text,
-                      from => UID, 
+                      from => My, 
                       to => Involved,
                       status => new},
     %db:save_attachments(NUpdate, wf:session_default(attached_files, sets:new())),
@@ -484,10 +484,15 @@ event({filter_load, Name, Terms}) ->  % {{{1
     wf:session(filter_name, Name),
     sigma_search_filter_event(search, Terms);
     
-event({reply, Thread, To}) -> % {{{1
-    wf:session(current_update, #{type => message,
-                                 thread => Thread,
-                                 to => [ To ]}),
+event({reply, UID, Packet}) -> % {{{1
+    Reply = maps:with([type, thread, to, subject], Packet),
+    #db_contact{address=My} = wf:user(),
+    From = maps:get(from, Packet),
+    To = maps:get(to, Packet),
+    Thread = maps:get(thread, Packet, UID),
+    wf:session(current_update, Reply#{type => message,
+                                      thread => Thread,
+                                      to => [From | To] -- [My]}),
     wf:session(attached_files, undefined),
     wf:redirect("/edit_update");
 
@@ -668,10 +673,9 @@ send_messages(#task_comment{task=TID}=TP) -> % {{{1
                   end,
                   Contacts);
 send_messages(#{type :=  message, % {{{1
-                from := FID,
+                from := From,
                 subject := Subject,
                 to := Contacts} = U) ->
-    #db_contact{address=From} = wf:user(),
     wf:info("Sending ~p~n", [U]),
     Attachments = sets:to_list(wf:session_default(attached_files, sets:new())),
     MSG = term_to_binary(U#{to => [From | Contacts],
