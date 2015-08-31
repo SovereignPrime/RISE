@@ -149,24 +149,7 @@ contact_render(#db_contact{id=Id,  % {{{1
                                    delegate=?MODULE}
                             ]}
                     ]},
-        lists:map(fun(Note = #db_contact_note{id=NID,
-                                              datetime=Datetime,
-                                              text=Text}) ->
-                          #panel{class='row-fluid',
-                                 style="min-height:20px; height:20px;",
-                                 body=[
-                                       #panel{class=span3,
-                                              style="min-height:20px; height:20px;",
-                                              text=sugar:date_format(Datetime)},
-
-                                       #panel{class=span9,
-                                              style="min-height:20px; height:20px;",
-                                              body=[
-                                                    Text
-                                                   ]}
-                                      ]}
-                  end,
-                  Notes),
+        [ render_contact_note(Note) || Note <- Notes],
         #panel{class='row-fluid', body=[
             #panel{class=span10, body=[
                 #h2{body=[
@@ -224,6 +207,36 @@ contact_render(#db_contact{id=Id,  % {{{1
                                  ]}
                     ]}
     ].
+
+render_contact_note(Note = #db_contact_note{id=Id,  % {{{1
+                                            datetime=Datetime,
+                                            text=Text}) ->
+    EID = wf:to_atom("note" ++ wf:to_list(Id)),
+    #panel{id=EID,
+           class='row-fluid',
+           style="min-height:20px; height:20px;",
+           body=[
+                 #panel{class=span3,
+                        style="min-height:20px; height:20px;",
+                        text=sugar:date_format(Datetime)},
+
+                 #panel{class=span8,
+                        style="min-height:20px; height:20px;",
+                        body=[
+                              #inplace_textbox{tag={note, Note},
+                                               html_encode=true,
+                                               text=Text}
+                             ]},
+                 #panel{class=span1,
+                        style="min-height:20px; height:20px; text-align:right",
+                        body=[
+                             #link{id=remove, 
+                                   body=["<i class='icon-remove'></i>"],
+                                   html_encode=false,
+                                   postback={del_note, Id},
+                                   delegate=?MODULE}
+                             ]}
+                ]}.
 
 %%%
 %% Event handlers
@@ -315,32 +328,26 @@ event({task_for, Addr}) ->  % {{{1
     common:event(add_task);
 
 event({add_note, CID}) ->  % {{{1
-    Id = db:next_id(db_contact_note),
+    {ok, Id} = db:next_id(db_contact_note),
     Datetime = calendar:local_time(),
     case wf:q(note) of
         "" ->
             ok;
         Text ->
-            db:save(#db_contact_note{id=Id,
+            Note = #db_contact_note{id=Id,
                                      contact=CID,
                                      text=Text,
-                                     datetime=Datetime}),
+                                     datetime=Datetime},
+            db:save(Note),
             wf:set(note, ""),
             wf:insert_after(add_note, 
-                            #panel{class='row-fluid',
-                                   style="min-height:20px; height:20px;",
-                                   body=[
-                                         #panel{class=span3,
-                                                style="min-height:20px; height:20px;",
-                                                text=sugar:date_format(Datetime)},
-
-                                         #panel{class=span10,
-                                                style="min-height:20px; height:20px;",
-                                                body=[
-                                                      Text
-                                                     ]}
-                                        ]})
+                            render_contact_note(Note))
     end;
+
+event({del_note, NID}) ->  % {{{1
+    db:delete(db_contact_note, NID),
+    EID = wf:to_atom("note" ++ wf:to_list(NID)),
+    wf:remove(EID);
 
 event(Click) ->  % {{{1
     io:format("~p~n",[Click]).
@@ -379,6 +386,11 @@ inplace_textbox_event({address, Id}, Name) ->  % {{{1
     db:save(ContactN),
     wf:session(current_contact, ContactN),
     Name;
+
+inplace_textbox_event({note, Note}, Text) ->  % {{{1
+    wf:info("Updating ~p text ~p", [Note, Text]),
+    db:save(Note#db_contact_note{text=Text}),
+    Text;
 
 inplace_textbox_event(T, Name) ->  % {{{1
     io:format("Saved ~p tag ~p", [Name, T]),

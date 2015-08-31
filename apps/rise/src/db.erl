@@ -145,7 +145,6 @@ delete(Type, Id) ->  % {{{1
                 mnesia:delete({Type, Id})
         end).
 
-
 archive(Rec) when is_record(Rec, db_task) ->  % {{{1
     transaction(fun() ->
                 R = Rec#db_task{status=archive},
