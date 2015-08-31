@@ -170,16 +170,28 @@ render_files() -> % {{{1
 
 sigma_search_event(to, Terms) -> % {{{1
     {NTerms, Results} = search:contacts(Terms),
-    Bs = lists:map(fun({"Term", _}) ->
-                           [];
-                      (In) ->
+    lists:foldl(fun({"Term", [$B, $M, $- |_] = Address}, {B, R}) when length(Address) > 35 ->
+                           wf:info("Address ~p", [Address]),
+                           BAddress = wf:to_binary(Address),
+                           #db_contact{address=My} = wf:user(),
+                           CID = receiver:get_or_request_contact(BAddress, My, BAddress),
+                           NTerms1 = proplists:delete("Term", NTerms),
+                           wf:info("Terms: ~p~nNTerms: ~p~nNTerms1: ~p", [Terms, NTerms,NTerms1]),
+                           {ok, #db_contact{name=Name}} = db:get_contact(CID),
+                           %wf:set(to, Name),
+                           % sigma_search_event(to,  NTerms1);
+                           {B,
+                            NTerms1};
+                      ({"Term", _}, A) ->
+                        A;
+                      (In, {B, R}) ->
                            wf:info("In: ~p", [In]),
-                           search:simple_badge(In, ["Contact"])
+                           {[search:simple_badge(In, ["Contact"]) | B],
+                            R}
                    end,
-                   NTerms),
-    {lists:flatten(Bs),
-                  Results
-                };
+                {[], Results},
+                NTerms);
+
 sigma_search_event(involved, Terms) -> % {{{1
     {NTerms, Results} = search:contacts(Terms),
     Involved = wf:state_default(involved, []),

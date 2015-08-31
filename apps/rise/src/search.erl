@@ -95,8 +95,9 @@ contacts(Terms) ->  % {{{1
                 [] ->
                     {Terms, []};
                 Contacts ->
-                    case lists:keyfind(Term, #db_contact.name, Contacts) of
-                        false ->
+                    case {lists:keyfind(Term, #db_contact.name, Contacts),
+                          lists:keyfind(Term, #db_contact.address, Contacts)} of
+                        {false, false} ->
                             {Terms, #panel{body=["<dl class='dl-horizontal'>",
                                                  "<dt>Contacts:</dt><dd>",
                                                  lists:map(fun(#db_contact{id=Id,
@@ -109,8 +110,10 @@ contacts(Terms) ->  % {{{1
                                                                                ]}
                                                            end, Contacts),
                                                  "</dd>"]}};
-                        #db_contact{name=Term} ->
-                            {proplists:delete("Term", [{"Contact", Term} | Terms]), []}
+                        {#db_contact{name=Name}, false} ->
+                            {proplists:delete("Term", [{"Contact", Name} | Terms]), []};
+                        {_, #db_contact{name=Name}} ->
+                            {proplists:delete("Term", [{"Contact", Name} | Terms]), []}
                     end
             end;
         _ ->

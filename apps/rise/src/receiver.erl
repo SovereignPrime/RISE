@@ -18,7 +18,8 @@
     downloaded/1,
     filechunk_sent/2,
     filechunk_received/3,
-	extract_packet/1
+	extract_packet/1,
+    get_or_request_contact/3
     ]). % }}}
 
 %% gen_server callbacks
@@ -359,6 +360,7 @@ apply_message(Message, FID, ToID, State) ->
 
 get_vcard(BM, To, From) ->  % {{{1
     bitmessage:send_message(From, To, <<"$Get vCard$">>, BM).
+
 get_or_request_contact(BM, From, To) ->  % {{{1
     case db:get_contact_by_address(BM) of
         {ok, none} ->
