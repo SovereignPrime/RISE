@@ -81,7 +81,8 @@ body() -> % {{{1
                                                     class="span12"}
                                           ]}
                              ]},
-                 #sigma_search{tag=to, 
+                 #sigma_search{id=to,
+                               tag=to, 
                                placeholder="Contacts", 
                                class="input-append input-prepend input-block-level search", 
                                textbox_class="",
