@@ -19,21 +19,22 @@ dates_if(Terms) ->  % {{{1
                     case  dates(Term) of
                         {[], Ts} ->
                             {Terms, Ts};
-                        {Date, Ts} ->
-                            {proplists:delete("Term", [{"Date", Term} | Terms]), Ts}
+                        {_Date, _Ts} ->
+                            {[{"Term", ""}, {"Contact", Term} | proplists:delete("Term",  Terms)], []}
                     end;
                 {Date, error} ->
                     case  dates(Term) of
                         {[], Ts} ->
                             {Terms, Ts};
-                        {DateN, Ts} ->
+                        {DateN, _Ts} ->
                             ADict1 = proplists:delete("Date", Terms),
                             DT = sugar:date_from_string(Date),
                             case lists:usort([DT, DateN]) of
-                                L when length(L) == 1->
-                                    {proplists:delete("Term", [{"Date", Date} | ADict1]), []};
+                                L when length(L) == 1 ->
+                                    {[{"Term", ""}, {"Date", Date} | proplists:delete("Term",  ADict1)], []};
                                 L ->
-                                    {proplists:delete("Term", [{"Daterange", list_to_tuple(L)} | ADict1]), []}
+                                    {[{"Term", ""},
+                                      {"Daterange", list_to_tuple(L)} | proplists:delete("Term",  ADict1)], []}
                             end
                     end;
                 {_, Date} ->
@@ -44,10 +45,11 @@ dates_if(Terms) ->  % {{{1
                             ADict1 = proplists:delete("Due", Terms),
                             DT = sugar:date_from_string(Date),
                             case lists:usort([DT, DateN]) of
-                                L when length(L) == 1->
-                                    {proplists:delete("Term", [{"Due", Date} | ADict1]), []};
+                                L when length(L) == 1 ->
+                                    {[{"Term", ""}, {"Date", Date} | proplists:delete("Term",  ADict1)], []};
                                 L ->
-                                    {proplists:delete("Term", [{"Duerange", list_to_tuple(L)} | ADict1]), []}
+                                    {[{"Term", ""},
+                                      {"Daterange", list_to_tuple(L)} | proplists:delete("Term",  ADict1)], []}
                             end
                     end
             end
@@ -96,7 +98,7 @@ contacts(Terms) ->  % {{{1
                     {Terms, []};
                 Contacts ->
                     case {lists:keyfind(Term, #db_contact.name, Contacts),
-                          lists:keyfind(Term, #db_contact.address, Contacts)} of
+                          lists:keyfind(wf:to_binary(Term), #db_contact.address, Contacts)} of
                         {false, false} ->
                             {Terms, #panel{body=["<dl class='dl-horizontal'>",
                                                  "<dt>Contacts:</dt><dd>",
@@ -111,9 +113,9 @@ contacts(Terms) ->  % {{{1
                                                            end, Contacts),
                                                  "</dd>"]}};
                         {#db_contact{name=Name}, false} ->
-                            {proplists:delete("Term", [{"Contact", Name} | Terms]), []};
+                            {[{"Term", ""}, {"Contact", Name} | proplists:delete("Term",  Terms)], []};
                         {_, #db_contact{name=Name}} ->
-                            {proplists:delete("Term", [{"Contact", Name} | Terms]), []}
+                            {[{"Term", ""}, {"Contact", Name} | proplists:delete("Term",  Terms)], []}
                     end
             end;
         _ ->
@@ -142,7 +144,7 @@ groups(Terms) ->  % {{{1
                                            end, Groups),
                                  "</dd>"]}};
                         #db_group{name=Term} ->
-                            {proplists:delete("Term", [{"Group", Term} | Terms]), []}
+                            {[{"Term", ""}, {"Group", Term} | proplists:delete("Term",  Terms)], []}
                     end
             end;
         _ ->
@@ -156,20 +158,24 @@ statuses(Terms) ->  % {{{1
         error ->
             case lists:keyfind(Term, 2, Statuses) of
                 false ->
-                    {Terms, format_dropdown_group("Statuses", 
-                                                  Term,
-                                                  lists:foldl(fun({_, Status}, A) ->
-                                                                      case re:run(Status, Term, [global, caseless]) of
-                                                                          nomatch ->
-                                                                              A;
-                                                                          _ ->
-                                                                              [Status | A]
-                                                                      end
-                                                              end, 
-                                                              [],
-                                                              Statuses))};
-                    _ ->
-                            {proplists:delete("Term", [{"Status", Term} | Terms]), []}
+                    {Terms,
+                     format_dropdown_group("Statuses", 
+                                           Term,
+                                           lists:foldl(fun({_, Status}, A) ->
+                                                               case re:run(Status,
+                                                                           Term,
+                                                                           [global,
+                                                                            caseless]) of
+                                                                   nomatch ->
+                                                                       A;
+                                                                   _ ->
+                                                                       [Status | A]
+                                                               end
+                                                       end, 
+                                                       [],
+                                                       Statuses))};
+                _ ->
+                    {[{"Term", ""}, {"Status", Term} | proplists:delete("Term",  Terms)], []}
             end;
         _ ->
             {Terms, []}
@@ -357,8 +363,8 @@ simple_badge({Type, Text}, Variants) ->  % {{{1
                         text=Text,
                         dropdown=Variants -- [Type]}.
 
-get_badge_for_type({"Term", _Data}) ->  % {{{1
-    [];
+get_badge_for_type({"Term", _Data}=In) ->  % {{{1
+    search:simple_badge(In, []);
 get_badge_for_type({Type, _Data}=In) ->  % {{{1
     lists:foldl(fun({Variants, Fun}, A) ->
                         case lists:member(Type, Variants) of

@@ -170,28 +170,25 @@ render_files() -> % {{{1
 
 sigma_search_event(to, Terms) -> % {{{1
     {NTerms, Results} = search:contacts(Terms),
-    lists:foldl(fun({"Term", [$B, $M, $- |_] = Address}, {B, R}) when length(Address) > 35 ->
-                           wf:info("Address ~p", [Address]),
-                           BAddress = wf:to_binary(Address),
+    Bs = lists:map(fun({"Term", [$B, $M, $- | _] = Address}) when length(Address) > 35 ->
+                           wf:info("Address: ~p", [Address]),
                            #db_contact{address=My} = wf:user(),
+                           BAddress = wf:to_binary(Address),
                            CID = receiver:get_or_request_contact(BAddress, My, BAddress),
-                           NTerms1 = proplists:delete("Term", NTerms),
-                           wf:info("Terms: ~p~nNTerms: ~p~nNTerms1: ~p", [Terms, NTerms,NTerms1]),
                            {ok, #db_contact{name=Name}} = db:get_contact(CID),
-                           %wf:set(to, Name),
-                           % sigma_search_event(to,  NTerms1);
-                           {B,
-                            NTerms1};
-                      ({"Term", _}, A) ->
-                        A;
-                      (In, {B, R}) ->
+                           [search:simple_badge({"Contact", Name}, ["Contact"]),
+                           search:simple_badge({"Term", ""}, ["Term"])];
+                      ({"Term", _}=In) ->
+                           wf:info("Term: ~p", [In]),
+                           search:simple_badge(In, []);
+                      (In) ->
                            wf:info("In: ~p", [In]),
-                           {[search:simple_badge(In, ["Contact"]) | B],
-                            R}
+                           search:simple_badge(In, ["Contact"])
                    end,
-                {[], Results},
-                NTerms);
-
+                   NTerms),
+    {lists:flatten(Bs),
+                  Results
+                };
 sigma_search_event(involved, Terms) -> % {{{1
     {NTerms, Results} = search:contacts(Terms),
     Involved = wf:state_default(involved, []),
