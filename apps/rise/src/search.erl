@@ -110,10 +110,10 @@ contacts(Terms) ->  % {{{1
                                                                                ]}
                                                            end, Contacts),
                                                  "</dd>"]}};
-                        {C1, C2} when is_record(C1, db_contact);
-                                      is_record(C2, db_contact) ->
-                            #db_contact{name=Name} = 
-                            {proplists:delete("Term", [{"Contact", Term} | Terms]), []}
+                        {#db_contact{name=Name}, false} ->
+                            {proplists:delete("Term", [{"Contact", Name} | Terms]), []};
+                        {_, #db_contact{name=Name}} ->
+                            {proplists:delete("Term", [{"Contact", Name} | Terms]), []}
                     end
             end;
         _ ->
