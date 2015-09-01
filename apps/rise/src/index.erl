@@ -182,9 +182,17 @@ maybe_update_current([#message{hash=FirstId,  % {{{1
                                text=Data}|_] = Messages,
                      Fun) ->
     U = receiver:extract_packet(Data),
-    maybe_update_session(current_update, U#{id => FirstId}),
-    maybe_update_session(current_thread,  FirstId),
-    Fun(Messages).
+    Thread = maps:get(thread, U, FirstId),
+    CThread = wf:session(current_thread),
+    if CThread /= Thread ->
+           wf:session(current_update, U#{id => FirstId}),
+           wf:session(current_thread,  Thread),
+           Fun(Messages);
+       true ->
+           Fun(Messages)
+    end.
+
+
 
 maybe_update_session(K, Default) ->  % {{{1
     Current = wf:session_default(K, Default),
