@@ -38,8 +38,7 @@ render_element(#update_preview{id=Id,
                  undefined -> UID;
                  T -> T
              end,
-    CurrentUpdateThread = maps:get(thread, CurrentUpdate, Thread),
-    CurrentThread = wf:session_default(current_thread, Thread),
+    CurrentThread = wf:session(current_thread),
 
     Class = if Thread == CurrentThread ->
            "current";
@@ -87,10 +86,10 @@ render_element(#update_preview{id=Id,
                 ],
            actions=#event{type=click,
                           postback={selected,
-                                    if Thread == CurrentUpdateThread ->
-                                           CurrentUpdate;
-                                       true -> Packet
-                                    end,
+                                    %if Thread == CurrentUpdateThread ->
+                                    %       CurrentUpdate;
+                                    %   true -> Packet
+                                    %end,
                                     Thread, 
                                     Archive}}}.
 
@@ -102,6 +101,7 @@ render_icon(Icon, unread) when Icon == message;  % {{{1
                                Icon == error ->
     #span{
        class="icon-stack",
+       style="line-height:1.7em",
        body="<i class='icon-sign-blank icon-stack-base'></i><i class='icon-envelope' style='color:#fff'></i>"
       };
 render_icon(Icon, State) when Icon == message;  % {{{1
@@ -109,30 +109,33 @@ render_icon(Icon, State) when Icon == message;  % {{{1
                               Icon == error ->
     #span{
        class="icon-stack",
+       style="line-height:1.7em",
        body="<i class='icon-sign icon-stack-base'></i><i class='icon-envelope'></i>"
       };
 render_icon(task, unread) ->  % {{{1
     #span{
-          body=[
-                "<i class='icon-sign-blank icon-stack-blank icon-2x'>",
-                "</i>",
-                #image{image="/img/tasks.svg", class='icon-task-unread'}
-               ]
+       body=[
+             "<i class='icon-sign-blank icon-stack-blank icon-2x'>",
+             "</i>",
+             #image{image="/img/tasks.svg", class='icon-task-unread'}
+            ]
       };
 render_icon(task, State) ->  % {{{1
     #span{
-          body=[
-                #image{image="/img/tasks.svg",
-                       style="-webkit-filter:invert(0);top:2px;",
-                       class='icon-task-unread'}
-               ]
+       body=[
+             #image{image="/img/tasks.svg",
+                    style="-webkit-filter:invert(0);top:2px;",
+                    class='icon-task-unread'}
+            ]
       };
 render_icon(update, unread) ->  % {{{1
     #span{
+       style="line-height:1.7em",
        body="<i class='icon-sign-blank icon-stack-base'></i><i class='icon-refresh'></i>"
       };
 render_icon(update, State) ->  % {{{1
     #span{
+       style="line-height:1.7em",
        class="icon-stack",
        body="<i class='icon-sign icon-stack-base'></i><i class='icon-refresh' style='color:#fff'></i>"
       }.

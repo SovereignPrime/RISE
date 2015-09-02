@@ -51,19 +51,15 @@ left(Archive) -> % {{{1
 render_left(Updates) -> % {{{1
     SortedUpdates = sugar:sort_by_timestamp(Updates),
     GroupedUpdates = group_updates(SortedUpdates),
-    maybe_update_current(SortedUpdates, 
-                         fun([]) -> [];
-                            (_) ->
-                                 Render = [#update_preview{message=M,
-                                                           flag=true,
-                                                           archive = (Status == archive)} || 
-                                           {T, [#message{status=Status}=M|_]} <- GroupedUpdates
-                                           
-                                          ],
-                                 #panel{id=left,
-                                        class="span4 scrollable",
-                                        body=Render}
-                         end).
+    Render = [#update_preview{message=M,
+                              flag=true,
+                              archive = (Status == archive)} || 
+              {_T, [#message{status=Status}=M|_]} <- GroupedUpdates
+
+             ],
+    #panel{id=left,
+           class="span4 scrollable",
+           body=Render}.
 
 group_updates(List) ->  % {{{1
     lists:foldr(fun(#message{hash=Hash, text=Data}=M, Threads) ->
@@ -93,21 +89,41 @@ body(Archive) -> % {{{1
 render_body(Thread, Archive) -> % {{{1
     wf:session(current_thread, Thread),
     {ok, Updates} = db:get_updates_by_thread(Thread, Archive),
+    wf:info("Rendering body: ~p", [Updates]),
     maybe_update_current(Updates,
-                         fun([]) -> [];
-                            (_) ->
-                                 U = wf:session(current_update),
-                                 Type = maps:get(type, U, message),
-                                 Icon = element_update_preview:render_icon(Type),
-                                 CurrentId = maps:get(id, U, unknown),
-                                 Subject = maps:get(subject, U),
-                                 [
-                                  #h1{body=[Icon," ",wf:html_encode(Subject)]},
-                                  [
+                         fun(Type, new) ->
+                                  #panel{
+                                     id=thread,
+                                     body=render_new()};
+                            (Type, CurrentId) ->
+                                  #panel{id=thread,
+                                         body=[
                                    #update_element{collapse=(Id /= CurrentId),
-                                                   message = M} || #message{hash=Id} = M <- sugar:sort_by_timestamp(Updates)] 
-                                 ]
+                                                   message = M} || #message{hash=Id} = M <- sugar:sort_by_timestamp(Updates)]}
                          end).
+
+render_new() ->  % {{{1
+    Current = wf:session_default(current_update, #{}),
+    #panel{
+       body=[
+             #update_element{collapse=new,
+                             message=Current}
+            ]}.
+
+render_subject(Type, Subject, Editable=true) ->  % {{{1
+    Icon = element_update_preview:render_icon(Type),
+    #h1{body=[Icon,
+              " ",
+              #textbox{id=name,
+                       style="box-shadow: none; border:#000 0px solid;",
+                       placeholder="Add subject here",
+                       text=Subject,
+                       next=text,
+                       class="span10"}]};
+
+render_subject(Type, Subject, Editable=false) ->  % {{{1
+    Icon = element_update_preview:render_icon(Type),
+    #h1{body=[Icon," ", wf:html_encode(Subject)]}.
 
 replace_left() -> % {{{1
     replace_left(left()).
@@ -117,10 +133,9 @@ replace_left(Body) -> % {{{1
     wf:replace(left, Body),
     wf:wire("objs('left').scrollTop(scrolltop_temp)").
 
-event({selected, CurrentUpdate, Thread, Archive}) -> % {{{1
+event({selected,  Thread, Archive}) -> % {{{1
     wf:info("Thread: ~p", [Thread]),
     wf:session(current_thread, Thread),
-    wf:session(current_update, CurrentUpdate),
     replace_left(left(Archive)),
     wf:update(body, render_body(Thread, Archive)),
     wf:wire("$(\".update-preview\").has(\"input[type=checkbox]:checked\").addClass(\"related-message\");"),
@@ -177,22 +192,44 @@ event(Click) -> % {{{1
 incoming() -> % {{{1
     replace_left().
 
-maybe_update_current([], Fun) -> Fun([]);  % {{{1
+maybe_update_current([], _Fun) ->   % {{{1
+    [
+     render_subject(message, "", true),
+     render_new()
+    ];
 maybe_update_current([#message{hash=FirstId,  % {{{1
+                               subject=Subject,
                                text=Data}|_] = Messages,
                      Fun) ->
     U = receiver:extract_packet(Data),
     Thread = maps:get(thread, U, FirstId),
     CThread = wf:session(current_thread),
-    if CThread /= Thread ->
-           wf:session(current_update, U#{id => FirstId}),
-           wf:session(current_thread,  Thread),
-           Fun(Messages);
-       true ->
-           Fun(Messages)
+    CUpdate = wf:session(current_update),
+    wf:info("Fixing thread: ~p", [CThread]),
+    case {CUpdate, CThread} of
+        {new, undefined} ->
+            wf:session(current_update, #{}),
+            [
+             render_subject(message, "", true),
+             Fun(message, new)
+            ];
+        {#{id := new} = Answer, T} ->
+            [
+             render_subject(message, Subject, true),
+             Fun(message, new),
+             Fun(message, FirstId)
+            ];
+            %wf:session(current_update, #{thread => T});
+        {_, undefined} ->
+            event({selected, Thread, false});
+        _ ->
+            wf:session(current_update, U#{id => FirstId}),
+            Type = maps:get(type, U, message),
+            [
+             render_subject(Type, Subject, false),
+             Fun(Type, FirstId)
+            ]
     end.
-
-
 
 maybe_update_session(K, Default) ->  % {{{1
     Current = wf:session_default(K, Default),

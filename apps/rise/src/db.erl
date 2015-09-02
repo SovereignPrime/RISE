@@ -617,6 +617,10 @@ get_updates(Archive) ->  % {{{1
 get_updates_by_thread(Thread) ->  % {{{1
     get_updates_by_thread(Thread, false).
 
+get_updates_by_thread(new, Archive) ->  % {{{1
+    {ok, []};
+get_updates_by_thread(undefined, Archive) ->  % {{{1
+    get_updates(Archive);
 get_updates_by_thread(Thread, Archive) ->  % {{{1
     ArchOp = archive_op(Archive),
     transaction(fun() ->

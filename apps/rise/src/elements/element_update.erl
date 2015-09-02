@@ -279,6 +279,73 @@ render_element(#update_element{id=Id,
                  end
 
                 ]};
+
+%% Render new update  {{{1
+render_element(#update_element{id=Id,
+                               message=Message,
+                               collapse=new
+                              }=Record) ->
+    #db_contact{id=FromId,
+                name=FromName} = wf:user(),
+    To = maps:get(to, Message, []),
+    #panel{
+       id=Id,
+       body=[
+             #panel{
+                class="row-fluid",
+                body=[
+                      #panel{
+                         class="span2",
+                         body=[
+                               #span{
+                                  body="<i class='icon-chevron-down'></i> "},
+                               #span{
+                                  text=FromName,
+                                  style="cursor:pointer;",
+                                  actions=#event{type=click,
+                                                 delegate=common,
+                                                 postback={to_contact, FromId}}
+                                 },
+                               " <i class='icon-arrow-right'></i> "]},
+                      #panel{
+                         class="span7",
+                         body=[
+                               #sigma_search{
+                                  id=to,
+                                  tag=to, 
+                                  style="border: #000 1px solid; box-shadow: none;",
+                                  placeholder="Contacts", 
+                                  class="input-append input-prepend input-block-level search", 
+                                  textbox_class="",
+                                  search_button_class="btn btn-inverse search-btn wfid_to_field", 
+                                  badges=[render_contact(A) || A <- To],
+                                  search_button_text="<i class='icon icon-arrow-right'></i>",
+                                  x_button_class="search-x",
+                                  clear_button_class="pull-right btn btn-inverse",
+                                  clear_button_text="<i class='icon icon-remove'></i>",
+                                  results_summary_class="search-results span10",
+                                  delegate=common}
+                              ]},
+                      #panel{
+                         style="text-align: right;",
+                         class="span1 offset1",
+                         body="Now (composing)"
+                        }
+                     ]},
+             #panel{
+                    class="row-fluid",
+                    body=[
+                          #panel{
+                             class="span11",
+                             body=#textarea{class="input-block-level",
+                                            style="border: #000 0px solid; box-shadow: none;",
+                                            rows=15,
+                                            %text=Text,
+                                            placeholder="Some text here",
+                                            id=text}
+                            }
+                         ]}
+                ]};
 %% Render update as single paragraph for relationships {{{1
 render_element(#update_element{
                   id=Id,
@@ -345,3 +412,6 @@ format_status(encrypt_message) ->  % {{{1
 format_status(Status) ->  % {{{1
     " " ++ wf:to_list(Status).
 
+render_contact(Address) ->  % {{{1
+    {ok, #db_contact{name=Name}} = db:get_contact_by_address(Address),
+    search:simple_badge({"Contact", Name}, ["Contact"]).

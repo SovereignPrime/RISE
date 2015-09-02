@@ -264,6 +264,7 @@ sigma_search_filter_event(to, Terms) ->  % {{{1
                       text => Text,
                       from => My, 
                       to => Involved,
+                      id => sent,
                       status => new},
     %db:save_attachments(NUpdate, wf:session_default(attached_files, sets:new())),
     common:send_messages(NUpdate),
@@ -428,11 +429,10 @@ event(add_expense) -> %{{{1
               end);
 event(add_update) -> %{{{1
     maybe_unsaved(fun() ->
-                      wf:session(current_update,
-                                 #{type => message,
-                                   id => new}),
+                      wf:session(current_update, new),
+                      wf:session(current_thread, undefined),
                       wf:session(attached_files, sets:new()),
-                      wf:redirect("/edit_update")
+                      wf:redirect("/")
               end);
 event(check_all) -> %{{{1
     case wf:q(check_all) of
@@ -497,13 +497,15 @@ event({reply, UID, Packet}) -> % {{{1
     Reply = maps:with([type, thread, to, subject], Packet),
     #db_contact{address=My} = wf:user(),
     From = maps:get(from, Packet),
-    To = maps:get(to, Packet),
+    To = maps:get(to, Packet,[]),
     Thread = maps:get(thread, Packet, UID),
+    wf:session(current_thread, Thread),
     wf:session(current_update, Reply#{type => message,
+                                      id => new,
                                       thread => Thread,
                                       to => [From | To] -- [My]}),
     wf:session(attached_files, undefined),
-    wf:redirect("/edit_update");
+    wf:redirect("/");
 
 event({to_message, undefined}) ->  % {{{1
     maybe_unsaved(fun() ->
