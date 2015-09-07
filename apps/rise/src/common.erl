@@ -169,6 +169,7 @@ render_files() -> % {{{1
                 ]}.
 
 sigma_search_event(to, Terms) -> % {{{1
+    wf:info("Terms: ~p", [Terms]),
     {NTerms, Results} = search:contacts(Terms),
     Bs = lists:map(fun({"Term", [$B, $M, $- | _] = Address}) when length(Address) > 35 ->
                            wf:info("Address: ~p", [Address]),
@@ -186,6 +187,7 @@ sigma_search_event(to, Terms) -> % {{{1
                            search:simple_badge(In, ["Contact"])
                    end,
                    NTerms),
+    wf:info("Body: ~p", [Results]),
     {lists:flatten(Bs),
                   Results
                 };

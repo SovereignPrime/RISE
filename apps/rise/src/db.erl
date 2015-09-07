@@ -220,6 +220,8 @@ get_archive(Type) when Type == db_expense ->  % {{{1
         end).
 
 
+search_groups([]) ->  % {{{1
+    {ok, []};
 search_groups(Term) ->  % {{{1
     transaction(fun() ->
                         Tab = mnesia:table(db_group),
@@ -228,6 +230,8 @@ search_groups(Term) ->  % {{{1
                         qlc:e(QH)
                 end).
 
+search_contacts("") ->  % {{{1
+    {ok, []};
 search_contacts(Term) ->  % {{{1
     transaction(fun() ->
                         Tab = mnesia:table(db_contact),
@@ -237,6 +241,8 @@ search_contacts(Term) ->  % {{{1
                         qlc:e(QH)
                 end).
 
+search_files("") ->  % {{{1
+    {ok, []};
 search_files(Terms) ->  % {{{1
     search:check_roles(Terms,
                        fun() -> {ok, []} end,
@@ -265,6 +271,8 @@ search_files(Terms) ->  % {{{1
                   end)
             end).
 
+search_messages("") ->  % {{{1
+    {ok, []};
 search_messages(Terms) ->  % {{{1
     Term = search:get_term(Terms),
     SearchText = fun(G, Text) -> 
@@ -323,6 +331,8 @@ search_messages(Terms) ->  % {{{1
             end).
 
 
+search_tasks("") ->  % {{{1
+    {ok, []};
 search_tasks(Terms) ->  % {{{1
     {ok, Messages} = search_messages(Terms),
     {ok, lists:foldl(fun(#message{text=Data}, A) ->
