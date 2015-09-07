@@ -8,9 +8,6 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    application:load(mnesia),
-    application:load(sasl),
-    application:stop(lager),
     RiseDir = case os:type() of
         {win32, _} ->
             os:getenv("APPDATA") ++ "/RISE";
@@ -25,7 +22,6 @@ start(_StartType, _StartArgs) ->
     file:make_dir(RiseDir ++ "/scratch"),
     file:make_dir(RiseDir ++ "/log"),
     file:make_dir(RiseDir ++ "/log/sasl"),
-    application:stop(mnesia),
     application:set_env(mnesia, dir, RiseDir ++ "/data"),
     application:set_env(simple_bridge, scratch_dir, RiseDir ++ "/scratch"),
     application:set_env(sasl, sasl_error_logger, {file, RiseDir ++ "/log/sasl/sasl-error.log"}),

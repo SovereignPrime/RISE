@@ -393,12 +393,3 @@ extract_packet(Packet) ->
     #{type => error,
       text =>  wf:to_binary(Text)}.
 
--spec save_attachments(non_neg_integer(), record(), [#bm_file{}]) -> {ok, ok}.  % {{{1
-save_attachments(UID, Message, Attachments) ->
-    Files = lists:map(fun(#bm_file{
-                             hash=I
-                            }) ->
-                                    I
-                      end,
-                      Attachments),
-    db:save_attachments(Message, sets:from_list(Files)).
