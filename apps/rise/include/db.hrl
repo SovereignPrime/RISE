@@ -52,7 +52,7 @@
          due :: calendar:date_time(),
          recurring :: tuple(),
          name :: iodata(),
-         text="" :: iodata(),
+         text = <<"">> :: binary(),
          parent :: binary(),
          effort={1.0, days} :: {float(), atom()} | atom(),
          sort :: non_neg_integer() | atom(),

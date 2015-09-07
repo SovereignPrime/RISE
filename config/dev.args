@@ -12,16 +12,16 @@
 -env ERL_LIBS ./lib
 -pa ./site/ebin
 -pa ./site/include
--boot ./releases/{{rel_vsn}}/rise
+%-boot ./releases/{{rel_vsn}}/rise
 -embded
 
 #-mnesia dir "${HOME}/.config/RISE/data"
 # Configs to use
--config ./etc/bitmessage
--config ./etc/app
+-config ./config/bitmessage
+#-config ./config/app
 -config ./etc/cowboy
 # -config ./etc/sasl
--config ./etc/eminer
--config ./etc/simple_bridge
+-config ./config/eminer
+-config ./config/simple_bridge
 #-config ./etc/sync
 

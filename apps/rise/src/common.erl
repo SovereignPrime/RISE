@@ -192,17 +192,18 @@ sigma_search_event(to, Terms) -> % {{{1
                   Results
                 };
 sigma_search_event(involved, Terms) -> % {{{1
+    wf:info("Terms: ~p", [Terms]),
     {NTerms, Results} = search:contacts(Terms),
     Involved = wf:state_default(involved, []),
-    {InvolvedN, Bs} = lists:foldl(fun({"Term", _}, A) ->
-                                        A;
+    {InvolvedN, Bs} = lists:foldl(fun({"Term", _}=In, {I, B}) ->
+                                          {I, [search:simple_badge(In, [])|B]};
                                    ({Role, Name}=In, {I, B}) ->
-                                        %{ok, #db_contact{id=CID}} = db:get_contacts_by_name(Name),
+                                        {ok, #db_contact{id=CID}} = db:get_contacts_by_name(Name),
                                         ContactRole = case lists:keysearch(Name, 2, Involved) of
                                                           false ->
                                                               {#db_contact_roles{id=new,
-                                                                                 role=Role},
-                                                                                 %contact=CID},
+                                                                                 role=Role,
+                                                                                 contact=CID},
                                                                Name};
                                                           {value, {CR, Name}} when CR#db_contact_roles.role /= Role ->
                                                               {CR#db_contact_roles{role=Role}, Name};
@@ -417,9 +418,10 @@ event(add_contact) -> %{{{1
               end);
 event(add_task) -> %{{{1
     maybe_unsaved(fun() ->
-                      wf:session(current_task, undefined),
+                      wf:session(current_task, #db_task{id=new,
+                                                        name="Add task name here"}),
                       wf:session(attached_files, sets:new()),
-                      wf:redirect("/edit_task")
+                      wf:redirect("/tasks")
               end);
 event(add_expense) -> %{{{1
     maybe_unsaved(fun() ->

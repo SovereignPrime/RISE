@@ -65,7 +65,7 @@ buttons(main) ->  % {{{1
     ]}.
 
 left() ->  % {{{1
-    CId = wf:session(current_task_id),
+    #db_task{id=CId} = wf:session_default(current_task, #db_task{}),
     #panel{id=left,
            class="span4 scrollable",
            body=case wf:session(filter) of
@@ -292,7 +292,6 @@ body() ->  % {{{1
     case wf:session(current_task) of
         #db_task{id=Id, name=Name, due=Due, text=Text, parent=Parent, status=Status}=Task -> 
             wf:state(current_task, Task),
-            wf:state(current_task_id, Id),
             highlight_selected(Id),
             #panel{id=body,
                    class="span8 scrollable",
@@ -425,9 +424,11 @@ render_task(#db_task{id=Id,  % {{{1
     ]. 
 
 get_involved_full() -> % {{{1
-    Id = wf:state(current_task_id),
+    #db_task{id=Id} = wf:state(current_task),
     get_involved_full(Id).
 
+get_involved_full(new) -> % {{{1
+    {ok, []};
 get_involved_full(Id) -> % {{{1
     case wf:state(involved) of
         undefined ->
@@ -800,6 +801,8 @@ highlight_selected() ->  % {{{1
         _ -> ok
     end.
 
+highlight_selected(new) ->  % {{{1
+    ok;
 highlight_selected(Id) ->  % {{{1
     Md5 = md5(Id),
     wf:defer(#remove_class{target=".wfid_tasks a", class=current}),
@@ -808,7 +811,7 @@ highlight_selected(Id) ->  % {{{1
 check_changing_task_status() -> ok.  % {{{1
 
 save_contact_role(CR = #db_contact_roles{id=new}) -> % {{{1
-    Taskid = wf:state(current_task_id),
+    #db_task{id=Taskid} = wf:state(current_task),
     {ok, Id} = db:next_id(db_contact_roles),
     NewCR = CR#db_contact_roles{
               id=Id,
@@ -829,7 +832,6 @@ event({duplicate, #db_task{name=Name, text=Text} = OTask}) ->  % {{{1
     db:save(Task),
     db:save_attachments(wf:state(current_task), wf:session_default(attached_files, sets:new())),
     Involved = wf:state(involved),
-    wf:state(current_task_id, VID),
     [save_contact_role(ContactRole#db_contact_roles{id=new}) || {ContactRole, _} <- Involved],
     %save_payments(TaskName),
     wf:session(task_attached_files, undefined),
@@ -851,11 +853,9 @@ event({task_chosen, Id}) ->  % {{{1
     common:maybe_unsaved(fun() ->
                                  Right = wf:session(right_parent_id),
                                  {ok, [ #db_task{parent=Par, status=S} = Task ]} = db:get_task(Id),
-                                 wf:session(current_task_id, Id),
                                  wf:session(current_task, Task),
                                  wf:state(involved, undefined),
                                  wf:state(current_task, Task),
-                                 wf:state(current_task_id, Id),
                                  wf:update(body, render_task(Task)),
                                  expand_task(Id),
                                  highlight_selected(Id)
@@ -879,12 +879,13 @@ event(save) -> % {{{1
     Task = wf:state(current_task),
     Involved = wf:state(involved),
     Task2 = calculate_changes(Task),
+    wf:state(current_task, Task2),
     db:save(Task2),
     [save_contact_role(ContactRole) || {ContactRole, _} <- Involved],
     common:send_messages(Task2),
     wf:state(unsaved, false),
     update_task_tree(),
-    event({task_chosen, Task#db_task.id});
+    event({task_chosen, Task2#db_task.id});
 event(discard) -> % {{{1
     Task = wf:state(current_task),
     wf:state(unsaved, false),
@@ -979,7 +980,7 @@ inplace_event(effort_period, Val) ->  % {{{1
 
 inplace_event(status, Val) ->  % {{{1
     NewStatus = db:sanitize_task_status(Val),
-    Taskid = wf:state(current_task_id),
+    #db_task{id=Taskid} = wf:state(current_task),
     Acceptable = NewStatus=/=complete orelse db:are_all_child_tasks_complete(Taskid),
     case Acceptable of
         true ->
@@ -1032,27 +1033,35 @@ maybe_show_top_buttons() -> % {{{1
     maybe_show_top_buttons(CurrentTask).
 
 maybe_show_top_buttons(CurrentTask) -> % {{{1
-    Taskid = wf:state(current_task_id),
-    {ok, [TaskFromDB]} = db:get_task(Taskid),
-    
-    {ok, InvolvedFromDB} = db:get_involved_full(Taskid),
-    NewInvolved = wf:state(involved),
-   
+    #db_task{id=Taskid} = wf:state(current_task),
+    case db:get_task(Taskid) of
+        {ok, [TaskFromDB]} ->
+            {ok, InvolvedFromDB} = db:get_involved_full(Taskid),
+            NewInvolved = wf:state(involved),
 
-    TaskChanged = TaskFromDB =/= CurrentTask,
-    InvolvedChanged = sets:from_list(InvolvedFromDB) /= sets:from_list(NewInvolved),
 
-    case TaskChanged orelse InvolvedChanged of
-        true -> 
-            wf:info("OldTask: ~p~n
+            TaskChanged = TaskFromDB =/= CurrentTask,
+            InvolvedChanged = sets:from_list(InvolvedFromDB) /= sets:from_list(NewInvolved),
+
+            case TaskChanged orelse InvolvedChanged of
+                true -> 
+                    wf:info("OldTask: ~p~n
                     NewTask: ~p~n", [TaskFromDB, CurrentTask]),
+                    wf:state(unsaved, true),
+                    wf:wire(top_buttons, #show{});
+                false -> 
+                    wf:state(unsaved, false),
+                    wf:wire(top_buttons, #hide{})
+            end;
+        _ -> 
+            wf:info("NewTask: ~p~n", [CurrentTask]),
             wf:state(unsaved, true),
-            wf:wire(top_buttons, #show{});
-        false -> 
-            wf:state(unsaved, false),
-            wf:wire(top_buttons, #hide{})
+            wf:wire(top_buttons, #show{})
     end.
 
+calculate_changes(#db_task{id=new, name=Name, text=Text}=Task) -> % {{{1
+    Id = crypto:hash(sha512, <<Name/bytes, Text/bytes>>),
+    Task#db_task{id=Id};
 calculate_changes(Task) -> % {{{1
     Id = Task#db_task.id,
     {ok, [TaskFromDB]} = db:get_task(Id),
