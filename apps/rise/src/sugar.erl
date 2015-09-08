@@ -125,3 +125,26 @@ maybe_wrap_list(Address) when is_binary(Address) ->  % {{{1
 
 once_join(L) ->  % {{{1
     string:join(sets:to_list(sets:from_list(L)), "; ").
+
+to_float(V) when is_binary(V) ->  % {{{1
+    to_float(binary:bin_to_list(V));
+to_float(V) when is_list(V) ->
+    try list_to_float(V)
+    catch
+        error:badarg ->
+            try list_to_integer(V) / 1.0
+            catch
+                _:_ ->
+                    0.0
+            end;
+        _:_ ->
+            0.0
+    end;
+to_float(V) when is_integer(V) ->
+    V / 1.0;
+to_float(V) when is_float(V) ->
+    V;
+to_float(_V) ->
+    0.0.
+
+    

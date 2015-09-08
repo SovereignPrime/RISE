@@ -966,7 +966,7 @@ inplace_textarea_event(text, Val) -> % {{{1
 inplace_textbox_event(effort_value, Val) -> % {{{1
     error_logger:info_msg(Val),
     #db_task{effort={_Value, Period}} = wf:state(current_task),
-    ?UPDATE_CURRENT(effort, {list_to_float(Val), Period}),
+    ?UPDATE_CURRENT(effort, {sugar:to_float(Val), Period}),
     Val;
 
 inplace_textbox_event(name, Val) -> % {{{1
@@ -1075,22 +1075,30 @@ calculate_changes(Task) -> % {{{1
                                      case element(Fieldnum+1, Task) =:= element(Fieldnum+1, TaskFromDB) of
             true -> Acc;
             false ->
-                FieldValue = sugar:date_format(element(Fieldnum+1, Task)),
+                FieldValue = element(Fieldnum+1, Task),
                 IsComplex = is_tuple(FieldValue),
-                wf:info("FieldValue: ~p", [FieldValue]),
+                IsDate = IsComplex andalso is_tuple(element(1, FieldValue)),
+                wf:info("IsDate: ~p IsComplex: ~p FieldValue: ~p", [IsDate, IsComplex, FieldValue]),
                 %IsDate = IsComplex andalso calendar:valid_date(element(1, FieldValue)),
-                NewValue = if is_list(FieldValue) ->
+                NewValue = if is_list(FieldValue);
+                              is_binary(FieldValue) ->
                                   string:strip(lists:flatten(io_lib:format("~100s",[FieldValue])));
-                              %IsDate ->
-                              %    string:strip(lists:flatten(io_lib:format("~100s",[sugar:date_format(FieldValue)])));
+                              IsDate ->
+                                  string:strip(lists:flatten(io_lib:format("~100s",[sugar:date_format(FieldValue)])));
                               IsComplex ->
-                                  string:strip(lists:flatten(io_lib:format("~100p",[FieldValue])));
+                                  case FieldValue of
+                                      {N, Period} when is_float(N),
+                                                       is_atom(Period) ->
+                                  string:strip(lists:flatten(io_lib:format("~p ~p",[N, Period])));
+                                      _ ->
+                                  string:strip(lists:flatten(io_lib:format("~100p",[FieldValue])))
+                                  end;
                               true ->
                                   string:strip(lists:flatten(io_lib:format("~100p",[FieldValue])))
                            end,
                                   
 
-                IsShortened = wf:to_list(NewValue) =/= wf:to_list(FieldValue),
+                IsShortened = is_list(FieldValue) andalso wf:to_list(NewValue) =/= wf:to_list(FieldValue),
                 NewValue2 = ?WF_IF(IsShortened, NewValue ++ "...", NewValue),
                 Change = #db_task_change{
                             address=Me,
