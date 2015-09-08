@@ -877,10 +877,11 @@ event(task) -> % {{{1
 
 event(save) -> % {{{1
     Task = wf:state(current_task),
-    Involved = wf:state(involved),
     Task2 = calculate_changes(Task),
     wf:state(current_task, Task2),
     db:save(Task2),
+    Involved = wf:state(involved),
+    db:clear_involved(Task2),
     [save_contact_role(ContactRole) || {ContactRole, _} <- Involved],
     common:send_messages(Task2),
     wf:state(unsaved, false),

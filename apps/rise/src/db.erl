@@ -753,20 +753,40 @@ coalesce_best_contact([User | Rest], Archive) ->  % {{{1
 
 get_involved(Id) ->  % {{{1
     transaction(fun() ->
-                        R = mnesia:match_object(#db_contact_roles{type=db_task, tid=Id, _='_'}),
-                        lists:map(fun(#db_contact_roles{role=Role, contact=Contact}) ->
-                                          [ #db_contact{name=Name, email=_Email}=C ] = mnesia:read(db_contact, Contact),
+                        R = mnesia:match_object(#db_contact_roles{type=db_task,
+                                                                  tid=Id,
+                                                                  _='_'}),
+
+                        lists:map(fun(#db_contact_roles{role=Role,
+                                                        contact=Contact}) ->
+                                          [ #db_contact{name=Name,
+                                                        email=_Email}=C ] = mnesia:read(db_contact, Contact),
                                           {Name, Role, C}
                                   end, R)
                 end).
 
 get_involved_full(Id) -> % {{{1
     transaction(fun() ->
-                        R = mnesia:match_object(#db_contact_roles{type=db_task, tid=Id, _='_'}),
+                        R = mnesia:match_object(#db_contact_roles{type=db_task,
+                                                                  tid=Id,
+                                                                  _='_'}),
+
                         lists:map(fun(ContactRole = #db_contact_roles{contact=Contact}) ->
                                           [ #db_contact{name=Name}] = mnesia:read(db_contact, Contact),
                                           {ContactRole, Name}
                                   end, R)
+                end).
+
+clear_involved(#db_task{id=Id}) ->  % {{{1
+    transaction(fun() ->
+                        R = mnesia:match_object(#db_contact_roles{type=db_task,
+                                                                  tid=Id,
+                                                                  _='_'}),
+
+                        lists:foreach(fun(O) ->
+                                              mnesia:delete_object(O)
+                                      end,
+                                      R)
                 end).
 
 get_users(N) ->  % {{{1
