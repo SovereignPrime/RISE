@@ -65,9 +65,17 @@ date_from_string(Str) when is_list(Str) ->  % {{{1
              {wf:to_integer(H), wf:to_integer(Mi), wf:to_integer(S)}};
         [Date, Time] ->
             [Y, M, D] = string:tokens(Date, "-"),
-            [H, Mi, S] = string:tokens(Time, ":"),
-            {{wf:to_integer(Y), wf:to_integer(M), wf:to_integer(D)},
-             {wf:to_integer(H), wf:to_integer(Mi), wf:to_integer(S)}};
+            case string:tokens(Time, ":") of
+               [H, Mi, S] -> 
+                    {{wf:to_integer(Y), wf:to_integer(M), wf:to_integer(D)},
+                     {wf:to_integer(H), wf:to_integer(Mi), wf:to_integer(S)}};
+               [H, Mi] -> 
+                    {{wf:to_integer(Y), wf:to_integer(M), wf:to_integer(D)},
+                     {wf:to_integer(H), wf:to_integer(Mi), 0}};
+               [H] -> 
+                    {{wf:to_integer(Y), wf:to_integer(M), wf:to_integer(D)},
+                     {wf:to_integer(H), 0, 0}}
+            end;
         _ ->
             Str
     end;
