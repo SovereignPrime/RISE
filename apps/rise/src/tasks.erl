@@ -36,7 +36,7 @@ buttons(main) ->  % {{{1
                 class="btn btn-link",
                 body="<i class='icon-angle-left'></i> Hide tasks",
                 click=[
-                    #hide{trigger=hide_show,target=tasks}, 
+                    #hide{trigger=hide_show,target=left}, 
                     #event{postback=hide}
                 ]
             }
@@ -896,14 +896,14 @@ event(hide) ->  % {{{1
     wf:wire(body, [#remove_class{class="span8"}, #add_class{class="span12"}]),
     wf:replace(hide_show, #button{id=hide_show, class="btn btn-link", body="Show task list <i class='icon-angle-right'></i>", 
                                     actions=#event{type=click, actions=[
-                                        #show{trigger=hide_show,target=tasks}, 
+                                        #show{trigger=hide_show,target=left}, 
                                         #event{postback=show}
                                         ]}});
 event(show) ->  % {{{1
     wf:wire(body, [#remove_class{class="span12"}, #add_class{class="span8"}]),
     wf:replace(hide_show, #button{id=hide_show, class="btn btn-link", body="<i class='icon-angle-left'></i> Hide task list", 
                                     actions=#event{type=click, actions=[
-                                        #hide{trigger=hide_show,target=tasks}, 
+                                        #hide{trigger=hide_show,target=left}, 
                                         #event{postback=hide}
                                         ]}});
 
