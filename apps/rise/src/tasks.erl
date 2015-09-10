@@ -194,7 +194,7 @@ render_subtask(Task = #db_task{name=Name, status=Status, due=Due, id=Id}, Archiv
     end.
 
 render_task_link(Task = #db_task{name=Name, due=Due, id=Id}) -> % {{{1
-    HasAttachments = does_task_have_attachments(Task),
+    HasAttachments = false, % does_task_have_attachments(Task),
     render_task_link(Id, Name, HasAttachments, Due).
 
 render_task_link(Id, Name, HasAttachments, Due) -> % {{{1
@@ -417,7 +417,7 @@ render_task(#db_task{id=Id,  % {{{1
                                                  text=Text}
                               ]}
                  ]},
-     render_attachments(Task),
+     %render_attachments(Task),
      render_comments(Comments),
      render_updates(Updates),
      render_task_changes(Changes)
@@ -546,7 +546,7 @@ render_side_buttons(Id, Task) -> % {{{1
         ]}
     ].
 
-render_attachments(Task) ->
+render_attachments(Task) -> % {{{1
     case db:get_attachments(Task) of 
         {ok, []} ->
             wf:session(attached_files, sets:new()),
