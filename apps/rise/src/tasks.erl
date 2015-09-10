@@ -861,8 +861,10 @@ event({task_chosen, Id}) ->  % {{{1
                                  highlight_selected(Id)
                          end);
 event({add, ParentId}) -> % {{{1
-    wf:session(current_task, #db_task{parent=ParentId}),
-    wf:redirect("/edit_task");
+    wf:session(current_task, #db_task{id=new,
+                                      name="Add task name here",
+                                      parent=ParentId}),
+    wf:redirect("/tasks");
 event({edit, Id}) ->  % {{{1
     Task = wf:session(current_task),
     wf:session(current_task, Task),
