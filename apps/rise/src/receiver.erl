@@ -300,7 +300,6 @@ apply_message(#message{from=BMF,
               ToID,
               State)  when E == 2; E == 3 ->
     error_logger:info_msg("Message from ~s received subject ~s~n", [BMF, Subject]),
-    {ok, Id} = db:next_id(db_update),
 
     case extract_packet(Data) of
         #{type := message}  ->

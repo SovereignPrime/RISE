@@ -198,27 +198,6 @@ archive(Rec) when is_record(Rec, db_expense) ->  % {{{1
                 mnesia:write(Rec#db_expense{status=archive})
         end).
 
-get_archive(Type) when Type == db_task ->  % {{{1
-    transaction(fun() ->
-                mnesia:index_read(Type, archive, #db_task.status)
-        end);
-get_archive(Type) when Type == db_update ->  % {{{1
-    transaction(fun() ->
-                mnesia:index_read(Type, archive, #db_update.status)
-        end);
-get_archive(Type) when Type == db_contact ->  % {{{1
-    transaction(fun() ->
-                mnesia:index_read(Type, archive, #db_contact.status)
-        end);
-get_archive(Type) when Type == bm_file ->  % {{{1
-    transaction(fun() ->
-                mnesia:index_read(Type, archive, #bm_file.status)
-        end);
-get_archive(Type) when Type == db_expense ->  % {{{1
-    transaction(fun() ->
-                mnesia:index_read(Type, archive, #db_expense.status)
-        end).
-
 
 search_groups([]) ->  % {{{1
     {ok, []};
