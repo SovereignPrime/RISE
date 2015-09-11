@@ -669,7 +669,7 @@ save_involved(Type, TId) -> %{{{1
                 db:save(P#db_contact_roles{id=NPId, contact=CID})
         end, List).
 
-send_messages(#task_comment{task=TID}=TP) -> % {{{1
+send_messages(#{type := task_comment, task :=TID}=TP) -> % {{{1
     #db_task{id=TID, name=Subject} = wf:session(current_task),
     #db_contact{address=From} = wf:user(),
     {ok, Involved} = db:get_involved(TID),

@@ -651,7 +651,8 @@ render_comment(#message{from=From, text=Data, time=Datetime}) ->  % {{{1
                   {ok, Co} -> Co#db_contact.name
               end,
     Text = try binary_to_term(Data) of
-               #task_comment{text=T} ->
+               #{type := task_comment,
+                 text := T} ->
                    T;
                _ ->
                    "Wrong comment"
@@ -915,9 +916,10 @@ event(add_comment) -> % {{{1
            ok;
        true ->
            #db_task{id=TID} = T = wf:session(current_task),
-           common:send_messages(#task_comment{task=TID, 
-                                              text=Text,
-                                              time=calendar:universal_time()}),
+           common:send_messages(#{type => task_comment,
+                                  task => TID, 
+                                  text => Text,
+                                  time => calendar:universal_time()}),
            wf:update(body, render_task(T))
     end;
 event(add_role) -> % {{{1
