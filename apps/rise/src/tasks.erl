@@ -846,8 +846,8 @@ event({duplicate, #db_task{name=Name, text=Text} = OTask}) ->  % {{{1
 event({archive, #db_task{id=_Id, parent=_Parent} = Rec}) ->  % {{{1
     {ok, NTask} = db:archive(Rec),
     common:send_messages(NTask),
-    update_task_tree(),
-    wf:update(body, render_task(Rec));
+    update_task_tree(true),
+    wf:update(body, render_task(NTask));
 event({show_archive, true}) ->  % {{{1
     update_task_tree(true),
     wf:replace(archive, #link{id=archive, body="<i class='icon-list-alt'></i> Actual", postback={show_archive, false}}),
