@@ -178,8 +178,8 @@ render_subtask(Task = #db_task{name=Name, status=Status, due=Due, id=Id}, Archiv
                            body=[
                                  #draggable{tag={task, Id},
                                             group=task_groups,
-                                            clone=false,
-                                            distance=20,
+                                            clone=true,
+                                            %distance=20,
                                             options=[{delay, 300}],
                                             body=[
                                                   #panel{style="display:block",
@@ -761,36 +761,42 @@ render_calendar_view(Y, M) ->  % {{{1
                                                    };
                                             (Day) ->
                                                  Date = (Day - FirstDay + 1) + 7 * (Week - 1),
-                                                 #panel{
-                                                    style="border: #000 0px solid;display:table-cell;padding:2%;",
-                                                    body=[
-                                                          #panel{
-                                                             style="width:100%;text-align:right;",
-                                                             text=wf:to_list(Date)},
-                                                          lists:map(
-                                                            fun(#db_task{
-                                                                   name=N,
-                                                                   id=Id,
-                                                                   due={{Y1, M1, D1}, 
-                                                                        {H, Mi, _}}
-                                                                  }) when Y1 == Y, 
-                                                                          M1 == M,
-                                                                          D1 == Date ->
-                                                                    Text = wf:f("~p:~2..0w ~16s", [H, M, N]),
-
-                                                                    #panel{
-                                                                       class="badge",
-                                                                       style="cursor:pointer;width:95%;background-color:#000;",
-                                                                       text=Text,
-                                                                       actions=#event{
-                                                                                  type=click,
-                                                                                  postback={to_task, Id},
-                                                                                  delegate=common}};
-                                                               (_) -> []
-                                                            end,
-                                                            TasksByDate)
-                                                         ]
-                                                   }
+                                                 #droppable{
+                                                            tag={due, {Y, M, Date}},
+                                                            accept_groups=[task_groups],
+                                                            style="display:table-cell;padding:2%;",
+                                                            body=[
+                                                                  #panel{
+                                                                     style="width:100%;text-align:right;height:100%;",
+                                                                     text=wf:to_list(Date)},
+                                                                  lists:map(
+                                                                    fun(#db_task{
+                                                                           name=N,
+                                                                           id=Id,
+                                                                           due={{Y1, M1, D1}, 
+                                                                                {H, Mi, _}}
+                                                                          }) when Y1 == Y, 
+                                                                                  M1 == M,
+                                                                                  D1 == Date ->
+                                                                            Text = wf:f("~p:~2..0w ~16s", [H, M, N]),
+                                                                            #draggable{tag={task, Id},
+                                                                                       group=task_groups,
+                                                                                       clone=true,
+                                                                                       options=[{delay, 300}],
+                                                                                       body=#panel{
+                                                                                               class="badge",
+                                                                                               style="cursor:pointer;width:95%;background-color:#000;",
+                                                                                               text=Text,
+                                                                                               actions=#event{
+                                                                                                          type=click,
+                                                                                                          postback={to_task, Id},
+                                                                                                          delegate=common}
+                                                                                              }
+                                                                                      };
+                                                                       (_) -> []
+                                                                    end,
+                                                                    TasksByDate)
+                                                                 ]}
                                          end,
                                          lists:seq(1, 7))}
                        end,
@@ -1159,7 +1165,29 @@ drop_event({task, Id}, task_root) ->  % {{{1
     PId = wf:session(left_parent_id),
     db:save_subtask(Id, PId, bm_types:timestamp()),
     common:send_task_tree(Id, PId, bm_types:timestamp()),
-    update_task_tree().
+    update_task_tree();
+
+drop_event({task, Id}, {due, {Y, M, _}=Date}) ->  % {{{1
+    wf:info("Due ~p set for ~p", [Date, Id]),
+    case db:get_task(Id) of
+        {ok, [#db_task{due={Date, _}}]} ->
+            ok;
+        {ok, [#db_task{due={_, Time}}=Task]} ->
+            db:save(Task#db_task{due={Date, Time}}),
+            update_task_tree(),
+            event({calendar, Y, M});
+        {ok, [#db_task{due=undefined}=Task]} ->
+            db:save(Task#db_task{due={Date, {9,0,0}} }),
+            update_task_tree(),
+            event({calendar, Y, M});
+        _ ->
+            ok
+    end;
+drop_event(A,B) ->  % {{{1
+    wf:warning("Wrong drop event in ?MODULE_STRING ~p", [{A,B}]).
+
+
+    
 
 incoming() ->  % {{{1
     wf:update(tasks, render_task_tree()),
