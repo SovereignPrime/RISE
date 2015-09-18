@@ -145,13 +145,22 @@ delete(Type, Id) ->  % {{{1
                 mnesia:delete({Type, Id})
         end).
 
-archive(Rec) when is_record(Rec, db_task) ->  % {{{1
+archive(Rec) ->  % {{{1
+    set_archive(Rec, true).
+
+set_archive(Rec, false) when is_record(Rec, db_task) ->  % {{{1
+    transaction(fun() ->
+                R = Rec#db_task{status=new},
+                mnesia:write(R),
+                R
+        end);
+set_archive(Rec, true) when is_record(Rec, db_task) ->  % {{{1
     transaction(fun() ->
                 R = Rec#db_task{status=archive},
                 mnesia:write(R),
                 R
         end);
-archive(Rec) when is_record(Rec, message) ->  % {{{1
+set_archive(Rec, IsArchive) when is_record(Rec, message) ->  % {{{1
     transaction(fun() ->
                         #message{hash=Id} = Rec,
                          [R]  = mnesia:wread({message, Id}),
@@ -159,7 +168,7 @@ archive(Rec) when is_record(Rec, message) ->  % {{{1
                          mnesia:write(message, RN, write),
                          RN
                 end);
-archive(#db_contact{address=Address}) ->  % {{{1
+set_archive(#db_contact{address=Address}, IsArchive) ->  % {{{1
     transaction(fun() ->
                 [R] = mnesia:index_read(db_contact, Address, #db_contact.address),
                 mnesia:write(R#db_contact{status=archive}),
@@ -185,7 +194,7 @@ archive(#db_contact{address=Address}) ->  % {{{1
                 %              end,
                 %              Tasks)
         end);
-archive(Rec) when is_list(Rec) ->  % {{{1
+set_archive(Rec, IsArchive) when is_list(Rec) ->  % {{{1
     transaction(fun() ->
                 iterate(bm_file, Rec, fun(_T, R) ->
                             [R1] = mnesia:wread({bm_file, R}),
@@ -193,7 +202,7 @@ archive(Rec) when is_list(Rec) ->  % {{{1
                             [R1]
                     end)
         end);
-archive(Rec) when is_record(Rec, db_expense) ->  % {{{1
+set_archive(Rec, IsArchive) when is_record(Rec, db_expense) ->  % {{{1
     transaction(fun() ->
                 mnesia:write(Rec#db_expense{status=archive})
         end).
@@ -451,7 +460,7 @@ get_tasks_by_month(Y, M) ->  % {{{1
 
 get_tasks_overdue(Archive) ->  % {{{1
     Today = sugar:date_format(date()),
-    error_logger:info_msg("searching: ~p",[Today]),
+    error_logger:info_msg("searching: ~p ~p",[Archive, Today]),
     ArchOp = archive_op(Archive),
     transaction(fun() ->
                         mnesia:select(db_task,

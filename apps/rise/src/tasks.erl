@@ -84,7 +84,7 @@ left() ->  % {{{1
                 end}.
 
 
-render_task_tree_buttons(Selected) ->  % {{{1
+render_task_tree_buttons(Selected, Archive) ->  % {{{1
     Buttons = [
     %%  { Label, postback, width }
         {"Tree", task_tree, 2},
@@ -102,7 +102,7 @@ render_task_tree_buttons(Selected) ->  % {{{1
                          'task-tree-button-selected',
                          'task-tree-button-unselected')],
            text=Label,
-           postback={change_mode, Postback}
+           postback={change_mode, Postback, Archive}
         }
     end, Buttons)}.
 
@@ -117,7 +117,7 @@ render_task_tree() ->  % {{{1
 
 render_task_tree(Archive) ->  % {{{1
     Mode = wf:session_default(task_tree_mode, task_tree),
-    Buttons = render_task_tree_buttons(Mode),
+    Buttons = render_task_tree_buttons(Mode, Archive),
     Tree = case Mode of
         task_tree ->
             render_task_tree(undefined, Archive, true);
@@ -515,14 +515,17 @@ render_top_buttons() -> % {{{1
                                ]}
                  ]}.
 
-render_side_buttons(Id, Task) -> % {{{1
+render_side_buttons(Id, #db_task{status=archive}=Task) -> % {{{1
+        #panel{class="btn-group", body=[
+                    #link{postback={archive, Task, false},
+                          new=false,
+                          body=[
+                                "<i class='icon-list-alt icon-large'></i> Unarchive"
+                               ]}
+                ]};
+
+render_side_buttons(Id, #db_task{status=State}=Task) when State /= archive -> % {{{1
     [
-        #panel{class="btn btn-link", body = [
-            #link{postback={edit, Id}, new=false, body=[
-                "<i class='icon-edit icon-large'></i><br>"      
-            ]}
-        ]},
-        #br{},
         #panel{class="btn-group", body=[
             #link{new=false,
                   data_fields=[{toggle, "dropdown"}],
@@ -536,7 +539,8 @@ render_side_buttons(Id, Task) -> % {{{1
                           body=[
                                 "<i class='icon-copy icon-large'></i> Duplicate"
                                ]},
-                    #link{postback={archive, Task},
+
+                    #link{postback={archive, Task, true},
                           new=false,
                           body=[
                                 "<i class='icon-list-alt icon-large'></i> Archive"
@@ -828,9 +832,9 @@ save_contact_role(CR = #db_contact_roles{id=new}) -> % {{{1
 save_contact_role(CR) -> % {{{1
     db:save(CR).
 
-event({change_mode, Mode}) ->  % {{{1
+event({change_mode, Mode, Archive}) ->  % {{{1
     wf:session(task_tree_mode, Mode),
-    update_task_tree();
+    update_task_tree(Archive);
 event({duplicate, #db_task{name=Name, text=Text} = OTask}) ->  % {{{1
     NName = <<Name/bytes,  " (copy)">>,
     VID = crypto:hash(sha512, <<NName/bytes, Text/bytes>>),
@@ -843,14 +847,17 @@ event({duplicate, #db_task{name=Name, text=Text} = OTask}) ->  % {{{1
     %save_payments(TaskName),
     wf:session(task_attached_files, undefined),
     wf:redirect("/tasks");
-event({archive, #db_task{id=_Id, parent=_Parent} = Rec}) ->  % {{{1
-    {ok, NTask} = db:archive(Rec),
+event({archive, #db_task{id=_Id, parent=_Parent} = Rec, IsArchive}) ->  % {{{1
+    {ok, NTask} = db:set_archive(Rec, IsArchive),
     common:send_messages(NTask),
     update_task_tree(true),
     wf:update(body, render_task(NTask));
 event({show_archive, true}) ->  % {{{1
     update_task_tree(true),
-    wf:replace(archive, #link{id=archive, body="<i class='icon-list-alt'></i> Actual", postback={show_archive, false}}),
+    wf:replace(archive,
+               #link{id=archive,
+                     body="<i class='icon-list-alt'></i> Actual",
+                     postback={show_archive, false}}),
     wf:update(subgroups, []);
 event({show_archive, false}) ->  % {{{1
     update_task_tree(false),
