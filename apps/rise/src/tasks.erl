@@ -428,7 +428,11 @@ get_involved_full() -> % {{{1
     get_involved_full(Id).
 
 get_involved_full(new) -> % {{{1
-    {ok, []};
+    #db_contact{name=Name, id=Me} = wf:user(),
+    Role = #db_contact_roles{type=db_task,
+                             contact=Me,
+                             role="accountable"},
+    {ok, [{Role, Name}]};
 get_involved_full(Id) -> % {{{1
     case wf:state(involved) of
         undefined ->
