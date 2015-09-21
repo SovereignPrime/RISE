@@ -678,6 +678,15 @@ get_unread_ids() -> % {{{1
     Ms = get_unread_updates(),
     [M#message.hash || M <- Ms].
 
+get_status(message, Id) ->  % {{{1
+    transaction(fun() ->
+                        case  mnesia:read({message, Id}) of
+                            [#message{status=S}] ->
+                                S;
+                            _ -> unknown
+                        end
+                end).
+
 set_read(Id) ->  % {{{1
     transaction(fun() ->
                         case  mnesia:wread({message, Id}) of

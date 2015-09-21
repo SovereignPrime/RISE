@@ -8,7 +8,8 @@
 -include("db.hrl").
 -export([
     reflect/0,
-    render_element/1
+    render_element/1,
+    event/1
 ]).
 
 -spec reflect() -> [atom()].
@@ -28,6 +29,7 @@ name_from_address(Address) ->  % {{{1
 %% Render collapsed update {{{1
 render_element(#update_element{id=Id,
                                message=#message{
+                                          hash=UID,
                                           from=From,
                                           to=To,
                                           text=Data,
@@ -49,7 +51,10 @@ render_element(#update_element{id=Id,
                Packet ->
                    wf:f("Packet: ~p", [Packet])
            end,
-    TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
+    TD = case bm_types:timestamp() - sugar:ttl_to_timestamp(TTL) of
+             TD1 when TD1 >= 0 -> TD1;
+             _ -> 0
+         end,
     #panel{id=Id,
            class="row-fluid clickable",
            body=[
@@ -79,7 +84,7 @@ render_element(#update_element{id=Id,
                 #panel{class="span2",
                        body=[
                              sugar:format_timedelta(TD),
-                             format_status(Status)
+                             format_status(Status, -1, UID)
                             ]}
             ]};
 %% Render uncollapse update  {{{1
@@ -137,7 +142,7 @@ render_element(#update_element{id=Id,
                               #panel{class="span2 offset6",
                                      body=[
                                            sugar:format_timedelta(TD),
-                                           format_status(NStatus)
+                                           format_status(NStatus, -1, UID)
                                           ]}
                              ]},
                  #panel{
@@ -392,26 +397,76 @@ render_element(#update_element{
                  ]}
     ].
 
-format_status(ok) ->  % {{{1
+format_status(ok, _P, _UID) ->  % {{{1
     " (received)";
-format_status(read) ->  % {{{1
+format_status(read, _P, _UID) ->  % {{{1
     " (read)";
-format_status(unread) ->  % {{{1
+format_status(unread, _P, _UID) ->  % {{{1
     " (unread)";
-format_status(ackwait) ->  % {{{1
+format_status(ackwait, _P, _UID) ->  % {{{1
     " (sent)";
-format_status(new) ->  % {{{1
-    [" (creating message authentification)",
-     #progressbar{progress="0"}];
-format_status(wait_pubkey) ->  % {{{1
-    [" (waiting for key)",
-     #progressbar{progress="25"}];
-format_status(encrypt_message) ->  % {{{1
-    [" (sending)",
-     #progressbar{progress="80"}];
-format_status(Status) ->  % {{{1
+format_status(new, P, UID) ->  % {{{1
+    Id=wf:temp_id(),
+    Progress = if P > 20 -> 
+                      20;
+                  P == -1 ->
+                      1;
+                  true ->
+                      P + 1
+               end,
+    wf:wire(#event{type=timer, 
+                   delay=5000,
+                   target=Id,
+                   postback={status, Id, Progress, UID},
+                   delegate=?MODULE}),
+    #span{id=Id,
+          body=[" (creating message authentification)",
+                #progressbar{progress=wf:to_list(Progress)}]};
+format_status(wait_pubkey, P, UID) ->  % {{{1
+    Id=wf:temp_id(),
+    Progress = if P > 70 -> 
+                      70;
+                  P == -1 ->
+                      21;
+                  true ->
+                      P + 1
+               end,
+    wf:wire(#event{type=timer, 
+                   delay=5000,
+                   target=Id,
+                   postback={status, Id, Progress, UID},
+                   delegate=?MODULE}),
+    #span{id=Id,
+          body=[" (waiting for key)",
+                #progressbar{progress=wf:to_list(Progress)}]};
+format_status(encrypt_message, P, UID) ->  % {{{1
+    Id=wf:temp_id(),
+    Progress = if P > 97 -> 
+                      97;
+                  P == -1 ->
+                      70;
+                  true ->
+                      P + 1
+               end,
+    wf:wire(#event{type=timer, 
+                   delay=5000,
+                   target=Id,
+                   postback={status, Id, Progress, UID},
+                   delegate=?MODULE}),
+    #span{id=Id,
+    body=[" (sending)",
+          #progressbar{progress=wf:to_list(Progress)}]};
+format_status(Status, _P, _UID) ->  % {{{1
     " " ++ wf:to_list(Status).
 
 render_contact(Address) ->  % {{{1
     {ok, #db_contact{name=Name}} = db:get_contact_by_address(Address),
     search:simple_badge({"Contact", Name}, ["Contact"]).
+
+event({status, Id, Progress, UID}) ->  % {{{1
+    case db:get_status(message, UID) of
+        {ok, unknown} -> 
+            wf:redirect(wf:uri());
+        {ok, Status} ->
+            wf:replace(Id, format_status(Status, Progress, UID))
+    end.
