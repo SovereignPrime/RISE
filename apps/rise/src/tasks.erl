@@ -935,6 +935,7 @@ event(add_comment) -> % {{{1
            #db_task{id=TID} = T = wf:session(current_task),
            common:send_messages(#{type => task_comment,
                                   task => TID, 
+                                  thread => TID,
                                   text => Text,
                                   time => calendar:universal_time()}),
            wf:update(body, render_task(T))

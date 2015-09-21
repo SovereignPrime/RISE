@@ -728,6 +728,7 @@ send_messages(#db_task{id=UID, %{{{1
                                         wf:to_binary(Subject), 
                                         term_to_binary(#{type => task,
                                                          id => UID,
+                                                         thread => UID,
                                                          name => Subject,
                                                          due => Date,
                                                          text => Text,

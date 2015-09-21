@@ -86,10 +86,6 @@ render_element(#update_preview{id=Id,
                 ],
            actions=#event{type=click,
                           postback={selected,
-                                    %if Thread == CurrentUpdateThread ->
-                                    %       CurrentUpdate;
-                                    %   true -> Packet
-                                    %end,
                                     Thread, 
                                     Archive}}}.
 
@@ -97,7 +93,6 @@ render_icon(Icon) ->  % {{{1
     render_icon(Icon, true).
 
 render_icon(Icon, unread) when Icon == message;  % {{{1
-                               Icon == task_comment;
                                Icon == error ->
     #span{
        class="icon-stack",
@@ -105,14 +100,14 @@ render_icon(Icon, unread) when Icon == message;  % {{{1
        body="<i class='icon-sign-blank icon-stack-base'></i><i class='icon-envelope' style='color:#fff'></i>"
       };
 render_icon(Icon, State) when Icon == message;  % {{{1
-                              Icon == task_comment;
                               Icon == error ->
     #span{
        class="icon-stack",
        style="line-height:1.7em",
        body="<i class='icon-sign icon-stack-base'></i><i class='icon-envelope'></i>"
       };
-render_icon(task, unread) ->  % {{{1
+render_icon(Icon, unread) when Icon == task; % {{{1
+                               Icon == task_comment ->
     #span{
        body=[
              "<i class='icon-sign-blank icon-stack-blank icon-2x'>",
@@ -120,7 +115,8 @@ render_icon(task, unread) ->  % {{{1
              #image{image="/img/tasks.svg", class='icon-task-unread'}
             ]
       };
-render_icon(task, State) ->  % {{{1
+render_icon(Icon, State) when Icon == task;  % {{{1
+                              Icon == task_comment ->
     #span{
        body=[
              #image{image="/img/tasks.svg",
@@ -133,6 +129,7 @@ render_icon(update, unread) ->  % {{{1
        style="line-height:1.7em",
        body="<i class='icon-sign-blank icon-stack-base'></i><i class='icon-refresh'></i>"
       };
+
 render_icon(update, State) ->  % {{{1
     #span{
        style="line-height:1.7em",
