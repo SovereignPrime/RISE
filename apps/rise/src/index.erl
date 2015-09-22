@@ -89,7 +89,6 @@ body(Archive) -> % {{{1
 render_body(Thread, Archive) -> % {{{1
     wf:session(current_thread, Thread),
     {ok, Updates} = db:get_updates_by_thread(Thread, Archive),
-    wf:info("Rendering body: ~p", [Updates]),
     maybe_update_current(Updates,
                          fun(Type, new) ->
                                   #panel{
@@ -192,10 +191,11 @@ event(Click) -> % {{{1
 incoming() -> % {{{1
     replace_left().
 
-maybe_update_current([], _Fun) ->   % {{{1
+maybe_update_current([], Fun) ->   % {{{1
+    wf:session(current_update, #{type => message}),
     [
      render_subject(message, "", true),
-     render_new()
+     Fun(message, new)
     ];
 maybe_update_current([#message{hash=FirstId,  % {{{1
                                subject=Subject,
@@ -205,10 +205,9 @@ maybe_update_current([#message{hash=FirstId,  % {{{1
     Thread = maps:get(thread, U, FirstId),
     CThread = wf:session(current_thread),
     CUpdate = wf:session(current_update),
-    wf:info("Fixing thread: ~p", [CThread]),
     case {CUpdate, CThread} of
         {new, undefined} ->
-            wf:session(current_update, #{}),
+            wf:session(current_update, #{type => message}),
             [
              render_subject(message, "", true),
              Fun(message, new)
