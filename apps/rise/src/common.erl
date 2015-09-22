@@ -262,8 +262,7 @@ sigma_search_filter_event(to, Terms) ->  % {{{1
                            Terms),
 
     io:format("~p~n", [Involved]),
-    NUpdate = Update#{type => message,
-                      subject => Subject,
+    NUpdate = Update#{subject => Subject,
                       text => Text,
                       from => My, 
                       to => Involved,
@@ -500,14 +499,23 @@ event({filter_load, Name, Terms}) ->  % {{{1
 event({reply, UID, Packet}) -> % {{{1
     Reply = maps:with([type, thread, to, subject], Packet),
     #db_contact{address=My} = wf:user(),
-    From = maps:get(from, Packet),
     To = maps:get(to, Packet,[]),
     Thread = maps:get(thread, Packet, UID),
+    Reply1 = case maps:get(type, Packet, message) of
+               T when T == task;
+                      T == task_comment ->
+                     {ok, [Task]} = db:get_task(Thread),
+                     wf:session(current_task, Task),
+                     Reply#{type => task_comment,
+                            task => Thread};
+               _ ->
+                     From = maps:get(from, Packet),
+                     Reply#{type => message,
+                            to => [From | To] -- [My]}
+           end,
     wf:session(current_thread, Thread),
-    wf:session(current_update, Reply#{type => message,
-                                      id => new,
-                                      thread => Thread,
-                                      to => [From | To] -- [My]}),
+    wf:session(current_update, Reply1#{id => new,
+                                       thread => Thread}),
     wf:session(attached_files, undefined),
     wf:redirect("/");
 

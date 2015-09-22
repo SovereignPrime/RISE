@@ -31,7 +31,8 @@ render_element(#update_preview{id=Id,
                                archive=Archive}) -> 
     #{type := Icon,
       text := Text} = Packet = receiver:extract_packet(Data),
-    TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
+    
+    TD = element_update:time_delta(TTL),
     CurrentUpdate = wf:session_default(current_update, Packet),
 
     Thread = case maps:get(thread, Packet, UID) of

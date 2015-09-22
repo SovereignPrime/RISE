@@ -9,7 +9,8 @@
 -export([
     reflect/0,
     render_element/1,
-    event/1
+    event/1,
+    time_delta/1
 ]).
 
 -spec reflect() -> [atom()].
@@ -51,10 +52,7 @@ render_element(#update_element{id=Id,
                Packet ->
                    wf:f("Packet: ~p", [Packet])
            end,
-    TD = case bm_types:timestamp() - sugar:ttl_to_timestamp(TTL) of
-             TD1 when TD1 >= 0 -> TD1;
-             _ -> 0
-         end,
+    TD = time_delta(TTL),
     #panel{id=Id,
            class="row-fluid clickable",
            body=[
@@ -114,7 +112,7 @@ render_element(#update_element{id=Id,
                       Status
               end,
     Packet = receiver:extract_packet(Data),
-    TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
+    TD = time_delta(TTL),
     #panel{id=Id,
            body=[
                  #panel{class="row-fluid",
@@ -200,13 +198,7 @@ render_element(#update_element{id=Id,
                                             #span{class="icon-reply icon-large",
                                                   text=" "}
                                            ],
-                                      postback=case Enc of
-
-                                                   E when E == 3; E == 2 -> 
-                                                       {reply, UID, Packet};
-                                                   4 ->
-                                                       {to_task, maps:get(tid, Packet, empty)}
-                                               end,
+                                      postback={reply, UID, Packet},
                                       new=false,
                                       delegate=common},
 
@@ -291,8 +283,25 @@ render_element(#update_element{id=Id,
                                collapse=new
                               }=Record) ->
     #db_contact{id=FromId,
-                name=FromName} = wf:user(),
-    To = maps:get(to, Message, []),
+                name=FromName,
+               address=FromAddress} = wf:user(),
+    To = case maps:get(type, Message, message) of
+             message ->
+                 maps:get(to, Message, []);
+             T when T == task;
+                    T == task_comment ->
+                 TID = case T of
+                           task -> 
+                               maps:get(id, Message);
+                           task_comment ->
+                               maps:get(task, Message)
+                       end,
+             
+                 
+                 {ok, Involved} = db:get_involved(TID),
+                 [C || {_, _, #db_contact{bitmessage=C}}  <- Involved, 
+                       C /= FromAddress]
+         end,
     #panel{
        id=Id,
        body=[
@@ -377,7 +386,7 @@ render_element(#update_element{
                    wf:f("Packet: ~p", [Packet])
            end,
 
-    TD = bm_types:timestamp() - sugar:ttl_to_timestamp(TTL), %Timstamp,
+    TD = time_delta(TTL),
     [
      #panel{class="row-fluid",
             body=[
@@ -469,4 +478,10 @@ event({status, Id, Progress, UID}) ->  % {{{1
             wf:redirect(wf:uri());
         {ok, Status} ->
             wf:replace(Id, format_status(Status, Progress, UID))
+    end.
+
+time_delta(TTL) ->  % {{{1
+    case bm_types:timestamp() - sugar:ttl_to_timestamp(TTL) of
+        TD1 when TD1 >= 0 -> TD1;
+        _ -> 0
     end.
