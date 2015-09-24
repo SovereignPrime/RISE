@@ -191,10 +191,11 @@ event(Click) -> % {{{1
 incoming() -> % {{{1
     replace_left().
 
-maybe_update_current([], _Fun) ->   % {{{1
+maybe_update_current([], Fun) ->   % {{{1
+    wf:session(current_update, #{type => message}),
     [
      render_subject(message, "", true),
-     render_new()
+     Fun(message, new)
     ];
 maybe_update_current([#message{hash=FirstId,  % {{{1
                                subject=Subject,
@@ -206,7 +207,7 @@ maybe_update_current([#message{hash=FirstId,  % {{{1
     CUpdate = wf:session(current_update),
     case {CUpdate, CThread} of
         {new, undefined} ->
-            wf:session(current_update, #{}),
+            wf:session(current_update, #{type => message}),
             [
              render_subject(message, "", true),
              Fun(message, new)
