@@ -269,9 +269,9 @@ tasks(Messages) ->  % {{{1
                                                              delegate=common}
                                                       ]}];
                                     _ ->
-                                        []
+                                        A
                                 catch
-                                    error:_ -> []
+                                    error:_ -> A
                                 end
                         end,
                         [],
