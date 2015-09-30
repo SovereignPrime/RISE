@@ -175,7 +175,7 @@ sigma_search_event(to, Terms) -> % {{{1
                            wf:info("Address: ~p", [Address]),
                            #db_contact{address=My} = wf:user(),
                            BAddress = wf:to_binary(Address),
-                           CID = receiver:get_or_request_contact(BAddress, My, BAddress),
+                           CID = receiver:get_or_request_contact(BAddress, BAddress, My),
                            {ok, #db_contact{name=Name}} = db:get_contact(CID),
                            [search:simple_badge({"Contact", Name}, ["Contact"]),
                            search:simple_badge({"Term", ""}, ["Term"])];
