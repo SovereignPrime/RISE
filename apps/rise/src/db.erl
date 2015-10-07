@@ -603,15 +603,18 @@ get_updates(Archive) ->  % {{{1
                                       [{#message{status='$1',
                                                  subject='$3',
                                                  _='_'},
-                                        [{'and',
-                                          {ArchOp, '$1', archive},
-                                          {'/=', '$3', <<"$Task tree$">>},
-                                          {'/=', '$3', <<"$Get vCard$">>},
-                                          {'/=', '$3', <<"$vCard$">>},
-                                          {'/=', '$3', <<"$Update223322$">>}
-                                         }],
+                                        filter_subject([
+                                          {ArchOp, '$1', archive}],
+                                                       '$3'),
                                         ['$_']}])
                 end).
+
+filter_subject(Cond, SubjectAncor) -> % {{{1
+                    Cond ++
+                    [{'/=', SubjectAncor, <<"$Task tree$">>},
+                    {'/=', SubjectAncor, <<"$Get vCard$">>},
+                    {'/=', SubjectAncor, <<"$vCard$">>},
+                    {'/=', SubjectAncor, <<"$Update223322$">>}].
 
 get_updates_by_thread(Thread) ->  % {{{1
     get_updates_by_thread(Thread, false).
@@ -647,14 +650,15 @@ get_updates_by_user(UID) ->   % {{{1
                         mnesia:select(message,
                                       [{#message{status='$1',
                                                  enc='$2',
+                                                 subject='$3',
                                                  folder=incoming,
                                                  from=UID,
                                                  _='_'},
-                                        [{'/=', '$1', archive},
-                                         {'or', 
-                                          {'==', '$2', 3},
-                                          {'==', '$2', 2}
-                                         }],
+                                        filter_subject([{'/=', '$1', archive},
+                                                        {'or', 
+                                                         {'==', '$2', 3},
+                                                         {'==', '$2', 2}
+                                                        }], '$3'),
                                         ['$_']}])
                 end).
 
