@@ -907,10 +907,17 @@ event(save) -> % {{{1
     wf:state(unsaved, false),
     update_task_tree(),
     event({task_chosen, Task2#db_task.id});
+
 event(discard) -> % {{{1
-    Task = wf:state(current_task),
     wf:state(unsaved, false),
-    event({task_chosen, Task#db_task.id});
+    case wf:state(current_task) of
+        #db_task{id=new} -> 
+            wf:state(current_task, undefined),
+            wf:session(current_task, undefined),
+            wf:redirect("/tasks");
+        Task ->
+            event({task_chosen, Task#db_task.id})
+    end;
     
 event(hide) ->  % {{{1
     wf:wire(body, [#remove_class{class="span8"}, #add_class{class="span12"}]),
