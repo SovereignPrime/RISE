@@ -892,7 +892,7 @@ event({calendar, Y, M}) -> % {{{1
     wf:replace(calendar, calendar_button(task));
 
 event(task) -> % {{{1
-    wf:update(body, body()),
+    wf:replace(body, body()),
     wf:replace(calendar, calendar_button(calendar));
 
 event(save) -> % {{{1
