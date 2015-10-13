@@ -1316,20 +1316,24 @@ search_roles(Involved, Terms) ->  % {{{1
     IsInRole = lists:any(fun(#{type := role,
                                role := R,
                                address := A}) ->
-                                 {value, {Role, _R}, _} = lists:keytake(R, 2, ?ROLES),
-                                 case proplists:get_value(Role, Terms, error) of
-                                     error ->
-                                         wf:info("Role: ~p", [Role]),
-                                         false;
-                                     Name ->
-                                         case get_contact_by_address(A) of
-                                             {ok, #db_contact{name=N}} when N == Name ->
-                                                 wf:info("Role1: ~p", [Role]),
-                                                 true;
-                                             T ->
-                                                 wf:info("Role2: ~p", [T]),
-                                                 false
-                                         end
+                                 case lists:keytake(R, 2, ?ROLES) of
+                                     {value, {Role, _R}, _} ->
+                                         case proplists:get_value(Role, Terms, error) of
+                                             error ->
+                                                 wf:info("Role: ~p", [Role]),
+                                                 false;
+                                             Name ->
+                                                 case get_contact_by_address(A) of
+                                                     {ok, #db_contact{name=N}} when N == Name ->
+                                                         wf:info("Role1: ~p", [Role]),
+                                                         true;
+                                                     T ->
+                                                         wf:info("Role2: ~p", [T]),
+                                                         false
+                                                 end
+                                         end;
+                                     _ ->
+                                         false
                                  end
                          end,
                          Involved),
@@ -1346,5 +1350,3 @@ register_vsn(VSN) ->  % {{{1
                         mnesia:write(#db_version{version=VSN,
                                                  schema=Schema})
                 end).
-
-
