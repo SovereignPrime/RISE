@@ -22,14 +22,13 @@ icon() -> #image{image="/img/tasks.svg", class="icon", style="height: 32px;"}.
 
 
 buttons(main) ->  % {{{1
-    #list{numbered=false,
-          class="nav nav-pills",
-          style="display:inline-block",
-          body=[
-                #listitem{body=[
-                                %#panel{ class='span2',
-                                %body="<i class='icon-user'></i> All accounts"},
-                               ]},
+    #list{
+       numbered=false,
+       class="nav nav-pills",
+       style="display:inline-block",
+       body=[
+             #listitem{body=[
+                            ]},
         #listitem{body=[
             #button{
                 id=hide_show,
@@ -47,9 +46,6 @@ buttons(main) ->  % {{{1
         #listitem{body=[
             common:render_filters()
         ]},
-        %#listitem{body=[
-        %    #panel{ class='span2', body="<i class='icon-sort'></i> Sort"},
-        %]},
         #listitem{body=[
             #link{id=archive,
                   body="<i class='icon-list-alt'></i> Archive",
@@ -290,7 +286,12 @@ render_flat_task(Task, Archive) ->  % {{{1
 
 body() ->  % {{{1
     case wf:session(current_task) of
-        #db_task{id=Id, name=Name, due=Due, text=Text, parent=Parent, status=Status}=Task -> 
+        #db_task{id=Id,
+                 name=Name,
+                 due=Due,
+                 text=Text,
+                 parent=Parent,
+                 status=Status}=Task -> 
             wf:state(current_task, Task),
             highlight_selected(Id),
             #panel{id=body,
@@ -428,11 +429,17 @@ get_involved_full() -> % {{{1
     get_involved_full(Id).
 
 get_involved_full(new) -> % {{{1
-    #db_contact{name=Name, id=Me} = wf:user(),
-    Role = #db_contact_roles{type=db_task,
-                             contact=Me,
-                             role="accountable"},
-    {ok, [{Role, Name}]};
+    case wf:session(involved) of
+        undefined ->
+            #db_contact{name=Name, id=Me} = wf:user(),
+            Role = #db_contact_roles{type=db_task,
+                                     contact=Me,
+                                     role="accountable"},
+            {ok, [{Role, Name}]};
+        Involved ->
+            {ok, Involved}
+    end;
+        
 get_involved_full(Id) -> % {{{1
     case wf:state(involved) of
         undefined ->

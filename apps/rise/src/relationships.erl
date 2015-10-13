@@ -323,8 +323,19 @@ event({write_to, Addr}) ->  % {{{1
 
 event({task_for, Addr}) ->  % {{{1
     {ok, Contact} = db:get_contact_by_address(Addr),
-    Me = wf:user(),
-    wf:session(involved, [{0, responcible, Me},{0, concerning, Contact}]),
+    #db_contact{name=Name, id=Me} = wf:user(),
+    #db_contact{name=Other, id=OtherId} = Contact,
+    Roles = [
+             {#db_contact_roles{type=db_task,
+                                contact=Me,
+                                role="responsible"},
+              Name},
+             {#db_contact_roles{type=db_task,
+                                contact=OtherId,
+                                role="concerning"},
+              Other}
+            ],
+    wf:session(involved, Roles),
     common:event(add_task);
 
 event({add_note, CID}) ->  % {{{1
