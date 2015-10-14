@@ -57,12 +57,16 @@ render_element(#vcard{id=Id,
                                                body= #inplace_textbox{text=Name,
                                                                       tag={name, Id}}
                                               },
-                                           #panel{body= [ "Email: ",
-                                                          #inplace_textbox{class="inline",
-                                                                           tag={ email, Id},
-                                                                           text=  Email,
-                                                                           validators=#is_email{text="You provided wrong e-mail address"}}
-                                                        ]},
+                                           #panel{
+                                              body=["Email: ",
+                                                    #inplace_textbox{
+                                                       class="inline",
+                                                       tag={email, Id},
+                                                       text=  Email,
+                                                       validators=#is_email{
+                                                                     text="You provided wrong e-mail address"
+                                                                    }}
+                                                   ]},
                                            #panel{body= [
                                                          "Tel: ",
                                                          #inplace_textbox{class="inline",
@@ -91,22 +95,29 @@ render_element(#vcard{id=Id,
                                     postback={task_for, Address }},
                               #panel{class="btn-group",
                                      body=[
-                                           #link{ class="btn btn-link dropdown-toggle",
-                                                  body=[
-                                                        "<i class='icon-reorder icon-large'></i>"
-                                                       ],
-                                                  new=false,
-                                                  data_fields=[{toggle, "dropdown"}]},
-                                           #list{numbered=false,
-                                                 class="dropdown-menu pull-right",
-                                                 body=[
-                                                       #listitem{body=[
-                                                                       #link{body=[
-                                                                                   "<i class='icon-list-alt icon-large'></i> Archive"
-                                                                                  ],
-                                                                             postback={archive, Address},
-                                                                             new=false}]}
-                                                      ]}
+                                           #link{
+                                              class="btn btn-link dropdown-toggle",
+                                              body=[
+                                                    "<i class='icon-reorder icon-large'></i>"
+                                                   ],
+                                              new=false,
+                                              data_fields=[{toggle, "dropdown"}]
+                                             },
+                                           #list{
+                                              numbered=false,
+                                              class="dropdown-menu pull-right",
+                                              body=[
+                                                    #listitem{
+                                                       body=[
+                                                             #link{
+                                                                body=[
+                                                                      "<i class='icon-list-alt icon-large'></i> Archive"
+                                                                     ],
+                                                                postback={archive, Address},
+                                                                new=false
+                                                               }
+                                                            ]}
+                                                   ]}
                                           ]}
                              ]}
                 ]}.

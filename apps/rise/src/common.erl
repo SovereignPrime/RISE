@@ -201,9 +201,13 @@ sigma_search_event(involved, Terms) -> % {{{1
                                         {ok, #db_contact{id=CID}} = db:get_contacts_by_name(Name),
                                         ContactRole = case lists:keysearch(Name, 2, Involved) of
                                                           false ->
-                                                              {#db_contact_roles{id=new,
-                                                                                 role=Role,
-                                                                                 contact=CID},
+                                                              {#db_contact_roles{
+                                                                  id=new,
+                                                                  role=case Role of 
+                                                                           "Contact" -> "responsible";
+                                                                           R -> R
+                                                                       end,
+                                                                  contact=CID},
                                                                Name};
                                                           {value, {CR, Name}} when CR#db_contact_roles.role /= Role ->
                                                               {CR#db_contact_roles{role=Role}, Name};

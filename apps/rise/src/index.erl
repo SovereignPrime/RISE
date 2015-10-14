@@ -68,8 +68,11 @@ group_updates(List) ->  % {{{1
                         case proplists:get_value(Thread, Threads) of
                             undefined ->
                                 [{Thread, [M]} | Threads];
-                            Ms -> 
-                                [{Thread, [M | Ms]} | proplists:delete(Thread, Threads)]
+                            [#message{status=St}] when St == unread -> 
+                                [{Thread, [M#message{status=St}]} | proplists:delete(Thread, Threads)];
+                            [_] ->
+                                [{Thread, [M]} | proplists:delete(Thread, Threads)]
+                                
                         end
                 end,
                 [],
