@@ -11,9 +11,7 @@
 -define(UPDATE_CURRENT(Field, Val),
             update_current_task(fun(T) ->
                 T#db_task{Field=Val}
-            end)
-       ).
-
+            end)).  
 main() -> common:main().
 
 title() -> "Hello from relationships.erl!".
@@ -157,7 +155,7 @@ md5(Data) ->  % {{{1
     lists:flatten([io_lib:format("~2.16.0b", [B]) || <<B>> <= MD5]).
 
 render_subtask(Task = #db_task{name=Name, status=Status, due=Due, id=Id}, Archive) ->  % {{{1
-    case Status==complete andalso db:are_all_child_tasks_complete(Id) of
+    case Status==verified andalso db:are_all_child_tasks_complete(Id) of
         true -> [];
         false ->
             ThisTaskIdMd5 = md5(Id),
@@ -190,7 +188,7 @@ render_subtask(Task = #db_task{name=Name, status=Status, due=Due, id=Id}, Archiv
     end.
 
 render_task_link(Task = #db_task{name=Name, due=Due, id=Id}) -> % {{{1
-    HasAttachments = false, % does_task_have_attachments(Task),
+    HasAttachments =  does_task_have_attachments(Task),
     render_task_link(Id, Name, HasAttachments, Due).
 
 render_task_link(Id, Name, HasAttachments, Due) -> % {{{1
@@ -252,7 +250,7 @@ render_task_list(Mode, Archive) ->  % {{{1
        body=[render_flat_task(T, Archive) || T <- Tasks]
     }.
 
-get_tasks_by_filter(_) ->
+get_tasks_by_filter(_) ->  % {{{1
     Filter = wf:session(filter),
     db:search_tasks(Filter).
 
@@ -418,10 +416,10 @@ render_task(#db_task{id=Id,  % {{{1
                                                  text=Text}
                               ]}
                  ]},
-     %render_attachments(Task),
      render_comments(Comments),
      render_updates(Updates),
-     render_task_changes(Changes)
+     render_task_changes(Changes),
+     render_attachments(Task)
     ]. 
 
 get_involved_full() -> % {{{1
@@ -573,27 +571,32 @@ render_attachments(Task) -> % {{{1
             Att = lists:map(fun(#bm_file{hash=AID}) ->
                                     AID
                             end, Attachments),
-            wf:session(attached_files, sets:from_list(Att)),
-            [
-                #br{},
-                #panel{class="row-fluid", body=[
-                    #panel{class="span6", body="<i class='icon-file-alt'></i> Attachment"},
-                    #panel{class="span2 offset4", body="<i class='icon-download-alt'></i> Download all"}
-                ]},
-                lists:map(fun(#bm_file{name=Path,
-                                       size=Size,
-                                       time={Date,
-                                             _Time},
-                                       hash=Id,
-                                       status=State}) ->
-                    #attachment{fid=Id,
-                                filename=Path,
-                                size=Size,
-                                time=Date,
-                                status=State}
-                end, Attachments)
-            ]
-    end.
+            wf:session(attached_files, sets:from_list(Att))
+            %[
+            %    #br{},
+            %    #panel{class="row-fluid",
+            %           body=[
+            %                 #panel{class="span6",
+            %                        body="<i class='icon-file-alt'></i> Attachment"},
+            %                 #panel{class="span2 offset4",
+            %                        body="<i class='icon-download-alt'></i> Download all"}
+            %                ]},
+            %    lists:map(fun(#bm_file{name=Path,
+            %                           size=Size,
+            %                           time={Date,
+            %                                 _Time},
+            %                           hash=Id,
+            %                           status=State}) ->
+            %        #attachment{fid=Id,
+            %                    filename=Path,
+            %                    size=Size,
+            %                    time=Date,
+            %                    status=State}
+            %    end, Attachments)
+            %]
+    end,
+    wf:wire(files, #event{type=change, postback=upload}),
+    common:render_files().
 
 render_updates([]) -> [];  % {{{1
 render_updates(Updates) -> % {{{1
@@ -898,6 +901,9 @@ event({calendar, Y, M}) -> % {{{1
     wf:update(body, render_calendar_view(Y, M)),
     wf:replace(calendar, calendar_button(task));
 
+event(show) ->  % {{{1
+    maybe_show_top_buttons();
+
 event(task) -> % {{{1
     wf:replace(body, body()),
     wf:replace(calendar, calendar_button(calendar));
@@ -1075,12 +1081,15 @@ maybe_show_top_buttons(CurrentTask) -> % {{{1
         {ok, [TaskFromDB]} ->
             {ok, InvolvedFromDB} = db:get_involved_full(Taskid),
             NewInvolved = wf:state(involved),
+            {ok, AttachmentsFromDB} = db:get_attachments(CurrentTask),
+            NewAttachments = wf:session_default(attached_files, sets:new()),
 
 
             TaskChanged = TaskFromDB =/= CurrentTask,
             InvolvedChanged = sets:from_list(InvolvedFromDB) /= sets:from_list(NewInvolved),
+            AttachmentsChanged = sets:from_list(AttachmentsFromDB) /= NewAttachments,
 
-            case TaskChanged orelse InvolvedChanged of
+            case TaskChanged orelse InvolvedChanged orelse AttachmentsChanged of
                 true -> 
                     wf:info("OldTask: ~p~n
                     NewTask: ~p~n", [TaskFromDB, CurrentTask]),
@@ -1216,6 +1225,7 @@ drop_event(A,B) ->  % {{{1
     
 
 incoming() ->  % {{{1
+    maybe_show_top_buttons(),
     wf:update(tasks, render_task_tree()),
     wf:flush().
 
