@@ -473,25 +473,25 @@ get_tasks_overdue(Archive) ->  % {{{1
                                         ['$_']}])
                 end).
 
-get_tasks_no_deadline(Archive) ->
+get_tasks_no_deadline(Archive) ->  % {{{1
     ArchOp = archive_op(Archive),
     transaction(fun() ->
                         mnesia:select(db_task, [{#db_task{status='$1', due="", _='_'}, [{ArchOp, '$1', 'archive'}], ['$_']}])
                 end).
 
-get_tasks_completed(_Archive) ->
+get_tasks_completed(_Archive) ->  % {{{1
     transaction(fun() ->
                         mnesia:select(db_task, [{#db_task{status=complete,  _='_'}, [], ['$_']}])
                 end).
 
-are_all_child_tasks_complete(Taskid) ->
+are_all_child_tasks_complete(Taskid) ->  % {{{1
     {ok, Tasks} = get_tasks(Taskid, false),
     lists:all(fun(Task) ->
-                      Task#db_task.status=:=complete andalso
+                      Task#db_task.status=:=verified andalso
                       are_all_child_tasks_complete(Task#db_task.id)
               end, Tasks).
 
-get_orphan_tasks(Archive) ->
+get_orphan_tasks(Archive) ->  % {{{1
     {ok, Tasks} = get_tasks(Archive),
     Taskids = [T#db_task.id || T <- Tasks],
     Orphans = [T || T <- Tasks,
@@ -544,7 +544,8 @@ task_status_list(WhthValue) ->  % {{{1
     [{new, "New"},
      {accepted, "Accepted"},
      {in_progress, "In Progress"},
-     {complete, "Complete"}] ++
+     {complete, "Complete"},
+     {verified, "Verified"}] ++
      if WhthValue ->
             [
              {paied, "Paied"}
