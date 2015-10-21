@@ -161,7 +161,12 @@ render_files() -> % {{{1
                                         status=Status}) ->
                                    DateTime = sugar:timestamp_to_datetime(Timestamp),
                                    #attachment{fid=Id,
-                                               filename=Path ++ "/" ++ FName,
+                                               filename=case Path of
+                                                           undefined ->
+                                                               FName;
+                                                           _ ->
+                                                               Path ++ "/" ++ FName
+                                                        end,
                                                size=Size,
                                                time=DateTime,
                                                status=Status}
