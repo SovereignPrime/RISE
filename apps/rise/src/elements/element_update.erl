@@ -358,7 +358,8 @@ render_element(#update_element{id=Id,
                                             placeholder="Some text here",
                                             id=text}
                             }
-                         ]}
+                         ]},
+             common:render_files()
                 ]};
 %% Render update as single paragraph for relationships {{{1
 render_element(#update_element{

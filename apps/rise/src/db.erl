@@ -27,6 +27,7 @@ create_tables() -> % {{{1
     ?V(mnesia:create_table(db_group_members, [{disc_copies, [node()]}, {attributes, record_info(fields, db_group_members)}, {type, bag}])),
     ?V(mnesia:create_table(db_expense_tasks, [{disc_copies, [node()]}, {attributes, record_info(fields, db_expense_tasks)}, {type, bag}])),
     ?V(mnesia:create_table(db_task_tree, [{disc_copies, [node()]}, {attributes, record_info(fields, db_task_tree)}, {type, bag}, {index, [parent, visible]}])),
+    ?V(mnesia:create_table(db_attachment, [{disc_copies, [node()]}, {attributes, record_info(fields, db_attachment)}, {type, ordered_set}, {index, [file]}])),
     ?V(mnesia:create_table(db_contact_note, [{disc_copies, [node()]}, {attributes, record_info(fields, db_contact_note)}, {type, ordered_set}, {index, [contact]}])).
     
 account(Pid, Address) ->  % {{{1
@@ -947,16 +948,16 @@ save_file(Path, #db_contact{id=UID}) ->  % {{{1
 get_attachments(Record) ->  % {{{1
     Type = element(1, Record),
     Id = element(2, Record),
-    transaction(fun() ->
-                        A = mnesia:select(db_attachment,
-                                          [{#db_attachment{ file='$1',
-                                                            type=Type,
-                                                            tid=Id,
-                                                            _='_'},
-                                            [],
-                                            ['$1']}]),
-                        iterate(bm_file, A)
-                end).
+    transaction(
+      fun() ->
+              mnesia:select(db_attachment,
+                            [{#db_attachment{file='$1',
+                                             type=Type,
+                                             tid=Id,
+                                             _='_'},
+                              [],
+                              ['$1']}])
+      end).
 
 save_attachments(Record, Files) when is_tuple(Record) ->  % {{{1
     Type = element(1, Record),

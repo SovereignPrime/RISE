@@ -560,43 +560,51 @@ render_side_buttons(Id, #db_task{status=State}=Task) when State /= archive -> % 
     ].
 
 render_attachments(Task) -> % {{{1
-    case db:get_attachments(Task) of 
-        {ok, []} ->
-            wf:session(attached_files, sets:new()),
-            [];
-        {ok, [], undefined} ->
-            wf:session(attached_files, sets:new()),
-            [];
-        {ok, Attachments} ->
-            Att = lists:map(fun(#bm_file{hash=AID}) ->
-                                    AID
-                            end, Attachments),
-            wf:session(attached_files, sets:from_list(Att))
-            %[
-            %    #br{},
-            %    #panel{class="row-fluid",
-            %           body=[
-            %                 #panel{class="span6",
-            %                        body="<i class='icon-file-alt'></i> Attachment"},
-            %                 #panel{class="span2 offset4",
-            %                        body="<i class='icon-download-alt'></i> Download all"}
-            %                ]},
-            %    lists:map(fun(#bm_file{name=Path,
-            %                           size=Size,
-            %                           time={Date,
-            %                                 _Time},
-            %                           hash=Id,
-            %                           status=State}) ->
-            %        #attachment{fid=Id,
-            %                    filename=Path,
-            %                    size=Size,
-            %                    time=Date,
-            %                    status=State}
-            %    end, Attachments)
-            %]
-    end,
+    Images = case db:get_attachments(Task) of 
+                 {ok, []} ->
+                     wf:session(attached_files, sets:new()),
+                     [];
+                 {ok, [], undefined} ->
+                     wf:session(attached_files, sets:new()),
+                     [];
+                 {ok, Attachments} ->
+                     wf:session(attached_files, sets:from_list(Attachments)),
+                     case db:get_files(Attachments) of
+                         {ok, Files} ->
+                             lists:foldl(fun render_image/2,
+                                         [],
+                                         Files);
+                         _ -> []
+                     end
+             end,
     wf:wire(files, #event{type=change, postback=upload}),
-    common:render_files().
+    [
+     Images,
+     common:render_files()
+    ].
+
+render_image(#bm_file{name=Name,  % {{{1
+                      path=Path,
+                      status=Status}=File, Acc) when Status == downloaded;
+                                                     Status == uploaded ->
+    wf:info("Image: ~p", [Name]),
+    case filename:extension(Name) of
+        E when E == ".jpeg";
+               E == ".jpg";
+               E == ".png";
+               E == ".gif" ->
+            Full = filename:join([Path, Name]),
+            wf:info("Rendering Image: ~p", [Full]),
+            [#panel{class="row-fluid",
+                    body=#image{style="max-width: 100%;",
+                                image="raw?image=true&file=" ++ Full}} | Acc];
+        _ -> 
+            Acc
+    end;
+
+render_image(File, Acc) -> % {{{1
+    wf:info("File: ~p", [File]),
+    Acc.
 
 render_updates([]) -> [];  % {{{1
 render_updates(Updates) -> % {{{1
@@ -913,6 +921,8 @@ event(save) -> % {{{1
     Task2 = calculate_changes(Task),
     wf:state(current_task, Task2),
     db:save(Task2),
+    Attachments = wf:session_default(attached_files, sets:new()),
+    db:save_attachments(Task2, Attachments),
     Involved = wf:state(involved),
     db:clear_involved(Task2),
     [save_contact_role(ContactRole) || {ContactRole, _} <- Involved],
@@ -1124,7 +1134,6 @@ calculate_changes(Task) -> % {{{1
                 IsComplex = is_tuple(FieldValue),
                 IsDate = IsComplex andalso is_tuple(element(1, FieldValue)),
                 wf:info("IsDate: ~p IsComplex: ~p FieldValue: ~p", [IsDate, IsComplex, FieldValue]),
-                %IsDate = IsComplex andalso calendar:valid_date(element(1, FieldValue)),
                 NewValue = if is_list(FieldValue);
                               is_binary(FieldValue) ->
                                   string:strip(lists:flatten(io_lib:format("~100s",[FieldValue])));
