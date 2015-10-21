@@ -568,32 +568,7 @@ render_attachments(Task) -> % {{{1
             wf:session(attached_files, sets:new()),
             [];
         {ok, Attachments} ->
-            Att = lists:map(fun(#bm_file{hash=AID}) ->
-                                    AID
-                            end, Attachments),
-            wf:session(attached_files, sets:from_list(Att))
-            %[
-            %    #br{},
-            %    #panel{class="row-fluid",
-            %           body=[
-            %                 #panel{class="span6",
-            %                        body="<i class='icon-file-alt'></i> Attachment"},
-            %                 #panel{class="span2 offset4",
-            %                        body="<i class='icon-download-alt'></i> Download all"}
-            %                ]},
-            %    lists:map(fun(#bm_file{name=Path,
-            %                           size=Size,
-            %                           time={Date,
-            %                                 _Time},
-            %                           hash=Id,
-            %                           status=State}) ->
-            %        #attachment{fid=Id,
-            %                    filename=Path,
-            %                    size=Size,
-            %                    time=Date,
-            %                    status=State}
-            %    end, Attachments)
-            %]
+            wf:session(attached_files, sets:from_list(Attachments))
     end,
     wf:wire(files, #event{type=change, postback=upload}),
     common:render_files().
@@ -913,6 +888,8 @@ event(save) -> % {{{1
     Task2 = calculate_changes(Task),
     wf:state(current_task, Task2),
     db:save(Task2),
+    Attachments = wf:session_default(attached_files, sets:new()),
+    db:save_attachments(Task2, Attachments),
     Involved = wf:state(involved),
     db:clear_involved(Task2),
     [save_contact_role(ContactRole) || {ContactRole, _} <- Involved],
@@ -1087,6 +1064,7 @@ maybe_show_top_buttons(CurrentTask) -> % {{{1
 
             TaskChanged = TaskFromDB =/= CurrentTask,
             InvolvedChanged = sets:from_list(InvolvedFromDB) /= sets:from_list(NewInvolved),
+            wf:info("AttachmentsFromDB: ~p~n NewAttachments: ~p~n", [AttachmentsFromDB, NewAttachments]),
             AttachmentsChanged = sets:from_list(AttachmentsFromDB) /= NewAttachments,
 
             case TaskChanged orelse InvolvedChanged orelse AttachmentsChanged of
@@ -1124,7 +1102,6 @@ calculate_changes(Task) -> % {{{1
                 IsComplex = is_tuple(FieldValue),
                 IsDate = IsComplex andalso is_tuple(element(1, FieldValue)),
                 wf:info("IsDate: ~p IsComplex: ~p FieldValue: ~p", [IsDate, IsComplex, FieldValue]),
-                %IsDate = IsComplex andalso calendar:valid_date(element(1, FieldValue)),
                 NewValue = if is_list(FieldValue);
                               is_binary(FieldValue) ->
                                   string:strip(lists:flatten(io_lib:format("~100s",[FieldValue])));

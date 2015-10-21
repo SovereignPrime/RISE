@@ -947,16 +947,16 @@ save_file(Path, #db_contact{id=UID}) ->  % {{{1
 get_attachments(Record) ->  % {{{1
     Type = element(1, Record),
     Id = element(2, Record),
-    transaction(fun() ->
-                        A = mnesia:select(db_attachment,
-                                          [{#db_attachment{ file='$1',
-                                                            type=Type,
-                                                            tid=Id,
-                                                            _='_'},
-                                            [],
-                                            ['$1']}]),
-                        iterate(bm_file, A)
-                end).
+    transaction(
+      fun() ->
+              mnesia:select(db_attachment,
+                            [{#db_attachment{file='$1',
+                                             type=Type,
+                                             tid=Id,
+                                             _='_'},
+                              [],
+                              ['$1']}])
+      end).
 
 save_attachments(Record, Files) when is_tuple(Record) ->  % {{{1
     Type = element(1, Record),
