@@ -135,7 +135,6 @@ fade() ->  % {{{1
 render_files() -> % {{{1
     AttachmentsIDs = sets:to_list(wf:session_default(attached_files, sets:new())),
     {ok, Attachments} = db:get_files(AttachmentsIDs),
-    wf:info("AttachmentsIDs: ~p Attachments: ~p", [AttachmentsIDs, Attachments]),
     (wf:page_module()):incoming(),
     #panel{id=files,
            class="span12",

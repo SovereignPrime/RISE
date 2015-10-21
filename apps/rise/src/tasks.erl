@@ -560,18 +560,51 @@ render_side_buttons(Id, #db_task{status=State}=Task) when State /= archive -> % 
     ].
 
 render_attachments(Task) -> % {{{1
-    case db:get_attachments(Task) of 
-        {ok, []} ->
-            wf:session(attached_files, sets:new()),
-            [];
-        {ok, [], undefined} ->
-            wf:session(attached_files, sets:new()),
-            [];
-        {ok, Attachments} ->
-            wf:session(attached_files, sets:from_list(Attachments))
-    end,
+    Images = case db:get_attachments(Task) of 
+                 {ok, []} ->
+                     wf:session(attached_files, sets:new()),
+                     [];
+                 {ok, [], undefined} ->
+                     wf:session(attached_files, sets:new()),
+                     [];
+                 {ok, Attachments} ->
+                     wf:session(attached_files, sets:from_list(Attachments)),
+                     case db:get_files(Attachments) of
+                         {ok, Files} ->
+                             lists:foldl(fun render_image/2,
+                                         [],
+                                         Files);
+                         _ -> []
+                     end
+             end,
     wf:wire(files, #event{type=change, postback=upload}),
-    common:render_files().
+    [
+     Images,
+     common:render_files()
+    ].
+
+render_image(#bm_file{name=Name,  % {{{1
+                      path=Path,
+                      status=Status}=File, Acc) when Status == downloaded;
+                                                     Status == uploaded ->
+    wf:info("Image: ~p", [Name]),
+    case filename:extension(Name) of
+        E when E == ".jpeg";
+               E == ".jpg";
+               E == ".png";
+               E == ".gif" ->
+            Full = filename:join([Path, Name]),
+            wf:info("Rendering Image: ~p", [Full]),
+            [#panel{class="row-fluid",
+                    body=#image{style="max-width: 100%;",
+                                image="raw?image=true&file=" ++ Full}} | Acc];
+        _ -> 
+            Acc
+    end;
+
+render_image(File, Acc) -> % {{{1
+    wf:info("File: ~p", [File]),
+    Acc.
 
 render_updates([]) -> [];  % {{{1
 render_updates(Updates) -> % {{{1
@@ -1064,7 +1097,6 @@ maybe_show_top_buttons(CurrentTask) -> % {{{1
 
             TaskChanged = TaskFromDB =/= CurrentTask,
             InvolvedChanged = sets:from_list(InvolvedFromDB) /= sets:from_list(NewInvolved),
-            wf:info("AttachmentsFromDB: ~p~n NewAttachments: ~p~n", [AttachmentsFromDB, NewAttachments]),
             AttachmentsChanged = sets:from_list(AttachmentsFromDB) /= NewAttachments,
 
             case TaskChanged orelse InvolvedChanged orelse AttachmentsChanged of
