@@ -571,7 +571,7 @@ render_attachments(Task) -> % {{{1
                      wf:session(attached_files, sets:from_list(Attachments)),
                      case db:get_files(Attachments) of
                          {ok, Files} ->
-                             lists:foldl(fun render_image/2,
+                             lists:foldl(fun common:render_image/2,
                                          [],
                                          Files);
                          _ -> []
@@ -583,28 +583,6 @@ render_attachments(Task) -> % {{{1
      common:render_files()
     ].
 
-render_image(#bm_file{name=Name,  % {{{1
-                      path=Path,
-                      status=Status}=File, Acc) when Status == downloaded;
-                                                     Status == uploaded ->
-    wf:info("Image: ~p", [Name]),
-    case filename:extension(Name) of
-        E when E == ".jpeg";
-               E == ".jpg";
-               E == ".png";
-               E == ".gif" ->
-            Full = filename:join([Path, Name]),
-            wf:info("Rendering Image: ~p", [Full]),
-            [#panel{class="row-fluid",
-                    body=#image{style="max-width: 100%;",
-                                image="raw?image=true&file=" ++ Full}} | Acc];
-        _ -> 
-            Acc
-    end;
-
-render_image(File, Acc) -> % {{{1
-    wf:info("File: ~p", [File]),
-    Acc.
 
 render_updates([]) -> [];  % {{{1
 render_updates(Updates) -> % {{{1
