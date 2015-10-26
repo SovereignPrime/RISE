@@ -368,6 +368,29 @@ render_help() ->  % {{{1
         ]}
     ]}.
 	
+render_image(#bm_file{name=Name,  % {{{1
+                      path=Path,
+                      status=Status}=File, Acc) when Status == downloaded;
+                                                     Status == uploaded ->
+    wf:info("Image: ~p", [Name]),
+    case filename:extension(Name) of
+        E when E == ".jpeg";
+               E == ".jpg";
+               E == ".png";
+               E == ".gif" ->
+            Full = filename:join([Path, Name]),
+            wf:info("Rendering Image: ~p", [Full]),
+            [#panel{class="row-fluid",
+                    body=#image{style="max-width: 100%;",
+                                image="raw?image=true&file=" ++ Full}} | Acc];
+        _ -> 
+            Acc
+    end;
+
+render_image(File, Acc) -> % {{{1
+    wf:info("File: ~p", [File]),
+    Acc.
+
 settings_menu() -> %{{{1
     #panel{ class="btn-group", body=[
 		#link{class="btn dropdown-toggle btn-link",

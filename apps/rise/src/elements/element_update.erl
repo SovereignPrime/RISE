@@ -252,12 +252,16 @@ render_element(#update_element{id=Id,
                      A ->
                          {ok, Files} = db:get_files(A),
                          [
-                          #panel{class="row-fluid", body=[
-                                                          #panel{class="span6",
-                                                                 body="<i class='icon-file-alt'></i> Attachment"},
-                                                          #panel{class="span2 offset4",
-                                                                 body="<i class='icon-download-alt'></i> Download all"}
-                                                         ]},
+                          lists:foldl(fun common:render_image/2,
+                                      [],
+                                      Files),
+                          #panel{class="row-fluid",
+                                 body=[
+                                       #panel{class="span6",
+                                              body="<i class='icon-file-alt'></i> Attachment"},
+                                       #panel{class="span2 offset4",
+                                              body="<i class='icon-download-alt'></i> Download all"}
+                                      ]},
                           lists:map(fun(#bm_file{
                                            hash=FID,
                                            name=Path,
