@@ -610,7 +610,7 @@ event(logs) -> %{{{1
 event(logs_download) ->  % {{{1
     FD = wf:q(logs_path),
     error_logger:info_msg("Logs to file: ~s", [FD]),
-    WorkDir = application:get_env(nitrogen, workdir, "workdir"),
+    WorkDir = application:get_env(rise, workdir, "workdir"),
     Path = WorkDir ++ "/log",
     error_logger:info_msg("Logs from file: ~s", [Path]),
     erl_tar:create(FD, [{"log", Path}], [compressed]);
