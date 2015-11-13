@@ -88,7 +88,11 @@ main() ->  % {{{1
 
 unread() -> % {{{1
     {ok, New} = db:get_unread_updates(),
-    #span{id=count, class='label label-inverse',text=wf:f("~p new", [length(New)])}.
+    Num = length(New),
+    #span{id=count,
+          show_if=(Num>0),
+          class='label label-inverse',
+          text=wf:f("~p new", [Num])}.
 
 connection_status(N) when N > 0, % {{{1
                           N /= undefined ->
@@ -116,7 +120,7 @@ search() -> %{{{1
                    Terms),
     #sigma_search{id=search,
                   tag=search, 
-                  placeholder="Search", 
+                  placeholder="SEARCH", 
                   class="input-append input-prepend input-block-level search", 
                   textbox_class="",
                   search_button_class="btn btn-inverse search-btn", 
@@ -325,9 +329,9 @@ render_filters(Chosen) -> %{{{1
                          end, 
                   body=case Chosen of
                            nothing ->
-                               "<i class='icon-filter'></i> Smart filter";
+                               "<i class='icon-filter'></i> SMART FILTER";
                            _ ->
-                               "<i class='icon-filter'></i> " ++ Chosen
+                               "<i class='icon-filter'></i> " ++ string:to_upper(Chosen)
                        end,
                   data_fields=[{toggle, "dropdown"}],
                   url="#",
@@ -357,7 +361,7 @@ render_filters(Chosen) -> %{{{1
 
 render_help() ->  % {{{1
     #panel{ class='btn-group', body=[
-        #link{class="btn dropdown-toggle btn-link", body="<i class='icon-question'></i> Help", data_fields=[{toggle, "dropdown"}], url="#", new=false},
+        #link{class="btn dropdown-toggle btn-link", body="<i class='icon-question'></i> HELP", data_fields=[{toggle, "dropdown"}], url="#", new=false},
         #list{numbered=false, class="dropdown-menu",body=[
 			#listitem{ class="", body=[
 				#link{text="Download logs", postback=logs, delegate=?MODULE}
@@ -398,7 +402,7 @@ settings_menu() -> %{{{1
                     #image{class="icon",
                            style="height:20px;vertical-align:middle;margin-top:-5px;",
                            image = "/img/id_card.svg"},
-                    " My Profile"
+                    " MY PROFILE"
                    ],
               data_fields=[{toggle, "dropdown"}],
               url="#", new=false},

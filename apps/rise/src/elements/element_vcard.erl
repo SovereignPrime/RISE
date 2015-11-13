@@ -58,7 +58,7 @@ render_element(#vcard{id=Id,
                                                                       tag={name, Id}}
                                               },
                                            #panel{
-                                              body=["Email: ",
+                                              body=["EMAIL: ",
                                                     #inplace_textbox{
                                                        class="inline",
                                                        tag={email, Id},
@@ -68,7 +68,7 @@ render_element(#vcard{id=Id,
                                                                     }}
                                                    ]},
                                            #panel{body= [
-                                                         "Tel: ",
+                                                         "TEL: ",
                                                          #inplace_textbox{class="inline",
                                                                           text=Phone,
                                                                           tag={phone, Id}}
