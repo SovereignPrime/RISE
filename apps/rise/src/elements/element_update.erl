@@ -159,11 +159,11 @@ render_element(#update_element{id=Id,
                                              body=[
                                                    #panel{
                                                       class="", 
-                                                      body=["Due: ", sugar:date_format(Due)]
+                                                      body=["DUE: ", sugar:date_format(Due)]
                                                      },
                                                    #panel{
                                                       class="", 
-                                                      body=["Status: ", TStatus]
+                                                      body=["STATUS: ", TStatus]
                                                      },
                                                    lists:map(fun(#{type := role,
                                                                    address := Address,
@@ -332,8 +332,8 @@ render_element(#update_element{id=Id,
                                   id=to,
                                   tag=to, 
                                   style="border: #000 1px solid; box-shadow: none;",
-                                  placeholder="Contacts", 
-                                  class="input-append input-prepend input-block-level search", 
+                                  placeholder="CONTACTS", 
+                                  class="input-append input-prepend input-block-level search no-border", 
                                   textbox_class="",
                                   search_button_class="btn btn-inverse search-btn wfid_to_field", 
                                   badges=[render_contact(A) || A <- To],
@@ -341,7 +341,7 @@ render_element(#update_element{id=Id,
                                   x_button_class="search-x",
                                   clear_button_class="pull-right btn btn-inverse",
                                   clear_button_text="<i class='icon icon-remove'></i>",
-                                  results_summary_class="search-results span10",
+                                  results_summary_class="search-results span10 no-border",
                                   delegate=common}
                               ]},
                       #panel{

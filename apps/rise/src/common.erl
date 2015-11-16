@@ -121,7 +121,7 @@ search() -> %{{{1
     #sigma_search{id=search,
                   tag=search, 
                   placeholder="SEARCH", 
-                  class="input-append input-prepend input-block-level search", 
+                  class="input-append input-prepend input-block-level search no-border", 
                   textbox_class="",
                   search_button_class="btn btn-inverse search-btn", 
                   search_button_text="<i class='icon icon-search'></i>",
@@ -129,7 +129,7 @@ search() -> %{{{1
                   badges=lists:flatten(Bs),
                   clear_button_class="pull-right btn btn-inverse",
                   clear_button_text="<i class='icon icon-remove'></i>",
-                  results_summary_class="search-results span10",
+                  results_summary_class="search-results span10 no-border",
                   delegate=?MODULE}.
 
 fade() ->  % {{{1
@@ -145,14 +145,14 @@ render_files() -> % {{{1
            body=[
                  #panel{class="row-fluid",
                          body=[
-                               "<i class='icon-file-alt'></i> Attachments",
+                               "<i class='icon-file-alt'></i> ATTACHMENTS",
                                #br{},
                                #rise_upload{id=attachments,
                                             tag=filename,
                                             delegate=common,
-                                            droppable_text="Drag and drop files here"
+                                            droppable_text="DRAG AND DROP FILES HERE"
                                            },
-                               #link{body="<i class='icon-th-large'></i> Select from my files",
+                               #link{body="<i class='icon-th-large'></i> SELECT FROM MY FILES",
                                      postback=add_file,
                                      new=false}
                               ]},

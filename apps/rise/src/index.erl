@@ -118,7 +118,7 @@ render_subject(Type, Subject, Editable=true) ->  % {{{1
               " ",
               #textbox{id=name,
                        style="box-shadow: none; border:#000 0px solid;",
-                       placeholder="Add subject here",
+                       placeholder="ADD SUBJECT HERE",
                        text=Subject,
                        next=text,
                        class="span10"}]};
