@@ -9,11 +9,9 @@
 -simple_bridge_max_post_size 14096
 -simple_bridge_max_file_size 14096
 
--env ERL_LIBS ./lib
--pa ./site/ebin
--pa ./site/include
-%-boot ./releases/{{rel_vsn}}/rise
--embded
+#-env ERL_LIBS ./lib
+#-pa ./site/ebin
+#-pa ./site/include
 
 #-mnesia dir "${HOME}/.config/RISE/data"
 # Configs to use
@@ -24,4 +22,5 @@
 -config ./config/eminer
 -config ./config/simple_bridge
 #-config ./etc/sync
+-exec "application:load(bitmessage)"
 
