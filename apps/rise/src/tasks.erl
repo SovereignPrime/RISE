@@ -31,7 +31,7 @@ buttons(main) ->  % {{{1
             #button{
                 id=hide_show,
                 class="btn btn-link",
-                body="<i class='icon-angle-left'></i> Hide tasks",
+                body="<i class='icon-angle-left'></i> HIDE TASKS",
                 click=[
                     #hide{trigger=hide_show,target=left}, 
                     #event{postback=hide}
@@ -46,7 +46,7 @@ buttons(main) ->  % {{{1
         ]},
         #listitem{body=[
             #link{id=archive,
-                  body="<i class='icon-list-alt'></i> Archive",
+                  body="<i class='icon-list-alt'></i> ARCHIVE",
                   postback={show_archive, true},
                   delegate=?MODULE}
         ]},
@@ -81,12 +81,12 @@ left() ->  % {{{1
 render_task_tree_buttons(Selected, Archive) ->  % {{{1
     Buttons = [
     %%  { Label, postback, width }
-        {"Tree", task_tree, 2},
-        {"Today", tasks_today, 2},
-        {"Next", tasks_soon, 1},
-        {"Overdue", tasks_overdue, 2},
-        {"No Deadline", tasks_no_deadline, 3},
-        {"Complete", tasks_complete, 2}
+        {"ALL", task_tree, 2},
+        {"TODAY", tasks_today, 2},
+        {"NEXT", tasks_soon, 1},
+        {"OVERDUE", tasks_overdue, 2},
+        {"NO DEADLINE", tasks_no_deadline, 3},
+        {"COMPLETE", tasks_complete, 2}
     ],
     #panel{body=lists:map(fun({Label, Postback, Size}) ->
         SizeClass = wf:to_atom(["span",wf:to_list(Size)]),
@@ -341,7 +341,7 @@ render_task(#db_task{id=Id,  % {{{1
                                       body=[
                                             #panel{class="span2",
                                                    style="min-height:15px;",
-                                                   body=["Status: ",
+                                                   body=["STATUS: ",
                                                          IncompleteWarning]},
                                             #inplace{id=status, 
                                                      style="min-height:15px;",
@@ -354,7 +354,7 @@ render_task(#db_task{id=Id,  % {{{1
                                            ]},
                                #panel{class="row-fluid",
                                       body=[
-                                            #panel{ class="span2", body="Due: "},
+                                            #panel{ class="span2", body="DUE: "},
                                             #inplace{id=due_date,
                                                      style="min-height:15px;",
                                                      class="span2",
@@ -376,7 +376,7 @@ render_task(#db_task{id=Id,  % {{{1
                                            ]},
                                #panel{class="row-fluid",
                                       body=[
-                                            #panel{class="span1", body="Level of effort: "},
+                                            #panel{class="span1", body="ESTIMATE: "},
                                             #inplace_textbox{id=effort_value,
                                                              style="min-height:15px;",
                                                              class="span2",
@@ -391,10 +391,10 @@ render_task(#db_task{id=Id,  % {{{1
                                                      view=#span{},
                                                      edit=#dropdown{
                                                              options=[
-                                                                      {hours, "hours"},
-                                                                      {days, "days"},
-                                                                      {weeks, "weeks"},
-                                                                      {years, "years"}
+                                                                      {hours, "HOURS"},
+                                                                      {days, "DAYS"},
+                                                                      {weeks, "WEEKS"},
+                                                                      {years, "YEARS"}
                                                                      ],
                                                              value=EffortPeriod} 
                                                     }
@@ -452,7 +452,7 @@ get_involved_full(Id) -> % {{{1
 render_roles(Id) -> % {{{1
     {ok, Involved} = get_involved_full(Id),
     #sigma_search{tag=involved, 
-                  placeholder="Involved", 
+                  placeholder="PEOPLE", 
                   class="input-append input-prepend input-block-level search no-border", 
                   textbox_class="",
                   search_button_class="hidden btn btn-inverse search-btn wfid_to_field", 
@@ -589,7 +589,7 @@ render_updates(Updates) -> % {{{1
     [
         #br{},
         #panel{class="row-fluid", body=[
-            #panel{class="span6", body="<i class='icon-envelope'></i> Related Messages"}
+            #panel{class="span6", body="<i class='icon-envelope'></i> RELATED MESSAGES"}
         ]},
         [#update_element{
            collapse=true,
@@ -602,7 +602,7 @@ render_task_changes(Changes) ->  % {{{1
     [
         #br{},
         #panel{class="row-fluid", body=[
-            #panel{class="span12", body="<i class='icon-time'></i> Change History"}
+            #panel{class="span12", body="<i class='icon-time'></i> CHANGE HISTORY"}
         ]},
         [render_task_change(C) || C <- Changes]
     ].
@@ -624,7 +624,7 @@ render_comments(Comments) -> % {{{1
     [
         #br{},
         #panel{class="row-fluid", body=[
-            #panel{class="span6", body="<i class='icon-envelope'></i> Comments"}
+            #panel{class="span6", body="<i class='icon-envelope'></i> COMMENTS"}
         ]},
         #panel{class="row-fluid",
                body=[
@@ -1221,7 +1221,7 @@ calendar_button(calendar) -> % {{{1
     #button{
        id=calendar,
        class="btn btn-link",
-       body="<i class='icon-calendar'></i> Calendar view",
+       body="<i class='icon-calendar'></i> CALENDAR VIEW",
        click=[
               #event{postback={calendar, Y, M}}
              ]
@@ -1230,7 +1230,7 @@ calendar_button(task) -> % {{{1
             #button{
                 id=calendar,
                 class="btn btn-link",
-                body="<i class='icon-calendar'></i> Task view",
+                body="<i class='icon-calendar'></i> TASK VIEW",
                 click=[
                     #event{postback=task}
                 ]

@@ -88,7 +88,11 @@ main() ->  % {{{1
 
 unread() -> % {{{1
     {ok, New} = db:get_unread_updates(),
-    #span{id=count, class='label label-inverse',text=wf:f("~p new", [length(New)])}.
+    Num = length(New),
+    #span{id=count,
+          show_if=(Num>0),
+          class='label label-inverse',
+          text=wf:f("~p new", [Num])}.
 
 connection_status(N) when N > 0, % {{{1
                           N /= undefined ->
@@ -116,8 +120,8 @@ search() -> %{{{1
                    Terms),
     #sigma_search{id=search,
                   tag=search, 
-                  placeholder="Search", 
-                  class="input-append input-prepend input-block-level search", 
+                  placeholder="SEARCH", 
+                  class="input-append input-prepend input-block-level search no-border", 
                   textbox_class="",
                   search_button_class="btn btn-inverse search-btn", 
                   search_button_text="<i class='icon icon-search'></i>",
@@ -125,7 +129,7 @@ search() -> %{{{1
                   badges=lists:flatten(Bs),
                   clear_button_class="pull-right btn btn-inverse",
                   clear_button_text="<i class='icon icon-remove'></i>",
-                  results_summary_class="search-results span10",
+                  results_summary_class="search-results span10 no-border",
                   delegate=?MODULE}.
 
 fade() ->  % {{{1
@@ -141,14 +145,14 @@ render_files() -> % {{{1
            body=[
                  #panel{class="row-fluid",
                          body=[
-                               "<i class='icon-file-alt'></i> Attachments",
+                               "<i class='icon-file-alt'></i> ATTACHMENTS",
                                #br{},
                                #rise_upload{id=attachments,
                                             tag=filename,
                                             delegate=common,
-                                            droppable_text="Drag and drop files here"
+                                            droppable_text="DRAG AND DROP FILES HERE"
                                            },
-                               #link{body="<i class='icon-th-large'></i> Select from my files",
+                               #link{body="<i class='icon-th-large'></i> SELECT FROM MY FILES",
                                      postback=add_file,
                                      new=false}
                               ]},
@@ -325,9 +329,9 @@ render_filters(Chosen) -> %{{{1
                          end, 
                   body=case Chosen of
                            nothing ->
-                               "<i class='icon-filter'></i> Smart filter";
+                               "<i class='icon-filter'></i> SMART FILTER";
                            _ ->
-                               "<i class='icon-filter'></i> " ++ Chosen
+                               "<i class='icon-filter'></i> " ++ string:to_upper(Chosen)
                        end,
                   data_fields=[{toggle, "dropdown"}],
                   url="#",
@@ -357,7 +361,7 @@ render_filters(Chosen) -> %{{{1
 
 render_help() ->  % {{{1
     #panel{ class='btn-group', body=[
-        #link{class="btn dropdown-toggle btn-link", body="<i class='icon-question'></i> Help", data_fields=[{toggle, "dropdown"}], url="#", new=false},
+        #link{class="btn dropdown-toggle btn-link", body="<i class='icon-question'></i> HELP", data_fields=[{toggle, "dropdown"}], url="#", new=false},
         #list{numbered=false, class="dropdown-menu",body=[
 			#listitem{ class="", body=[
 				#link{text="Download logs", postback=logs, delegate=?MODULE}
@@ -398,7 +402,7 @@ settings_menu() -> %{{{1
                     #image{class="icon",
                            style="height:20px;vertical-align:middle;margin-top:-5px;",
                            image = "/img/id_card.svg"},
-                    " My Profile"
+                    " MY PROFILE"
                    ],
               data_fields=[{toggle, "dropdown"}],
               url="#", new=false},

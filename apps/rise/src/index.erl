@@ -21,7 +21,7 @@ buttons(main) -> % {{{1
                                 common:render_filters()
                                ]},
                 #listitem{body=[
-                                #link{id=archive, body="<i class='icon-list-alt'></i> Archive", postback={show_archive, true}}
+                                #link{id=archive, body="<i class='icon-list-alt'></i> ARCHIVE", postback={show_archive, true}}
                                ]},
                 #listitem{body=[
                                 common:settings_menu()
@@ -118,14 +118,14 @@ render_subject(Type, Subject, Editable=true) ->  % {{{1
               " ",
               #textbox{id=name,
                        style="box-shadow: none; border:#000 0px solid;",
-                       placeholder="Add subject here",
+                       placeholder="ADD SUBJECT HERE",
                        text=Subject,
                        next=text,
                        class="span10"}]};
 
 render_subject(Type, Subject, Editable=false) ->  % {{{1
     Icon = element_update_preview:render_icon(Type),
-    #h1{body=[Icon," ", wf:html_encode(Subject)]}.
+    #h1{body=[Icon,"  ", string:to_upper(wf:to_list(wf:html_encode(Subject)))]}.
 
 replace_left() -> % {{{1
     replace_left(left()).

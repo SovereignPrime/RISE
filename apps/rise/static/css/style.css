@@ -36,6 +36,10 @@ button:focus {
     outline-width:0 !important;
 }
 
+.no-border {
+    border: #fff 0px solid !important;
+}
+
 .dropdown {
     background-color: #fff;
 	color: #000;
@@ -97,7 +101,7 @@ a.current:hover {
 .upload_drop {
     background-color: #fff;
     border-radius: 0;
-    border: 1px #000 dotted;
+    border: 0px #000 dotted;
     font-size: 100%;
     width: auto;
 }
@@ -146,7 +150,7 @@ a.current:hover {
     background-color: #fff;
     width:80.8%;
     margin-top: -10px;
-    border:#000 1px solid;
+    border:#000 0px solid;
     border-top: #000 0px solid;
     border-radius:  1px 1px 0;
     z-index:999;

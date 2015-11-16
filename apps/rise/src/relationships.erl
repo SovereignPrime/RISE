@@ -14,18 +14,17 @@ title() -> "Hello from relationships.erl!".
 icon() -> "<i class='icon-user icon-2x'></i>".
 
 buttons(main) ->  % {{{1
-    #list{numbered=false, class="nav nav-pills", style="display:inline-block;", body=[
-       % #listitem{body=[
-       %     #link{style="display:inline-block;text-align:right;",  body="<i class='icon-envelope-alt'></i> Email connect", postback=invite}
-       % ]},
+    #list{numbered=false,
+          class="nav nav-pills",
+          style="display:inline-block;",
+          body=[
         #listitem{body=[
             common:render_filters()
         ]},
-        %%#listitem{body=[
-        %%    %#panel{ class='span2', body="<i class='icon-sort'></i> Sort"},
-        %%]},
         #listitem{body=[
-            #link{id=archive, body="<i class='icon-list-alt'></i> Archive", postback={show_archive, true}}
+            #link{id=archive,
+                  body="<i class='icon-list-alt'></i> ARCHIVE",
+                  postback={show_archive, true}}
         ]},
         #listitem{body=[
             common:settings_menu()
@@ -82,7 +81,7 @@ render_contact_list(Users) ->  % {{{1
 
 body() ->   % {{{1
     Body = case wf:session(current_contact_id) of
-        undefined -> #h2{text="No Contact Currently Selected"};
+        undefined -> #h2{text="NO CONTACT CURRENTLY SELECTED"};
         Contactid ->
             {ok, Contact} = db:get_contact(Contactid),
             wf:session(current_contact, Contact),
@@ -115,11 +114,11 @@ contact_render(#db_contact{id=Id,  % {{{1
                             body=[
                                   #h2{body=[
                                             "<i class='icon-file-alt'></i>",
-                                            " Notes"
+                                            " NOTES"
                                            ]}
                                  ]},
             #panel{class=span2,
-                   body="Show All",
+                   body="SHOW ALL",
                    style="text-align:right"}
         ]},
         #panel{id=add_note,
@@ -136,7 +135,7 @@ contact_render(#db_contact{id=Id,  % {{{1
                                   #textbox{id=note,
                                            class="span10",
                                            style="min-height:15px;border:0px;box-shadow:none;padding-left:0",
-                                           placeholder="Add note here",
+                                           placeholder="ADD NOTE HERE",
                                            next=ok}
                                 ]},
                 #panel{class=span1,
@@ -157,10 +156,10 @@ contact_render(#db_contact{id=Id,  % {{{1
                            class="icon",
                            style="height: 20px;"},
 
-                    " Tasks"
+                    " TASKS"
                 ]}
             ]},
-            #panel{class=span2, body="Show All", style="text-align:right"}
+            #panel{class=span2, body="SHOW ALL", style="text-align:right"}
         ]},
         lists:map(fun(Task = #db_task{id=TID,
                                       parent=Responsible,
@@ -175,7 +174,9 @@ contact_render(#db_contact{id=Id,  % {{{1
                 #panel{class=span7,
                        style="min-height:20px; height:20px;",
                        body=[
-                    #link{text=Name, postback={to_task, TID}, delegate=common}
+                    #link{text=Name,
+                          postback={to_task, TID},
+                          delegate=common}
                 ]},
                 #panel{class=span3,
                        style="min-height:20px; height:20px; text-align:right",
@@ -188,11 +189,11 @@ contact_render(#db_contact{id=Id,  % {{{1
                      #panel{class=span10,
                             body=[
                                   #h2{body=[
-                                            "<i class='icon-message'></i> Messages"
+                                            "<i class='icon-message'></i> MESSAGES"
                                            ]}  
                                  ]},
                      #panel{class=span2,
-                            body="Show All",
+                            body="SHOW ALL",
                             style="text-align:right"}
                     ]},
         #panel{class="row-fluid",
