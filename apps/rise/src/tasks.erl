@@ -81,24 +81,27 @@ left() ->  % {{{1
 render_task_tree_buttons(Selected, Archive) ->  % {{{1
     Buttons = [
     %%  { Label, postback, width }
-        {"ALL", task_tree, 2},
+        {"ALL", task_tree, 1},
         {"TODAY", tasks_today, 2},
-        {"NEXT", tasks_soon, 1},
+        {"NEXT", tasks_soon, 2},
         {"OVERDUE", tasks_overdue, 2},
         {"NO DEADLINE", tasks_no_deadline, 3},
         {"COMPLETE", tasks_complete, 2}
     ],
-    #panel{body=lists:map(fun({Label, Postback, Size}) ->
-        SizeClass = wf:to_atom(["span",wf:to_list(Size)]),
-        #link{
-           class=[SizeClass, 'task-tree-button',
-                  ?WF_IF(Postback==Selected,
-                         'task-tree-button-selected',
-                         'task-tree-button-unselected')],
-           text=Label,
-           postback={change_mode, Postback, Archive}
-        }
-    end, Buttons)}.
+    #panel{
+       style="clear: both;",
+       body=lists:map(fun({Label, Postback, Size}) ->
+                              SizeClass = wf:to_atom(["span",wf:to_list(Size)]),
+                              #link{
+                                 class=[SizeClass,
+                                        'task-tree-button',
+                                        ?WF_IF(Postback==Selected,
+                                               'task-tree-button-selected',
+                                               'task-tree-button-unselected')],
+                                 text=Label,
+                                 postback={change_mode, Postback, Archive}
+                                }
+    end, Buttons) ++ [#span{class="clearfix", text=""}]}.
 
 update_task_tree() ->  % {{{1
     update_task_tree(false).
