@@ -647,8 +647,10 @@ event({unfold, #update_element{id=Id}=Update}) -> % {{{1
     wf:replace(Id,
                Update#update_element{collapse=false});
 
-event({fold, #update_element{id=Id}=Update}) -> % {{{1
-    wf:replace(Id, Update#update_element{collapse=true});
+event({fold, #update_element{id=Id, message=#message{hash=Hash}}=Update}) -> % {{{1
+    Message = db:get_update(Hash),
+    wf:replace(Id, Update#update_element{message=Message,
+                                         collapse=true});
 event(E) -> %{{{1
     io:format("Event ~p occured in ~p~n", [E, ?MODULE]).
 

@@ -52,12 +52,16 @@ render_element(#update_element{id=Id,
                Packet ->
                    wf:f("Packet: ~p", [Packet])
            end,
+    Class = if Status == unread ->
+                   "current";
+               true -> ""
+            end,
     TD = time_delta(TTL),
     #panel{id=Id,
-           class="row-fluid clickable",
+           class=["row-fluid", "clickable", Class],
            body=[
 
-                 #panel{class="span4",
+                 #panel{class=["span4", Class],
                         body=[
                               #span{body="<i class='icon-chevron-down'></i> ",
                                     actions=#event{type=click,
@@ -76,10 +80,10 @@ render_element(#update_element{id=Id,
                                                   }}
                              ]},
 
-                #panel{class="span6",
+                #panel{class=["span6", Class],
                        body=io_lib:format("~100s",
                                           [Text])},
-                #panel{class="span2",
+                #panel{class=["span2", Class],
                        body=[
                              sugar:format_timedelta(TD),
                              format_status(Status, -1, UID)

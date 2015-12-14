@@ -41,11 +41,19 @@ render_element(#update_preview{id=Id,
              end,
     CurrentThread = wf:session(current_thread),
 
-    Class = if Thread == CurrentThread ->
+    Class = if Status == unread ->
            "current";
        true ->
            ""
     end,
+    Current = if Thread == CurrentThread ->
+                     #span{
+                        class="icon-stack",
+                        style="line-height:1.7em",
+                        body="<i class='icon icon-chevron-right'></i>"
+                       };
+                 true -> ""
+              end,
 
     #panel{class=['update-preview',clickable,Class],
            style="line-height:18px;margin-top:18px;",
@@ -54,7 +62,7 @@ render_element(#update_preview{id=Id,
                         body=[
 
                               #panel{class="span1 no-padding",
-                                     body=render_icon(Icon, Status)},
+                                     body=render_icon(Icon)},
                               #panel{class='span9 no-padding update-participant-list',
                                      text=participant_list([From] ++ [To])},
                               #panel{class='span2 cell-right no-padding update-age',
@@ -65,7 +73,9 @@ render_element(#update_preview{id=Id,
                      Subject ->
                          #panel{class='row-fluid',
                                 body=[
-                                      #panel{class='span11 offset1 no-padding',
+                                      #panel{class="span1 no-padding",
+                                             body=Current},
+                                      #panel{class='span11 no-padding',
                                              style="overflow: hidden; font-weight:bold",
                                              text=Subject}
                                      ]}
