@@ -421,8 +421,8 @@ render_task(#db_task{id=Id,  % {{{1
                  ]},
      render_comments(Comments),
      render_updates(Updates),
-     render_task_changes(Changes),
-     render_attachments(Task)
+     render_task_changes(Changes)
+     %render_attachments(Task)
     ]. 
 
 get_involved_full() -> % {{{1

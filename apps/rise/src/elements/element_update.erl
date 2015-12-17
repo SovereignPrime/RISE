@@ -247,41 +247,41 @@ render_element(#update_element{id=Id,
                                                     ]}
 
                                            ]}
-                                  ]}]},
-                 case Attachments of
-                     undefined ->
-                         [];
-                     [] ->
-                         [];
-                     A ->
-                         {ok, Files} = db:get_files(A),
-                         [
-                          lists:foldl(fun common:render_image/2,
-                                      [],
-                                      Files),
-                          #panel{class="row-fluid",
-                                 body=[
-                                       #panel{class="span6",
-                                              body="<i class='icon-file-alt'></i> Attachment"},
-                                       #panel{class="span2 offset4",
-                                              body="<i class='icon-download-alt'></i> Download all"}
-                                      ]},
-                          lists:map(fun(#bm_file{
-                                           hash=FID,
-                                           name=Path,
-                                           size=Size,
-                                           time=Timestamp,
-                                           status=FStatus}) ->
-                                            Datetime = sugar:date_format(sugar:timestamp_to_datetime(Timestamp)),
-                                            #attachment{fid=FID,
-                                                        filename=Path,
-                                                        size=Size,
-                                                        time=Datetime,
-                                                        status=FStatus}
-                                    end,
-                                    Files)
-                         ]
-                 end
+                                  ]}]}
+                 %case Attachments of
+                 %    undefined ->
+                 %        [];
+                 %    [] ->
+                 %        [];
+                 %    A ->
+                 %        {ok, Files} = db:get_files(A),
+                 %        [
+                 %         lists:foldl(fun common:render_image/2,
+                 %                     [],
+                 %                     Files),
+                 %         #panel{class="row-fluid",
+                 %                body=[
+                 %                      #panel{class="span6",
+                 %                             body="<i class='icon-file-alt'></i> Attachment"},
+                 %                      #panel{class="span2 offset4",
+                 %                             body="<i class='icon-download-alt'></i> Download all"}
+                 %                     ]},
+                 %         lists:map(fun(#bm_file{
+                 %                          hash=FID,
+                 %                          name=Path,
+                 %                          size=Size,
+                 %                          time=Timestamp,
+                 %                          status=FStatus}) ->
+                 %                           Datetime = sugar:date_format(sugar:timestamp_to_datetime(Timestamp)),
+                 %                           #attachment{fid=FID,
+                 %                                       filename=Path,
+                 %                                       size=Size,
+                 %                                       time=Datetime,
+                 %                                       status=FStatus}
+                 %                   end,
+                 %                   Files)
+                 %        ]
+                 %end
 
                 ]};
 
@@ -366,8 +366,8 @@ render_element(#update_element{id=Id,
                                             placeholder="Some text here",
                                             id=text}
                             }
-                         ]},
-             common:render_files()
+                         ]}
+             %common:render_files()
                 ]};
 %% Render update as single paragraph for relationships {{{1
 render_element(#update_element{
