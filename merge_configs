@@ -1,0 +1,14 @@
+#!/usr/bin/env escript
+
+main([]) ->
+    ConfFiles = filelib:wildcard("config/*.config"),
+    Config = lists:foldl(fun(File, CS) ->
+                               {ok, [C]} = file:consult(File),
+                               C ++ CS
+                       end,
+                       [],
+                       ConfFiles),
+    {ok, Out} = file:open("config/all.config", [write]),
+    io:write(Out, Config),
+    file:write(Out, "."),
+    file:close(Out).
