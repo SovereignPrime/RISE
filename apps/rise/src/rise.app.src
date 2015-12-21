@@ -1,7 +1,7 @@
 % vim: ft=erlang ts=4 sw=4 et
 {application, 'rise',
  [{description, "Secure Sharing and Collaborating"},
-  {vsn, "0.2.6"},
+  {vsn, "0.2.0"},
   {registered, []},
   {mod, {'rise_app', []}},
   {applications,
